@@ -1,31 +1,43 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Backend.Authorization;
+using Backend.DbContext;
 using Backend.Models;
 using Backend.Services.IServices;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Backend.Services
 {
     public class JwtUtils : IJwtUtils
     {
-        public string GenerateToken(User user)
+        private readonly ApplicationDbContext _context;
+
+        public JwtUtils(
+            ApplicationDbContext context)
         {
-            // generate token that is valid for 7 days
+            _context = context;
+        }
+
+        public string GenerateJwtToken(Account account)
+        {
+            // generate token that is valid for 15 minutes
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(AppSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                Subject = new ClaimsIdentity(new[] { new Claim("id", account.Id.ToString()) }),
+                Expires = DateTime.UtcNow.AddMinutes(15),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
 
-        public int? ValidateToken(string token)
+        public int? ValidateJwtToken(string token)
         {
             if (token == null)
                 return null;
@@ -45,16 +57,37 @@ namespace Backend.Services
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+                var accountId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
 
-                // return user id from JWT token if validation successful
-                return userId;
+                // return account id from JWT token if validation successful
+                return accountId;
             }
             catch
             {
                 // return null if validation fails
                 return null;
             }
+        }
+
+        public RefreshToken GenerateRefreshToken(string ipAddress)
+        {
+            var refreshToken = new RefreshToken
+            {
+                // token is a cryptographically strong random sequence of values
+                Token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64)),
+                // token is valid for 7 days
+                Expires = DateTime.UtcNow.AddDays(7),
+                Created = DateTime.UtcNow,
+                CreatedByIp = ipAddress
+            };
+
+            // ensure token is unique by checking against db
+            var tokenIsUnique = !_context.Accounts.Any(a => a.RefreshTokens.Any(t => t.Token == refreshToken.Token));
+
+            if (!tokenIsUnique)
+                return GenerateRefreshToken(ipAddress);
+
+            return refreshToken;
         }
     }
 }

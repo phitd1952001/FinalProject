@@ -7,6 +7,21 @@ namespace Backend.DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         { }
-        public DbSet<User> Users { get; set; }
+        
+        public DbSet<Account> Accounts { get; set; }
+
+        public DbSet<Checkin> Checkins { get; set; }
+        
+        public DbSet<Class> Classes { get; set; }
+
+        public DbSet<Message> Messages { get; set; }
+
+        public DbSet<Reminder> Reminders { get; set; }
+
+        public DbSet<Room> Rooms { get; set; }
+        
+        public DbSet<Schedule> Schedules { get; set; }
+
+        public DbSet<Subject> Subjects { get; set; }
     }
 }

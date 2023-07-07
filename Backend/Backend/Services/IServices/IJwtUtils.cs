@@ -4,7 +4,8 @@ namespace Backend.Services.IServices
 {
     public interface IJwtUtils
     {
-        public string GenerateToken(User user);
-        public int? ValidateToken(string token);
+        public string GenerateJwtToken(Account account);
+        public int? ValidateJwtToken(string token);
+        public RefreshToken GenerateRefreshToken(string ipAddress);
     }
 }

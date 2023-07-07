@@ -20,7 +20,7 @@ namespace Backend.Authorization
                 return;
 
             // authorization
-            var user = (User)context.HttpContext.Items["User"];
+            var user = (Account)context.HttpContext.Items["Account"];
             if (user == null || (_roles.Any() && !_roles.Contains(user.Role)))
                 context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
         }

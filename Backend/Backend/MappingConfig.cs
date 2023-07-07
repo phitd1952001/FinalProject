@@ -11,15 +11,24 @@ namespace Backend
             var mappingConfig = new MapperConfiguration(config =>
             {
                 // mapping user
-                config.CreateMap<User, AuthenticateResponse>();
-                config.CreateMap<RegisterRequest, User>();
-                config.CreateMap<UpdateRequest, User>()
+                config.CreateMap<Account, AccountResponse>();
+
+                config.CreateMap<Account, AuthenticateResponse>();
+
+                config.CreateMap<CreateRequest, Account>();
+
+                config.CreateMap<CreateRequest, Account>();
+
+                config.CreateMap<UpdateRequest, Account>()
                     .ForAllMembers(x => x.Condition(
                         (src, dest, prop) =>
                         {
                             // ignore null & empty string properties
                             if (prop == null) return false;
                             if (prop.GetType() == typeof(string) && string.IsNullOrEmpty((string)prop)) return false;
+
+                            // ignore null role
+                            if (x.DestinationMember.Name == "Role" && src.Role == null) return false;
 
                             return true;
                         }

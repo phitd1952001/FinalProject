@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Backend.Authorization;
 using Backend.DbContext;
 using Backend.Services;
 using Backend.Services.IServices;
@@ -24,6 +23,7 @@ namespace Backend.Extensions
         {
             service.AddScoped<IUserService, UserService>();
             service.AddScoped<IJwtUtils, JwtUtils>();
+            service.AddScoped<IEmailService, EmailService>();
             return service;
         }
         
