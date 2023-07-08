@@ -1,5 +1,6 @@
 using Backend;
 using Backend.Extensions;
+using Backend.Initializer;
 using Backend.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -56,5 +57,7 @@ app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseMiddleware<JwtMiddleware>();;
 
 app.MapControllers();
+
+DbInitializer.Initialize(app);
 
 app.Run();

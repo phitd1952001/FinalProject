@@ -119,8 +119,7 @@ namespace Backend.Services
             var account = _mapper.Map<Account>(model);
 
             // first registered account is an admin
-            var isFirstAccount = _context.Accounts.Count() == 0;
-            account.Role = isFirstAccount ? Role.Admin : Role.User;
+            account.Role = Role.User;
             account.Created = DateTime.UtcNow;
             account.VerificationToken = generateVerificationToken();
 
@@ -238,6 +237,11 @@ namespace Backend.Services
             _context.SaveChanges();
 
             return _mapper.Map<AccountResponse>(account);
+        }
+
+        public bool AdminCheck()
+        { 
+            return _context.Accounts.Any(_ => _.Email == "Admin@gmail.com");
         }
 
         public void Delete(int id)

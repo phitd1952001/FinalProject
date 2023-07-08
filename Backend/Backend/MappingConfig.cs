@@ -17,7 +17,7 @@ namespace Backend
 
                 config.CreateMap<CreateRequest, Account>();
 
-                config.CreateMap<CreateRequest, Account>();
+                config.CreateMap<RegisterRequest, Account>();
 
                 config.CreateMap<UpdateRequest, Account>()
                     .ForAllMembers(x => x.Condition(

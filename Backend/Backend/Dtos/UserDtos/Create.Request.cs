@@ -16,7 +16,7 @@ namespace Backend.Dtos.UserDtos
 
         [Required]
         [EnumDataType(typeof(Role))]
-        public string Role { get; set; }
+        public Role Role { get; set; }
 
         [Required]
         [EmailAddress]

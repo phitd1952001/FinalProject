@@ -1,27 +1,53 @@
 ﻿using Backend.Services.IServices;
-using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
-using MimeKit.Text;
 
 namespace Backend.Services;
 
 public class EmailService : IEmailService
 {
-    public void Send(string to, string subject, string html, string from = null)
+    private readonly ILogger<EmailService> _logger;
+
+    public EmailService(ILogger<EmailService> logger)
     {
-        // create message
+        _logger = logger;
+        _logger.LogInformation("Create MailService");
+    }
+    public async Task Send(string to, string subject, string html)
+    {
         var email = new MimeMessage();
-        email.From.Add(MailboxAddress.Parse(from ?? AppSettings.EmailFrom));
+        email.Sender = new MailboxAddress(AppSettings.DisplayName, AppSettings.Mail);
+        email.From.Add(new MailboxAddress(AppSettings.DisplayName, AppSettings.Mail));
         email.To.Add(MailboxAddress.Parse(to));
         email.Subject = subject;
-        email.Body = new TextPart(TextFormat.Html) { Text = html };
 
-        // send email
-        using var smtp = new SmtpClient();
-        smtp.Connect(AppSettings.SmtpHost, AppSettings.SmtpPort, SecureSocketOptions.StartTls);
-        smtp.Authenticate(AppSettings.SmtpUser, AppSettings.SmtpPass);
-        smtp.Send(email);
+
+        var builder = new BodyBuilder();
+        builder.HtmlBody = html;
+        email.Body = builder.ToMessageBody();
+
+        // dùng SmtpClient của MailKit
+        using var smtp = new MailKit.Net.Smtp.SmtpClient(); //using gửi xong xóa để k làm chậm hệ thống
+
+        try
+        {
+            smtp.Connect(AppSettings.Host, AppSettings.Port, SecureSocketOptions.StartTls);
+            smtp.Authenticate(AppSettings.Mail, AppSettings.Password);
+            await smtp.SendAsync(email);
+        }
+        catch (Exception ex)
+        {
+            // Gửi mail thất bại, nội dung email sẽ lưu vào thư mục mailssave
+            System.IO.Directory.CreateDirectory("mailssave");
+            var emailsavefile = string.Format(@"mailssave/{0}.eml", Guid.NewGuid());
+            await email.WriteToAsync(emailsavefile);
+
+            _logger.LogInformation("Lỗi gửi mail, lưu tại - " + emailsavefile);
+            _logger.LogError(ex.Message);
+        }
+
         smtp.Disconnect(true);
+
+        _logger.LogInformation("send mail to " + to);
     }
 }

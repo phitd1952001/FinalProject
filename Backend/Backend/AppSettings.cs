@@ -10,10 +10,10 @@ namespace Backend
         // automatically deleted from the database after this time
         public static int RefreshTokenTTL { get; set; }
 
-        public static string EmailFrom { get; set; }
-        public static string SmtpHost { get; set; }
-        public static int SmtpPort { get; set; }
-        public static string SmtpUser { get; set; }
-        public static string SmtpPass { get; set; }
+        public static string Mail { get; set; }
+        public static string DisplayName { get; set; }
+        public static string Password { get; set; }
+        public static string Host { get; set; }
+        public static int Port { get; set; }
     }
 }
