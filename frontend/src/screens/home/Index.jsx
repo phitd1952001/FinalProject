@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { accountService } from '@/_services';
+import { accountService } from '../../_services';
 
 function Home() {
     const user = accountService.userValue;

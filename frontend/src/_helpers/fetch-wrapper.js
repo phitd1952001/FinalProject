@@ -1,5 +1,6 @@
-import config from 'config';
-import { accountService } from '@/_services';
+import { accountService } from '../_services';
+
+const apiUrl = process.env.REACT_APP_BASE_API
 
 export const fetchWrapper = {
     get,
@@ -50,7 +51,7 @@ function authHeader(url) {
     // return auth header with jwt if user is logged in and request is to the api url
     const user = accountService.userValue;
     const isLoggedIn = user && user.jwtToken;
-    const isApiUrl = url.startsWith(config.apiUrl);
+    const isApiUrl = url.startsWith(apiUrl);
     if (isLoggedIn && isApiUrl) {
         return { Authorization: `Bearer ${user.jwtToken}` };
     } else {

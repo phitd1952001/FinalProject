@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { accountService } from '@/_services';
+import { accountService } from '../../_services';
 
 function Details({ match }) {
     const { path } = match;

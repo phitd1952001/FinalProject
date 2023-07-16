@@ -1,10 +1,9 @@
 import { BehaviorSubject } from 'rxjs';
 
-import config from 'config';
-import { fetchWrapper, history } from '@/_helpers';
+import { fetchWrapper, history } from '../_helpers';
 
 const userSubject = new BehaviorSubject(null);
-const baseUrl = `${config.apiUrl}/accounts`;
+const baseUrl = `${process.env.REACT_APP_BASE_API}/accounts`;
 
 export const accountService = {
     login,
