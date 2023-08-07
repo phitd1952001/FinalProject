@@ -7,27 +7,27 @@ namespace Backend.Dtos.UserDtos
 {
     public class UpdateRequest
     {
-        private string _password;
-        private string _confirmPassword;
-        private string _role;
-        private string _email;
+        private string? _password;
+        private string? _confirmPassword;
+        private string? _role;
+        private string? _email;
     
         public string Title { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
         [EnumDataType(typeof(Role))]
-        public string Role
+        public string? Role
         {
             get => _role;
-            set => _role = replaceEmptyWithNull(value);
+            set => _role = ReplaceEmptyWithNull(value);
         }
 
         [EmailAddress]
-        public string Email
+        public string? Email
         {
             get => _email;
-            set => _email = replaceEmptyWithNull(value);
+            set => _email = ReplaceEmptyWithNull(value);
         }
         
         [JsonConverter(typeof(OptionalFieldConverter<string>))]
@@ -35,7 +35,7 @@ namespace Backend.Dtos.UserDtos
         public string? Password
         {
             get => _password;
-            set => _password = replaceEmptyWithNull(value);
+            set => _password = ReplaceEmptyWithNull(value);
         }
         
         [JsonConverter(typeof(OptionalFieldConverter<string>))]
@@ -43,15 +43,15 @@ namespace Backend.Dtos.UserDtos
         public string? ConfirmPassword 
         {
             get => _confirmPassword;
-            set => _confirmPassword = replaceEmptyWithNull(value);
+            set => _confirmPassword = ReplaceEmptyWithNull(value);
         }
 
         // helpers
 
-        private string replaceEmptyWithNull(string value)
+        private string? ReplaceEmptyWithNull(string? value)
         {
             // replace empty string with null to make field optional
-            return string.IsNullOrEmpty(value) ? null : value;
+            return String.IsNullOrEmpty(value) ? null : value;
         }
     }
 }
