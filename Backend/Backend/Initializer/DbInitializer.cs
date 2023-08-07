@@ -35,7 +35,7 @@ public static class DbInitializer
             // user admin
             var user = new CreateRequest()
             {
-                Title = "Admin",
+                Title = "Mr",
                 FirstName = "Admin",
                 LastName = "Nguyen",
                 Role = Role.Admin,

@@ -9,19 +9,21 @@ namespace Backend.Dtos.UserDtos
     {
         private string? _password;
         private string? _confirmPassword;
-        private string? _role;
+        public Role? Role;
         private string? _email;
     
         public string Title { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
-        [EnumDataType(typeof(Role))]
-        public string? Role
-        {
-            get => _role;
-            set => _role = ReplaceEmptyWithNull(value);
-        }
+        
+        public string? Address { get; set; }
+        public string? CCID { get; set; }
+        public string? Phone { get; set; }
+        public string? Position { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public bool Sex { get; set; }
+        public string? ManagementCode { get; set; }
+        public string? Avatar { get; set; }
 
         [EmailAddress]
         public string? Email

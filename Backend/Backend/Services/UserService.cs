@@ -205,6 +205,8 @@ namespace Backend.Services
 
             // map model to new account object
             var account = _mapper.Map<Account>(model);
+            account.Sex = true;
+            account.AcceptTerms = true;
             account.Created = DateTime.UtcNow;
             account.Verified = DateTime.UtcNow;
 

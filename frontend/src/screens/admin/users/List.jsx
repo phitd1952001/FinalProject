@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import { accountService } from '../../../_services';
+import { Role } from "../../../_helpers/role";
 
 function List({ match }) {
     const { path } = match;
@@ -12,13 +13,15 @@ function List({ match }) {
     }, []);
 
     function deleteUser(id) {
-        setUsers(users.map(x => {
-            if (x.id === id) { x.isDeleting = true; }
-            return x;
-        }));
-        accountService.delete(id).then(() => {
-            setUsers(users => users.filter(x => x.id !== id));
-        });
+        if (confirm('Do You Want to delete')){
+            setUsers(users.map(x => {
+                if (x.id === id) { x.isDeleting = true; }
+                return x;
+            }));
+            accountService.delete(id).then(() => {
+                setUsers(users => users.filter(x => x.id !== id));
+            });
+        }
     }
 
     return (
@@ -40,7 +43,7 @@ function List({ match }) {
                         <tr key={user.id}>
                             <td>{user.title} {user.firstName} {user.lastName}</td>
                             <td>{user.email}</td>
-                            <td>{user.role}</td>
+                            <td>{Object.keys(Role).find(roleName => Role[roleName] === user.role)}</td>
                             <td style={{ whiteSpace: 'nowrap' }}>
                                 <Link to={`${path}/edit/${user.id}`} className="btn btn-sm btn-primary mr-1">Edit</Link>
                                 <button onClick={() => deleteUser(user.id)} className="btn btn-sm btn-danger" style={{ width: '60px' }} disabled={user.isDeleting}>

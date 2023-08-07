@@ -7,13 +7,21 @@ import { accountService, alertService } from '../../_services';
 
 function Update({ history }) {
     const user = accountService.userValue;
+
     const initialValues = {
         title: user.title,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        address : user.address,
+        ccid : user.ccid,
+        phone : user.phone,
+        position : user.position,
+        dateOfBirth : new Date(user.dateOfBirth).toISOString().substr(0, 10),
+        sex : user.sex,
+        managementCode : user.managementCode
     };
 
     const validationSchema = Yup.object().shape({
@@ -32,11 +40,29 @@ function Update({ history }) {
             .when('password', (password, schema) => {
                 if (password) return schema.required('Confirm Password is required');
             })
-            .oneOf([Yup.ref('password')], 'Passwords must match')
+            .oneOf([Yup.ref('password')], 'Passwords must match'),
+        address: Yup.string()
+            .required('Address is required'),
+        ccid: Yup.string()
+            .required('ccid is required'), // done
+        phone: Yup.string()
+            .required('Phone is required'),
+        position: Yup.string()
+            .required('Position is required'),
+        dateOfBirth: Yup.date()
+            .max(new Date(), "Date Of Birth must be in the past")
+            .required('Date of birth is required'),
+        sex: Yup.boolean()
+            .oneOf([true], "You must choose Sex")
+            .required('Sex is required'), // done
+        managementCode: Yup.string()
+            .required('ManagementCode is required'), // done
+        
     });
 
     function onSubmit(fields, { setStatus, setSubmitting }) {
         setStatus();
+
         accountService.update(user.id, fields)
             .then(() => {
                 alertService.success('Update successful', { keepAfterRouteChange: true });
@@ -89,6 +115,55 @@ function Update({ history }) {
                         <label>Email</label>
                         <Field name="email" type="text" className={'form-control' + (errors.email && touched.email ? ' is-invalid' : '')} />
                         <ErrorMessage name="email" component="div" className="invalid-feedback" />
+                    </div>
+                    <div className="form-row">
+                        <div className="form-group col">
+                            <label>Sex</label>
+                            <Field name="sex" as="select" className={'form-control' + (errors.sex && touched.sex ? ' is-invalid' : '')}>
+                                <option value=""></option>
+                                <option value="true">Male</option>
+                                <option value="false">Female</option>
+                            </Field>
+                            <ErrorMessage name="sex" component="div" className="invalid-feedback" />
+                        </div>
+                        <div className="form-group col-5">
+                            <label>CCID</label>
+                            <Field name="ccid" type="text" className={'form-control' + (errors.ccid && touched.ccid ? ' is-invalid' : '')} />
+                            <ErrorMessage name="ccid" component="div" className="invalid-feedback" />
+                        </div>
+                        <div className="form-group col-5">
+                            <label>Management Code</label>
+                            <Field name="managementCode" type="text" className={'form-control' + (errors.managementCode && touched.managementCode ? ' is-invalid' : '')} />
+                            <ErrorMessage name="managementCode" component="div" className="invalid-feedback" />
+                        </div>
+                    </div>
+                    <div className="form-row">
+                        <div className="form-group col">
+                            <label>Position</label>
+                            <Field name="position" as="select" className={'form-control' + (errors.position && touched.position ? ' is-invalid' : '')}>
+                                <option value=""></option>
+                                <option value="Teacher">Teacher</option>
+                                <option value="Student">Student</option>
+                                <option value="Staff">Staff</option>
+                                <option value="Director">Director</option>
+                            </Field>
+                            <ErrorMessage name="position" component="div" className="invalid-feedback" />
+                        </div>
+                        <div className="form-group col-5">
+                            <label>Phone Number</label>
+                            <Field name="phone" type="text" className={'form-control' + (errors.phone && touched.phone ? ' is-invalid' : '')} />
+                            <ErrorMessage name="phone" component="div" className="invalid-feedback" />
+                        </div>
+                        <div className="form-group col-5">
+                            <label>Date of Birth</label>
+                            <Field name="dateOfBirth" type="date" className={'form-control' + (errors.dateOfBirth && touched.dateOfBirth ? ' is-invalid' : '')} />
+                            <ErrorMessage name="dateOfBirth" component="div" className="invalid-feedback" />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label>Address</label>
+                        <Field name="address" type="text" className={'form-control' + (errors.address && touched.address ? ' is-invalid' : '')} />
+                        <ErrorMessage name="address" component="div" className="invalid-feedback" />
                     </div>
                     <h3 className="pt-3">Change Password</h3>
                     <p>Leave blank to keep the same password</p>
