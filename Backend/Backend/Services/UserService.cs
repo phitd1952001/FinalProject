@@ -4,6 +4,8 @@ using Backend.DbContext;
 using Backend.Dtos.UserDtos;
 using Backend.Models;
 using Backend.Services.IServices;
+using CloudinaryDotNet.Actions;
+using Role = Backend.Models.Role;
 
 namespace Backend.Services
 {
@@ -13,17 +15,20 @@ namespace Backend.Services
         private readonly IJwtUtils _jwtUtils;
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
+        private readonly IImageServices _imageServices;
 
         public UserService(
             ApplicationDbContext context,
             IJwtUtils jwtUtils,
             IMapper mapper,
-            IEmailService emailService)
+            IEmailService emailService,
+            IImageServices imageServices)
         {
             _context = context;
             _jwtUtils = jwtUtils;
             _mapper = mapper;
             _emailService = emailService;
+            _imageServices = imageServices;
         }
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model, string ipAddress)
@@ -411,6 +416,18 @@ namespace Backend.Services
                 html: $@"<h4>Reset Password Email</h4>
                         {message}"
             );
+        }
+
+        public async Task<AccountResponse> UpLoadAvatar(int id, Stream avatar)
+        {
+            var uploadResult = _imageServices.UploadFile(avatar, Guid.NewGuid().ToString());
+            var user = await _context.Accounts.FindAsync(id);
+            
+            user.Avatar = uploadResult?.Url.ToString();
+            user.AvatarPublicId = uploadResult?.PublicId;
+
+            await _context.SaveChangesAsync();
+            return _mapper.Map<AccountResponse>(user);
         }
     }
 }

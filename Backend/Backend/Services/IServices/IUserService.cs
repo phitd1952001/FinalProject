@@ -19,5 +19,6 @@ namespace Backend.Services.IServices
         AccountResponse Update(int id, UpdateRequest model);
         bool AdminCheck();
         void Delete(int id);
+        Task<AccountResponse> UpLoadAvatar(int id, Stream avatar);
     }
 }

@@ -20,6 +20,7 @@ export const accountService = {
   getById,
   create,
   update,
+  handleUpload,
   delete: _delete,
   user: userSubject.asObservable(),
   get userValue() {
@@ -131,3 +132,18 @@ function startRefreshTokenTimer() {
 function stopRefreshTokenTimer() {
   clearTimeout(refreshTokenTimeout);
 }
+
+function handleUpload(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  return fetchWrapper.postUpload(`${baseUrl}/avatar/upload`, formData).then((user) => {
+    // update stored user if the logged in user updated their own record
+    if (user.id === userSubject.value.id) {
+      // publish updated user to subscribers
+      user = { ...userSubject.value, ...user };
+      userSubject.next(user);
+    }
+    return user;
+  });
+};

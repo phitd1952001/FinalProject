@@ -168,5 +168,23 @@ namespace Backend.Controllers
             else
                 return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
         }
+        
+        [HttpPost("avatar/upload")]
+        public async Task<IActionResult> UploadFile()
+        {
+            try
+            {
+                var file = Request.Form.Files[0];
+                using var stream = file.OpenReadStream();
+
+                var result = await _userService.UpLoadAvatar(Account.Id, stream);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
