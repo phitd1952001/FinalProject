@@ -420,8 +420,23 @@ namespace Backend.Services
 
         public async Task<AccountResponse> UpLoadAvatar(int id, Stream avatar)
         {
-            var uploadResult = _imageServices.UploadFile(avatar, Guid.NewGuid().ToString());
             var user = await _context.Accounts.FindAsync(id);
+            if (!String.IsNullOrEmpty(user.Avatar))
+            {
+                var isDeleteSuccessfully = _imageServices.DeleteFile(user.AvatarPublicId);
+
+                if (isDeleteSuccessfully)
+                {
+                    user.Avatar = String.Empty;
+                    user.AvatarPublicId = String.Empty;
+                }
+                else
+                {
+                    return _mapper.Map<AccountResponse>(user);
+                }
+            }
+            
+            var uploadResult = _imageServices.UploadFile(avatar, Guid.NewGuid().ToString());
             
             user.Avatar = uploadResult?.Url.ToString();
             user.AvatarPublicId = uploadResult?.PublicId;

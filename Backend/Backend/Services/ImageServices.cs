@@ -6,19 +6,34 @@ namespace Backend.Services;
 
 public class ImageServices : IImageServices
 {
+    private readonly Cloudinary _cloudinary;
+
+    public ImageServices(Cloudinary cloudinary)
+    {
+        _cloudinary = cloudinary;
+    }
+    
     public ImageUploadResult? UploadFile(Stream fileStream, string fileName)
     {
-        Account account = new Account(
-            AppSettings.Cloud,
-            AppSettings.ApiKey,
-            AppSettings.ApiSecretKey);
-
-        Cloudinary cloudinary = new Cloudinary(account);
-
         var uploadParams = new ImageUploadParams(){
             File = new FileDescription(fileName, fileStream),
         };
-        var uploadResult = cloudinary.Upload(uploadParams);
+        
+        var uploadResult = _cloudinary.Upload(uploadParams);
+        
         return uploadResult;
+    }
+
+    public bool DeleteFile(string publicId)
+    {
+        var deletionParams = new DeletionParams(publicId);
+        var deletionResult = _cloudinary.Destroy(deletionParams);
+        
+        if (deletionResult.Result == "ok")
+        {
+            return true;
+        }
+
+        return false;
     }
 }

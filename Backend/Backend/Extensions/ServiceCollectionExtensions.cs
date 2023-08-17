@@ -3,6 +3,7 @@ using Microsoft.OpenApi.Models;
 using Backend.DbContext;
 using Backend.Services;
 using Backend.Services.IServices;
+using CloudinaryDotNet;
 
 namespace Backend.Extensions
 {
@@ -35,6 +36,33 @@ namespace Backend.Extensions
             var mapper = MappingConfig.RegisterMaps().CreateMapper();
             service.AddSingleton(mapper);
             service.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            return service;
+        }
+        
+        public static IServiceCollection AddCloudinary(this IServiceCollection service)
+        {
+            service.AddSingleton(new Cloudinary(new Account(
+                AppSettings.Cloud,
+                AppSettings.ApiKey,
+                AppSettings.ApiSecretKey)));
+            return service;
+        }
+        
+        public static IServiceCollection AddCORS(this IServiceCollection service)
+        {
+            service.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder
+                            .WithOrigins(AppSettings.CORS)
+                            .AllowAnyMethod()
+                            .AllowCredentials()
+                            .AllowAnyHeader();
+                    });
+            });
+
             return service;
         }
         

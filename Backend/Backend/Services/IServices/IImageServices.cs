@@ -5,4 +5,5 @@ namespace Backend.Services.IServices;
 public interface IImageServices
 {
     ImageUploadResult? UploadFile(Stream fileStream, string fileName);
+    bool DeleteFile(string publicId);
 }

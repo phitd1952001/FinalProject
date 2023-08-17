@@ -19,23 +19,10 @@ builder.Services
     .AddDatabase()
     .AddAutoMapper()
     .AddService()
-    .AddSwagger();
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll",
-        builder =>
-        {
-            builder
-                .WithOrigins(AppSettings.CORS)
-                .AllowAnyMethod()
-                .AllowCredentials()
-                .AllowAnyHeader();
-        });
-});
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+    .AddCloudinary()
+    .AddEndpointsApiExplorer()
+    .AddSwagger()
+    .AddCORS();
 
 var app = builder.Build();
 

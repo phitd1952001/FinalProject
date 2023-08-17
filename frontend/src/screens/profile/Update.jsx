@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-
+import images from '../../_asset/images';
 import { accountService, alertService } from '../../_services';
 
 const styles = {
@@ -118,8 +118,6 @@ function Update({ history }) {
         }
     }
 
-    const [showFileInput, setShowFileInput] = useState(false);
-
     function uploadAvatar() {
         accountService.handleUpload(event.target.files[0])
             .then(() => {
@@ -128,12 +126,13 @@ function Update({ history }) {
             .catch(error => {
                 alertService.error(error);
             });
-        setShowFileInput(false);
     }
 
-    const handleShowFileInput = () => {
-        setShowFileInput(true);
-      };
+    const [noAvatarImage, setNoAvatarImage] = useState(null);
+
+    useEffect(() => {
+      images.noAvatar.then((img) => setNoAvatarImage(img));
+    }, []);
 
     return (
         <>
@@ -143,7 +142,13 @@ function Update({ history }) {
 
             <div className="container my-5">
                 <div style={styles.avatarContainer}>
-                    <img style={styles.avatar} src={user.avatar} alt="Avatar" />
+                    {
+                        user.avatar ? (
+                            <img style={styles.avatar} src={user.avatar} alt="Avatar" />
+                        ) : (
+                            <img style={styles.avatar} src={noAvatarImage} alt="Avatar" />
+                        )
+                    }                   
                 </div>
             </div>
             <input type="file" onChange={uploadAvatar} />

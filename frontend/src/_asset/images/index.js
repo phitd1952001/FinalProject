@@ -1,5 +1,5 @@
 const images = {
-    noAvatar: require('./noAva.png'),
+    noAvatar: import('./noAva.png').then((module) => module.default),
 };
 
 export default images;
