@@ -30,41 +30,81 @@ function Nav() {
 
     return (
         <div>
-            <nav className="navbar navbar-expand navbar-dark bg-dark">
-
-                <div className="navbar-nav">
-                    <NavLink exact to="/" className="nav-item nav-link">Home</NavLink>
-                    {user.role === Role.Admin &&
-                        <NavLink to="/admin" className="nav-item nav-link">Admin</NavLink>
-                    }
-                </div>
-
-                <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <nav className="navbar navbar-expand-md navbar-dark bg-dark">
+            <div className="container-fluid">
+                <NavLink exact to="/" className="navbar-brand">
+                    Home
+                </NavLink>
+                <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                <div className="collapse navbar-collapse justify-content-between" id="navbarNav">
+                    <ul className="navbar-nav">
+                        {user.role === Role.Admin && (
+                            <li className="nav-item">
+                                <NavLink to="/admin" className="nav-link">
+                                    Admin
+                                </NavLink>
+                            </li>
+                        )}
+                    </ul>
                     <ul className="navbar-nav">
                         <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle dflex" href="#" id="avatarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-                                {
-                                    user && user.avatar ? (
-                                        <img style={styles.avatar} src={user.avatar} alt="Avatar" class="avatar-img" width="30" height="30" />
-                                    ) : (
-                                        <img src={noAvatarImage} alt="Avatar" class="avatar-img" width="30" height="30" />
-                                    )
-                                }
-                                {
-                                    user && user.firstName ? (<span>Hi {user.firstName}!</span>) : (<>Hi!</>)
-                                }
+                            <a
+                                className="nav-link dropdown-toggle dflex"
+                                href="#"
+                                id="avatarDropdown"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                            >
+                                {user && user.avatar ? (
+                                    <img
+                                        style={styles.avatar}
+                                        src={user.avatar}
+                                        alt="Avatar"
+                                        className="avatar-img"
+                                        width="30"
+                                        height="30"
+                                    />
+                                ) : (
+                                    <img
+                                        src={noAvatarImage}
+                                        alt="Avatar"
+                                        className="avatar-img"
+                                        width="30"
+                                        height="30"
+                                    />
+                                )}
+                                {user && user.firstName ? (
+                                    <span>   Hi {user.firstName}!</span>
+                                ) : (
+                                    <>Hi!</>
+                                )}
                             </a>
                             <div className="dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
-                                <NavLink to="/profile" className="dropdown-item">Profile</NavLink>
-                                <div className="dropdown-divider"></div>
-                                <a onClick={accountService.logout} className="dropdown-item">Logout</a>
+                                <NavLink to="/profile" className="dropdown-item">
+                                    Profile
+                                </NavLink>
+                                <div className="dropdown-divider" />
+                                <a onClick={accountService.logout} className="dropdown-item">
+                                    Logout
+                                </a>
                             </div>
                         </li>
                     </ul>
                 </div>
-
-            </nav>
+            </div>
+        </nav>
             <Route path="/admin" component={AdminNav} />
         </div>
     );

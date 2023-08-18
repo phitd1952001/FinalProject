@@ -239,6 +239,7 @@ namespace Backend.Services
 
             // copy model to account and save
             _mapper.Map(model, account);
+            account.Sex = model._sex;
             account.Updated = DateTime.UtcNow;
             _context.Accounts.Update(account);
             _context.SaveChanges();

@@ -21,7 +21,7 @@ namespace Backend.Dtos.UserDtos
         public string? Phone { get; set; }
         public string? Position { get; set; }
         public DateTime? DateOfBirth { get; set; }
-        public bool Sex { get; set; }
+        public bool _sex { get; set; }
         public string? ManagementCode { get; set; }
         public string? Avatar { get; set; }
 
@@ -30,6 +30,12 @@ namespace Backend.Dtos.UserDtos
         {
             get => _email;
             set => _email = ReplaceEmptyWithNull(value);
+        }
+        
+        public string? Sex
+        {
+            get => Convert.ToString(_sex);
+            set => _sex = Convert.ToBoolean(value);
         }
         
         [JsonConverter(typeof(OptionalFieldConverter<string>))]

@@ -87,8 +87,8 @@ function Update({ history }) {
         dateOfBirth: Yup.date()
             .max(new Date(), "Date Of Birth must be in the past")
             .required('Date of birth is required'),
-        sex: Yup.boolean()
-            .oneOf([true], "You must choose Sex")
+        sex: Yup.string()
+            .oneOf(["true", "false"], "You must choose Sex")
             .required('Sex is required'), // done
         managementCode: Yup.string()
             .required('ManagementCode is required'), // done
