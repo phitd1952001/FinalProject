@@ -11,15 +11,20 @@ const styles = {
         borderRadius: '50%',
         overflow: 'hidden',
     },
+    avatarMargin:{
+        marginRight: '30px'
+    }
 };
 
 function Nav() {
     const [user, setUser] = useState({});
     const [noAvatarImage, setNoAvatarImage] = useState(null);
+    const [logoImage, setLogoImage] = useState(null);
 
     useEffect(() => {
         if (user) {
             images.noAvatar.then((img) => setNoAvatarImage(img));
+            images.logo.then((img) => setLogoImage(img));
         }
         const subscription = accountService.user.subscribe(x => setUser(x));
         return subscription.unsubscribe;
@@ -33,33 +38,16 @@ function Nav() {
             <nav className="navbar navbar-expand-md navbar-dark bg-dark">
             <div className="container-fluid">
                 <NavLink exact to="/" className="navbar-brand">
-                    Home
+                    <img src={logoImage} width="50" height="50"/>
                 </NavLink>
-                <button
-                    className="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav"
-                    aria-controls="navbarNav"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                >
-                    <span className="navbar-toggler-icon"></span>
-                </button>
                 <div className="collapse navbar-collapse justify-content-between" id="navbarNav">
                     <ul className="navbar-nav">
-                        {user.role === Role.Admin && (
-                            <li className="nav-item">
-                                <NavLink to="/admin" className="nav-link">
-                                    Admin
-                                </NavLink>
-                            </li>
-                        )}
+                        
                     </ul>
-                    <ul className="navbar-nav">
+                    <ul className="navbar-nav" style={styles.avatarMargin}>
                         <li className="nav-item dropdown">
                             <a
-                                className="nav-link dropdown-toggle dflex"
+                                className="nav-link dropdown-toggle"
                                 href="#"
                                 id="avatarDropdown"
                                 role="button"

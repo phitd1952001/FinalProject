@@ -1,7 +1,9 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-
+import { Role } from '@/_helpers';
 import { accountService } from '../_services';
+import DashBoardLayout from '../_layout/DashBoardLayout';
+import ApplicationBaseLayout from '../_layout/ApplicationBaseLayout';
 
 function PrivateRoute({ component: Component, roles, ...rest }) {
     return (
@@ -19,7 +21,15 @@ function PrivateRoute({ component: Component, roles, ...rest }) {
             }
 
             // authorized so return component
-            return <Component {...props} />
+            return user.role === Role.Admin || user.role === Role.Staff || user.role === Role.Supervisor ? (
+                <DashBoardLayout>
+                    <Component {...props} />
+                </DashBoardLayout>
+            ) :(
+                <ApplicationBaseLayout>
+                    <Component {...props} />
+                </ApplicationBaseLayout>
+            )  
         }} />
     );
 }

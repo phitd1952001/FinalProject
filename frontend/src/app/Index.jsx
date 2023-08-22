@@ -3,7 +3,7 @@ import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 
 import { Role } from '@/_helpers';
 import { accountService } from '@/_services';
-import { Nav, PrivateRoute, Alert } from '@/_components';
+import { PrivateRoute } from '@/_components';
 import { Home } from '@/screens/home';
 import { Profile } from '@/screens/profile';
 import { Admin } from '@/screens/admin';
@@ -19,9 +19,7 @@ function App() {
     }, []);
 
     return (
-        <div className={'app-container' + (user && ' bg-light')}>
-            <Nav />
-            <Alert />
+        <div>
             <Switch>
                 <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
                 <PrivateRoute exact path="/" component={Home} />
