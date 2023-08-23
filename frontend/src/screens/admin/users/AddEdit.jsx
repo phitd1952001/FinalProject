@@ -67,9 +67,9 @@ function AddEdit({ history, match }) {
         dateOfBirth: Yup.date()
             .max(new Date(), "Date Of Birth must be in the past")
             .required('Date of birth is required'),
-        sex: Yup.boolean()
-            .oneOf([true], "You must choose Sex")
-            .required('Sex is required'), // done
+        sex: Yup.string()
+            .oneOf(["true", "false"], "You must choose Sex")
+            .required('Sex is required'),// done
         managementCode: Yup.string()
             .required('ManagementCode is required'), // done
     });
@@ -142,6 +142,9 @@ function AddEdit({ history, match }) {
                                 fields.forEach(field => {
                                     if (field === 'dateOfBirth') {
                                         setFieldValue(field, new Date(user[field]).toISOString().substr(0, 10), false)
+                                    }
+                                    else if (field === 'sex'){
+                                        setFieldValue(field, user[field].toString(), false)
                                     }
                                     else {
                                         setFieldValue(field, user[field], false)

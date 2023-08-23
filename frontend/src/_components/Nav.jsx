@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Route } from 'react-router-dom';
-
-import { Role } from '../_helpers';
 import { accountService } from '../_services';
 import images from '../_asset/images';
 
@@ -26,8 +24,9 @@ function Nav() {
             images.noAvatar.then((img) => setNoAvatarImage(img));
             images.logo.then((img) => setLogoImage(img));
         }
+        
         const subscription = accountService.user.subscribe(x => setUser(x));
-        return subscription.unsubscribe;
+        return () => subscription.unsubscribe();
     }, []);
 
     // only show nav when logged in

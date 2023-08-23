@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 
 import { Role } from '@/_helpers';
-import { accountService } from '@/_services';
 import { PrivateRoute } from '@/_components';
 import { Home } from '@/screens/home';
 import { Profile } from '@/screens/profile';
@@ -11,12 +10,6 @@ import { Account } from '@/screens/account';
 
 function App() {
     const { pathname } = useLocation();  
-    const [user, setUser] = useState({});
-
-    useEffect(() => {
-        const subscription = accountService.user.subscribe(x => setUser(x));
-        return subscription.unsubscribe;
-    }, []);
 
     return (
         <div>

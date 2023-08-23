@@ -20,7 +20,7 @@ const SideBar = () => {
       images.noAvatar.then((img) => setNoAvatarImage(img));
     }
     const subscription = accountService.user.subscribe((x) => setUser(x));
-    return subscription.unsubscribe;
+    return () => subscription.unsubscribe();
   }, []);
 
   // only show nav when logged in
@@ -54,9 +54,9 @@ const SideBar = () => {
             <div className="grow ml-3">
               <p className="d-none d-sm-inline-block text-sm font-weight-semibold text-white">
                 {user && user.firstName ? (
-                  <p>Hi {user.firstName}!</p>
+                  <>Hi {user.firstName}!</>
                 ) : (
-                  <p>Hi!</p>
+                  <>Hi!</>
                 )}
               </p>
             </div>

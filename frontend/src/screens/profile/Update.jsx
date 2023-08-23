@@ -41,7 +41,16 @@ const styles = {
 };
 
 function Update({ history }) {
-    const user = accountService.userValue;
+    const [user, setUser] = useState(accountService.userValue);
+
+    useEffect(() => {
+        const subscription = accountService.user.subscribe(newUser => {
+            setUser(newUser);
+        });
+
+        // Cleanup the subscription when the component unmounts
+        return () => subscription.unsubscribe();
+    }, []);
 
     const initialValues = {
         title: user.title,
@@ -55,7 +64,7 @@ function Update({ history }) {
         phone: user.phone,
         position: user.position,
         dateOfBirth: new Date(user.dateOfBirth).toISOString().substr(0, 10),
-        sex: user.sex,
+        sex: user.sex.toString(),
         managementCode: user.managementCode
     };
 
@@ -259,7 +268,7 @@ function Update({ history }) {
                                     : <span>Delete</span>
                                 }
                             </button>
-                            <Link to="." className="btn btn-link">Cancel</Link>
+                            <Link to="/profile" className="btn btn-link">Cancel</Link>
                         </div>
                     </Form>
                 )}

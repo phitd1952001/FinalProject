@@ -157,12 +157,13 @@ const styles = {
         color: '#1a202c',
         textAlign: 'left',
         backgroundColor: '#e2e8f0',
+        boxShadow: 'rgba(0, 0, 0.3) 0px 6px 8px -4px, rgba(0, 0.5, 0.4, 0.06) 0px 2px 4px -1px',
     },
     mainBody: {
         padding: '15px',
     },
     card: {
-        boxShadow: '0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06)',
+        boxShadow: '0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06)',
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',

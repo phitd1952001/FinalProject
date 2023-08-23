@@ -19,7 +19,7 @@ function Home() {
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        minHeight: "92.2vH",
+        minHeight: "100vh",
       }}
     >
       <div className="container w-100 h-100 text-white d-flex justify-center items-center">
