@@ -10,11 +10,27 @@ module.exports = {
         loader: "babel-loader",
       },
       {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'], // Use 'style-loader' to apply styles in a <style> tag
+      },
+      {
         test: /\.less$/,
         use: [
           { loader: "style-loader" },
           { loader: "css-loader" },
           { loader: "less-loader" },
+        ],
+      },
+      {
+        test: /\.(woff|woff2|ttf)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: '_asset/fonts', // Adjust the output path as needed
+            },
+          },
         ],
       },
       {
@@ -36,6 +52,10 @@ module.exports = {
     extensions: [".js", ".jsx"],
     alias: {
       "@": path.resolve(__dirname, "src/"),
+      globalize$: path.resolve( __dirname, "node_modules/globalize/dist/globalize.js" ),
+      globalize: path.resolve(__dirname, "node_modules/globalize/dist/globalize"),
+      cldr$: path.resolve(__dirname, "node_modules/cldrjs/dist/cldr.js"),
+      cldr: path.resolve(__dirname, "node_modules/cldrjs/dist/cldr")
     },
   },
   plugins: [

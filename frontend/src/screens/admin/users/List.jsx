@@ -1,6 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+import DataGrid, {
+    Column,
+    Grouping,
+    GroupPanel,
+    Pager,
+    Paging,
+    SearchPanel,
+    Selection,
+    Summary,
+    TotalItem,
+    HeaderFilter,
+    FilterRow
+} from 'devextreme-react/data-grid';
+import Button from 'devextreme-react/button';
+import LoadPanel from 'devextreme-react/load-panel';
+
 import { accountService } from '../../../_services';
 import { Role } from "../../../_helpers/role";
 
@@ -13,7 +29,7 @@ function List({ match }) {
     }, []);
 
     function deleteUser(id) {
-        if (confirm('Do You Want to delete')){
+        if (confirm('Do You Want to delete')) {
             setUsers(users.map(x => {
                 if (x.id === id) { x.isDeleting = true; }
                 return x;
@@ -27,43 +43,64 @@ function List({ match }) {
     return (
         <div>
             <h1>Users</h1>
-            <br/>
+            <br />
             <Link to={`${path}/add`} className="btn btn-sm btn-success mb-2">Add User</Link>
-            <table className="table table-striped">
-                <thead>
-                    <tr>
-                        <th style={{ width: '30%' }}>Name</th>
-                        <th style={{ width: '30%' }}>Email</th>
-                        <th style={{ width: '30%' }}>Role</th>
-                        <th style={{ width: '10%' }}></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users && users.map(user =>
-                        <tr key={user.id}>
-                            <td>{user.title} {user.firstName} {user.lastName}</td>
-                            <td>{user.email}</td>
-                            <td>{Object.keys(Role).find(roleName => Role[roleName] === user.role)}</td>
-                            <td style={{ whiteSpace: 'nowrap' }}>
-                                <Link to={`${path}/edit/${user.id}`} className="btn btn-sm btn-primary mr-1">Edit</Link>
-                                <button onClick={() => deleteUser(user.id)} className="btn btn-sm btn-danger" style={{ width: '60px' }} disabled={user.isDeleting}>
-                                    {user.isDeleting 
-                                        ? <span className="spinner-border spinner-border-sm"></span>
-                                        : <span>Delete</span>
-                                    }
-                                </button>
-                            </td>
-                        </tr>
-                    )}
-                    {!users &&
-                        <tr>
-                            <td colSpan="4" className="text-center">
-                                <span className="spinner-border spinner-border-lg align-center"></span>
-                            </td>
-                        </tr>
+            <DataGrid
+                dataSource={users}
+                showBorders={true}
+                columnAutoWidth={true}
+                noDataText="No users available"
+                allowColumnResizing={true}
+            >
+                <HeaderFilter visible={true} />
+                <Selection mode="single" />
+                <GroupPanel visible={true} />
+                <SearchPanel visible={true} highlightCaseSensitive={true} />
+                <Grouping autoExpandAll={false} />
+                <FilterRow visible={true} />
+
+                <Column dataField="title" caption="Name" width="15%" />
+                <Column dataField="email" caption="Email" width="30%" />
+                <Column
+                    caption="Role"
+                    width="25%"
+                    cellRender={({ data }) =>
+                        Object.keys(Role).find(roleName => Role[roleName] === data.role)
                     }
-                </tbody>
-            </table>
+                />
+                <Column
+                    width="30%"
+                    caption="Actions"
+                    cellRender={({ data }) => (
+                        <>
+                            <Link to={`${path}/edit/${data.id}`} className="btn btn-sm btn-primary mr-1">Edit</Link>
+                            <Button
+                                text={data.isDeleting ? "Deleting" : "Delete"}
+                                type="danger"
+                                disabled={data.isDeleting}
+                                onClick={() => deleteUser(data.id)}
+                                width={79}
+                                height={29}
+                                hint="Delete User"
+                            />
+                        </>
+                    )}
+                />
+                <Pager allowedPageSizes={[10, 25, 50, 100]} showPageSizeSelector={true} />
+                <Paging defaultPageSize={10} />
+                <Summary>
+                    <TotalItem
+                        column="email"
+                        summaryType="count" />
+                </Summary>
+            </DataGrid>
+            <LoadPanel
+                shadingColor="rgba(0,0,0,0.4)"
+                visible={users === null}
+                showIndicator={true}
+                shading={true}
+                position={{ of: 'body' }}
+            />
         </div>
     );
 }

@@ -9,7 +9,7 @@ public class Subject
     [Required]
     public string SubjectCode { get; set; }
     [Required]
-    public int Name { get; set; }
+    public string Name { get; set; }
 
     public string Description { get; set; }
 }

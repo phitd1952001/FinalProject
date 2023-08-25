@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 
 import { Role } from '@/_helpers';
@@ -7,6 +7,7 @@ import { Home } from '@/screens/home';
 import { Profile } from '@/screens/profile';
 import { Admin } from '@/screens/admin';
 import { Account } from '@/screens/account';
+import { Management } from '@/screens/management';
 
 function App() {
     const { pathname } = useLocation();  
@@ -18,6 +19,7 @@ function App() {
                 <PrivateRoute exact path="/" component={Home} />
                 <PrivateRoute path="/profile" component={Profile} />
                 <PrivateRoute path="/admin" roles={[Role.Admin]} component={Admin} />
+                <PrivateRoute path="/management" roles={[Role.Admin, Role.Staff]} component={Management} />
                 <Route path="/account" component={Account} />
                 <Redirect from="*" to="/" />
             </Switch>

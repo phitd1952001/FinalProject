@@ -1,4 +1,5 @@
 using AutoMapper;
+using Backend.Dtos.Subject;
 using Backend.Dtos.UserDtos;
 using Backend.Models;
 
@@ -18,6 +19,10 @@ namespace Backend
                 config.CreateMap<CreateRequest, Account>();
 
                 config.CreateMap<RegisterRequest, Account>();
+                
+                config.CreateMap<CreateSubjectRequest, Subject>();
+                
+                config.CreateMap<UpdateSubjectRequest, Subject>();
 
                 config.CreateMap<UpdateRequest, Account>()
                     .ForAllMembers(x => x.Condition(

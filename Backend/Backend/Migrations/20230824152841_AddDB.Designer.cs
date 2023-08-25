@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230820164256_addDB")]
-    partial class addDB
+    [Migration("20230824152841_AddDB")]
+    partial class AddDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -281,8 +281,9 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Name")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SubjectCode")
                         .IsRequired()

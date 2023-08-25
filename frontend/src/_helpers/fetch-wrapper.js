@@ -1,5 +1,4 @@
 import { accountService } from "../_services";
-
 import config from "config";
 const apiUrl = config.apiUrl;
 
