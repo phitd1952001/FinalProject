@@ -1,5 +1,6 @@
 using AutoMapper;
 using Backend.Dtos.Subject;
+using Backend.Dtos.RoomDtos;
 using Backend.Dtos.UserDtos;
 using Backend.Models;
 
@@ -11,6 +12,14 @@ namespace Backend
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
+                // mapping Room
+                config.CreateMap<CreateRoomRequest, Room>();
+                
+                // mapping subject
+                config.CreateMap<CreateSubjectRequest, Subject>();
+                
+                config.CreateMap<UpdateSubjectRequest, Subject>();
+
                 // mapping user
                 config.CreateMap<Account, AccountResponse>();
 
@@ -19,10 +28,6 @@ namespace Backend
                 config.CreateMap<CreateRequest, Account>();
 
                 config.CreateMap<RegisterRequest, Account>();
-                
-                config.CreateMap<CreateSubjectRequest, Subject>();
-                
-                config.CreateMap<UpdateSubjectRequest, Subject>();
 
                 config.CreateMap<UpdateRequest, Account>()
                     .ForAllMembers(x => x.Condition(

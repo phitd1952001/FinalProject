@@ -27,6 +27,8 @@ namespace Backend.Extensions
             service.AddScoped<IEmailService, EmailService>();
             service.AddScoped<IImageServices, ImageServices>();
             service.AddScoped<ISubjectService, SubjectService>(); 
+            service.AddScoped<IImageServices, ImageServices>();   
+            service.AddScoped<IRoomService, RoomService>(); 
             
             return service;
         }
