@@ -17,25 +17,22 @@ import DataGrid, {
     HeaderFilter,
     FilterRow
 } from 'devextreme-react/data-grid';
+import { AddEdit } from './AddEdit';
+import { Modal } from '../../../_components';
 
 const List = ({ match }) => {
     const { path } = match;
     const [subjects, setSubjects] = useState(null);
+    const [openModal, setOpenModal] = useState(false);
+    const [addMode, setAddMode] = useState(false);
+    const [id, setId] = useState(0);
 
     useEffect(() => {
-        subjectService.getAll().then(x => setSubjects(x));
+        getSubject();
     }, []);
 
-    function deleteSubject(id) {
-        if (confirm('Do You Want to delete')) {
-            setSubjects(subjects.map(x => {
-                if (x.id === id) { x.isDeleting = true; }
-                return x;
-            }));
-            subjectService.delete(id).then(() => {
-                setSubjects(subjects => subjects.filter(x => x.id !== id));
-            });
-        }
+    const getSubject = () => {
+        subjectService.getAll().then(x => setSubjects(x));
     }
 
     function deleteSubject(id) {
@@ -65,11 +62,29 @@ const List = ({ match }) => {
         })
     }
 
+    const addSubject = () => {
+        setAddMode(true);
+        setOpenModal(true);
+    }
+
+    const updateSubject = (id) => {
+        setId(id);
+        setAddMode(false);
+        setOpenModal(true);
+    }
+
+    const onHide = () => {
+        setAddMode(false);
+        setOpenModal(false);
+        setId(0);
+        getSubject();
+    }
+
     return (
         <div>
-            <h1>Subject</h1>
+            <h1>Subject Management</h1>
             <br />
-            <Link to={`${path}/add`} className="btn btn-sm btn-success mb-2">Add Subject</Link>
+            <button onClick={addSubject} className="btn btn-sm btn-success mb-2">Add Subject</button>
             <DataGrid
                 dataSource={subjects}
                 showBorders={true}
@@ -92,7 +107,14 @@ const List = ({ match }) => {
                     caption="Actions"
                     cellRender={({ data }) => (
                         <>
-                            <Link to={`${path}/edit/${data.id}`} className="btn btn-sm btn-primary mr-1">Edit</Link>
+                            <Button
+                                className="mr-1"
+                                type="default"
+                                width={79}
+                                height={29}
+                                text={"Edit"}
+                                onClick={() => updateSubject(data.id)}
+                            />
                             <Button
                                 text={data.isDeleting ? "Deleting" : "Delete"}
                                 type="danger"
@@ -120,6 +142,10 @@ const List = ({ match }) => {
                 shading={true}
                 position={{ of: 'body' }}
             />
+
+            <Modal title={addMode ? "Add Subject" : "Update Subject"} show={openModal} onHide={() => setOpenModal(false)} >
+                <AddEdit onHide={onHide} id={addMode ? 0 : id} />
+            </Modal>
         </div>
     );
 }

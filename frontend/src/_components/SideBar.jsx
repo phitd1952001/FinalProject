@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { accountService } from "../_services";
 import images from "../_asset/images";
-import { AiOutlineUser , AiOutlineLogout, AiFillHome, AiFillDatabase} from "react-icons/ai";
+import { AiOutlineUser , AiOutlineLogout, AiFillHome, AiFillDatabase, AiFillContainer} from "react-icons/ai";
 
 const styles = {
   avatar: {
@@ -127,7 +127,28 @@ const SideBar = () => {
               </div>
             </Link>
           </li>
-
+          <li className="w-100">
+            <Link
+              to="/management/subjects"
+              style={{ textDecoration: "none" }}
+              className={`d-flex align-items-center p-2 text-base justify-content-between  ${
+                location.pathname === "/management/subjects"
+                  ? "bg-light text-dark"
+                  : "text-white"
+              } rounded-lg sideBarBtn`}
+            >
+              <div className="d-flex align-items-center">
+                <AiFillContainer
+                  className={`${
+                    location.pathname === "/management/subjects"
+                      ? "text-dark"
+                      : "text-white"
+                  } w-5 h-5`}
+                />
+                <span className="d-none d-md-inline-block ml-3">Manage Subjects</span>
+              </div>
+            </Link>
+          </li>
           <li className="w-100">
             <div
               onClick={accountService.logout}

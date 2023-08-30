@@ -69,9 +69,9 @@ function List({ match }) {
     }
 
     const updateUser = (id) => {
+        setId(id);
         setAddMode(false);
         setOpenModal(true);
-        setId(id);
     }
 
     const onHide = () => {
