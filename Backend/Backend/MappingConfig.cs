@@ -1,4 +1,5 @@
 using AutoMapper;
+using Backend.Dtos.RoomDtos;
 using Backend.Dtos.UserDtos;
 using Backend.Models;
 
@@ -10,6 +11,9 @@ namespace Backend
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
+                // mapping Room
+                config.CreateMap<CreateRoomRequest, Room>();
+
                 // mapping user
                 config.CreateMap<Account, AccountResponse>();
 
