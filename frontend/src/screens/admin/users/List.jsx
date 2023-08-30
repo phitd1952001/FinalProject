@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-
+import Swal from 'sweetalert2';
 import DataGrid, {
     Column,
     Grouping,
@@ -19,32 +18,74 @@ import LoadPanel from 'devextreme-react/load-panel';
 
 import { accountService } from '../../../_services';
 import { Role } from "../../../_helpers/role";
+import { Modal } from '../../../_components';
+import { AddEdit } from './AddEdit';
 
 function List({ match }) {
     const { path } = match;
     const [users, setUsers] = useState(null);
+    const [openModal, setOpenModal] = useState(false);
+    const [addMode, setAddMode] = useState(false);
+    const [id, setId] = useState(0);
 
     useEffect(() => {
-        accountService.getAll().then(x => setUsers(x));
+        getUser();
     }, []);
 
+    const getUser = () =>{
+        accountService.getAll().then(x => setUsers(x));
+    }
+
     function deleteUser(id) {
-        if (confirm('Do You Want to delete')) {
-            setUsers(users.map(x => {
-                if (x.id === id) { x.isDeleting = true; }
-                return x;
-            }));
-            accountService.delete(id).then(() => {
-                setUsers(users => users.filter(x => x.id !== id));
-            });
-        }
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setUsers(users.map(x => {
+                    if (x.id === id) { x.isDeleting = true; }
+                    return x;
+                }));
+                accountService.delete(id).then(() => {
+                    setUsers(users => users.filter(x => x.id !== id));
+                    Swal.fire(
+                        'Deleted!',
+                        'Your record has been deleted.',
+                        'success'
+                    )
+                })
+            }
+        })
+    }
+
+    const addUser = () => {
+        setAddMode(true);
+        setOpenModal(true);
+    }
+
+    const updateUser = (id) => {
+        setAddMode(false);
+        setOpenModal(true);
+        setId(id);
+    }
+
+    const onHide = () => {
+        setAddMode(false);
+        setOpenModal(false);
+        setId(0);
+        getUser();
     }
 
     return (
         <div>
-            <h1>Users</h1>
+            <h1 className="text-red-400">Users Management</h1>
             <br />
-            <Link to={`${path}/add`} className="btn btn-sm btn-success mb-2">Add User</Link>
+            <button onClick={addUser} className="btn btn-sm btn-success mb-2">Add User</button>
             <DataGrid
                 dataSource={users}
                 showBorders={true}
@@ -73,7 +114,14 @@ function List({ match }) {
                     caption="Actions"
                     cellRender={({ data }) => (
                         <>
-                            <Link to={`${path}/edit/${data.id}`} className="btn btn-sm btn-primary mr-1">Edit</Link>
+                            <Button
+                                className="mr-1"
+                                type="default"
+                                width={79}
+                                height={29} 
+                                text={"Edit"} 
+                                onClick={() => updateUser(data.id)}
+                            />
                             <Button
                                 text={data.isDeleting ? "Deleting" : "Delete"}
                                 type="danger"
@@ -101,6 +149,10 @@ function List({ match }) {
                 shading={true}
                 position={{ of: 'body' }}
             />
+
+            <Modal title={addMode ? "Add User" : "Update User"} show={openModal} onHide={() => setOpenModal(false)} >
+                <AddEdit onHide={onHide} id={addMode ? 0 : id} />
+            </Modal>
         </div>
     );
 }

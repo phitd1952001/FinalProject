@@ -425,7 +425,6 @@ namespace Backend.Services
             if (!String.IsNullOrEmpty(user.Avatar))
             {
                 var isDeleteSuccessfully = _imageServices.DeleteFile(user.AvatarPublicId);
-
                 if (isDeleteSuccessfully)
                 {
                     user.Avatar = String.Empty;

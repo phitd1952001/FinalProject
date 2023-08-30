@@ -5,9 +5,9 @@ import * as Yup from 'yup';
 
 import { accountService, alertService } from '../../../_services';
 
-function AddEdit({ history, match }) {
-    const { id } = match.params;
-    const isAddMode = !id;
+function AddEdit(props) {
+    const { id, onHide } = props;
+    const isAddMode = id === 0;
 
     const updateinitialValues = {
         title: '',
@@ -110,7 +110,7 @@ function AddEdit({ history, match }) {
         accountService.create(fields)
             .then(() => {
                 alertService.success('User added successfully', { keepAfterRouteChange: true });
-                history.push('.');
+                onHide();
             })
             .catch(error => {
                 setSubmitting(false);
@@ -122,7 +122,7 @@ function AddEdit({ history, match }) {
         accountService.update(id, fields)
             .then(() => {
                 alertService.success('Update successful', { keepAfterRouteChange: true });
-                history.push('..');
+                onHide();
             })
             .catch(error => {
                 setSubmitting(false);
@@ -156,7 +156,6 @@ function AddEdit({ history, match }) {
 
                     return (
                         <Form>
-                            <h1>{isAddMode ? 'Add User' : 'Edit User'}</h1>
                             <div className="form-row">
                                 <div className="form-group col">
                                     <label>Title</label>
@@ -190,10 +189,10 @@ function AddEdit({ history, match }) {
                                     <label>Role</label>
                                     <Field name="role" as="select" className={'form-control' + (errors.role && touched.role ? ' is-invalid' : '')}>
                                         <option value=""></option>
-                                        <option value={3}>User</option>
                                         <option value={0}>Admin</option>
-                                        <option value={2}>Supervisor</option>
                                         <option value={1}>Staff</option>
+                                        <option value={2}>Supervisor</option>
+                                        <option value={3}>User</option>
                                     </Field>
                                     <ErrorMessage name="role" component="div" className="invalid-feedback" />
                                 </div>
@@ -267,12 +266,11 @@ function AddEdit({ history, match }) {
                                     <ErrorMessage name="confirmPassword" component="div" className="invalid-feedback" />
                                 </div>
                             </div>
-                            <div className="form-group">
-                                <button type="submit" disabled={isSubmitting} className="btn btn-primary">
+                            <div className="form-group d-flex justify-content-center">
+                                <button type="submit" disabled={isSubmitting} className="btn btn-primary" style={{width:"25%"}}>
                                     {isSubmitting && <span className="spinner-border spinner-border-sm mr-1"></span>}
                                     Save
                                 </button>
-                                <Link to={isAddMode ? '.' : '..'} className="btn btn-link">Cancel</Link>
                             </div>
                         </Form>
                     );

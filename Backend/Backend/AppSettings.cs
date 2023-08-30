@@ -16,7 +16,7 @@ namespace Backend
         public static string Host { get; set; }
         public static int Port { get; set; }
         
-        //
+        // cdn
         public static string Cloud { get; set; }
         public static string ApiKey { get; set; }
         public static string ApiSecretKey { get; set; }
