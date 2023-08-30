@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import { Subjects } from './subjects/Index';
+import { Rooms } from './rooms/Index';
 
 function Management({ match }) {
     const { path } = match;
@@ -11,6 +12,7 @@ function Management({ match }) {
             <div className="container">
                 <Switch>
                     <Route path={`${path}/subjects`} component={Subjects} />
+                    <Route path={`${path}/rooms`} component={Rooms} />
                 </Switch>
             </div>
         </div>

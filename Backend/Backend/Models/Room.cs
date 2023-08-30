@@ -11,5 +11,5 @@ public class Room
     public string Name { get; set; }
     
     [Required] 
-    public string NumberOfSeat { get; set; }
+    public int NumberOfSeat { get; set; }
 }

@@ -8,5 +8,5 @@ public class CreateRoomRequest
     public string Name { get; set; }
  
     [Required] 
-    public string NumberOfSeat { get; set; }
+    public int NumberOfSeat { get; set; }
 }

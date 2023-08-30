@@ -2,7 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { accountService } from "../_services";
 import images from "../_asset/images";
-import { AiOutlineUser , AiOutlineLogout, AiFillHome, AiFillDatabase, AiFillContainer} from "react-icons/ai";
+import {
+  AiOutlineUser,
+  AiOutlineLogout,
+  AiFillHome,
+  AiFillDatabase,
+  AiFillContainer,
+  AiOutlineBank,
+  AiOutlineBars,
+  AiOutlineDown,
+} from "react-icons/ai";
 
 const styles = {
   avatar: {
@@ -14,6 +23,7 @@ const styles = {
 const SideBar = () => {
   const [user, setUser] = useState({});
   const [noAvatarImage, setNoAvatarImage] = useState(null);
+  const [managementToggle, setManagementToggle] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -25,6 +35,11 @@ const SideBar = () => {
 
   // only show nav when logged in
   if (!user) return null;
+
+  const handleManagementToggle = (e) => {
+    console.log("fdasfd");
+    setManagementToggle((prev) => !prev);
+  };
 
   return (
     <aside className="w-100 h-100 bg-dark">
@@ -53,11 +68,7 @@ const SideBar = () => {
             </div>
             <div className="grow ml-3">
               <p className="d-none d-sm-inline-block text-sm font-weight-semibold text-white">
-                {user && user.firstName ? (
-                  <>Hi {user.firstName}!</>
-                ) : (
-                  <>Hi!</>
-                )}
+                {user && user.firstName ? <>Hi {user.firstName}!</> : <>Hi!</>}
               </p>
             </div>
           </li>
@@ -66,17 +77,13 @@ const SideBar = () => {
               to="/"
               style={{ textDecoration: "none" }}
               className={`d-flex align-items-center p-2 text-base justify-content-between  ${
-                location.pathname === "/"
-                  ? "bg-light text-dark"
-                  : "text-white"
+                location.pathname === "/" ? "bg-light text-dark" : "text-white"
               } rounded-lg sideBarBtn`}
             >
               <div className="d-flex align-items-center">
                 <AiFillHome
                   className={`${
-                    location.pathname === "/"
-                      ? "text-dark"
-                      : "text-white"
+                    location.pathname === "/" ? "text-dark" : "text-white"
                   } w-5 h-5`}
                 />
                 <span className="d-none d-md-inline-block ml-3">Home</span>
@@ -123,38 +130,103 @@ const SideBar = () => {
                       : "text-white"
                   } w-5 h-5`}
                 />
-                <span className="d-none d-md-inline-block ml-3">Manage Users</span>
+                <span className="d-none d-md-inline-block ml-3">
+                  Manage Users
+                </span>
               </div>
             </Link>
           </li>
-          <li className="w-100">
-            <Link
-              to="/management/subjects"
+
+          <li class="w-100">
+            <a
               style={{ textDecoration: "none" }}
+              onClick={(e) => handleManagementToggle(e)}
               className={`d-flex align-items-center p-2 text-base justify-content-between  ${
-                location.pathname === "/management/subjects"
-                  ? "bg-light text-dark"
-                  : "text-white"
-              } rounded-lg sideBarBtn`}
+                managementToggle ? "bg-light text-dark" : "text-white"
+              } rounded-lg sideBarBtn mb-2`}
             >
-              <div className="d-flex align-items-center">
-                <AiFillContainer
-                  className={`${
-                    location.pathname === "/management/subjects"
-                      ? "text-dark"
-                      : "text-white"
-                  } w-5 h-5`}
-                />
-                <span className="d-none d-md-inline-block ml-3">Manage Subjects</span>
+              <div className="w-100 d-flex align-items-center justify-content-between">
+                <div>
+                  <AiOutlineBars
+                    className={`${
+                      managementToggle ? "text-dark" : "text-white"
+                    } w-5 h-5`}
+                  />
+                  <span className="d-none d-md-inline-block ml-3">
+                    Managements
+                  </span>
+                </div>
+                <div className="d-flex align-items-center justify-content-end">
+                  <AiOutlineDown
+                    className={`${
+                      managementToggle ? "text-dark" : "text-white"
+                    } w-5 h-5`}
+                  />
+                </div>
               </div>
-            </Link>
+            </a>
+            <ul
+              className={`${
+                managementToggle ? "d-flex flex-column d-block" : "d-none"
+              }`}
+            > 
+              <li className="w-100">
+                <Link
+                  to="/management/subjects"
+                  style={{ textDecoration: "none" }}
+                  className={`d-flex align-items-center p-2 text-base justify-content-between  ${
+                    location.pathname === "/management/subjects"
+                      ? "bg-light text-dark"
+                      : "text-white"
+                  } rounded-lg sideBarBtn`}
+                >
+                  <div className="d-flex align-items-center">
+                    <AiFillContainer
+                      className={`${
+                        location.pathname === "/management/subjects"
+                          ? "text-dark"
+                          : "text-white"
+                      } w-5 h-5`}
+                    />
+                    <span className="d-none d-md-inline-block ml-3">
+                      Manage Subjects
+                    </span>
+                  </div>
+                </Link>
+              </li>
+              <li className="w-100">
+                <Link
+                  to="/management/rooms"
+                  style={{ textDecoration: "none" }}
+                  className={`d-flex align-items-center p-2 text-base justify-content-between  ${
+                    location.pathname === "/management/rooms"
+                      ? "bg-light text-dark"
+                      : "text-white"
+                  } rounded-lg sideBarBtn`}
+                >
+                  <div className="d-flex align-items-center">
+                    <AiOutlineBank
+                      className={`${
+                        location.pathname === "/management/rooms"
+                          ? "text-dark"
+                          : "text-white"
+                      } w-5 h-5`}
+                    />
+                    <span className="d-none d-md-inline-block ml-3">
+                      Manage Rooms
+                    </span>
+                  </div>
+                </Link>
+              </li>
+            </ul>
           </li>
+
           <li className="w-100">
             <div
               onClick={accountService.logout}
               className=" sideBarBtn d-flex align-items-center p-2 text-base font-weight-normal rounded-lg text-white hover-bg-gray-100 dark:hover-bg-gray-700"
             >
-              <AiOutlineLogout className='text-white w-5 h-5' />
+              <AiOutlineLogout className="text-white w-5 h-5" />
               <span className="d-none d-md-inline-block ml-3">Logout</span>
             </div>
           </li>

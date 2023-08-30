@@ -228,9 +228,8 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("NumberOfSeat")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("NumberOfSeat")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

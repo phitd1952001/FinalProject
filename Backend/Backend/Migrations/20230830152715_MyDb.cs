@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Backend.Migrations
 {
-    public partial class AddDB : Migration
+    public partial class MyDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -83,7 +83,7 @@ namespace Backend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NumberOfSeat = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    NumberOfSeat = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
