@@ -41,5 +41,6 @@ namespace Backend.Models
         public string? Avatar { get; set; }
         public string? AvatarPublicId { get; set; }
         public string? QrCode { get; set; }
+        public string? QrCodePublishId { get; set; }
     }
 }

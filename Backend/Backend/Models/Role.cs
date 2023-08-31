@@ -5,6 +5,7 @@ namespace Backend.Models
         Admin, 
         Staff,
         Supervisor,
+        Student,
         User
     }
 }

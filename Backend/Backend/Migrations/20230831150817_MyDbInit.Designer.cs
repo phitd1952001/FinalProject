@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230830152715_MyDb")]
-    partial class MyDb
+    [Migration("20230831150817_MyDbInit")]
+    partial class MyDbInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -80,6 +80,9 @@ namespace Backend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("QrCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("QrCodePublishId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ResetToken")

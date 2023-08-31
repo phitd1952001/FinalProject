@@ -20,6 +20,7 @@ export const accountService = {
   getById,
   create,
   update,
+  updateSelf,
   handleUpload,
   delete: _delete,
   user: userSubject.asObservable(),
@@ -94,6 +95,18 @@ function create(params) {
 
 function update(id, params) {
   return fetchWrapper.put(`${baseUrl}/${id}`, params).then((user) => {
+    // update stored user if the logged in user updated their own record
+    if (user.id === userSubject.value.id) {
+      // publish updated user to subscribers
+      user = { ...userSubject.value, ...user };
+      userSubject.next(user);
+    }
+    return user;
+  });
+}
+
+function updateSelf(id, params) {
+  return fetchWrapper.put(`${baseUrl}/update-self/${id}`, params).then((user) => {
     // update stored user if the logged in user updated their own record
     if (user.id === userSubject.value.id) {
       // publish updated user to subscribers

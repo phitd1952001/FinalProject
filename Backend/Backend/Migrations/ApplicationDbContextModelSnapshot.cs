@@ -80,6 +80,9 @@ namespace Backend.Migrations
                     b.Property<string>("QrCode")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("QrCodePublishId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ResetToken")
                         .HasColumnType("nvarchar(max)");
 

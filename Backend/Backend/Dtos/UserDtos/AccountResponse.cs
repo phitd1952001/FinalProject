@@ -22,4 +22,5 @@ public class AccountResponse
     public bool Sex { get; set; }
     public string? ManagementCode { get; set; }
     public string? Avatar { get; set; }
+    public string? QrCode { get; set; }
 }

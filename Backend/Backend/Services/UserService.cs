@@ -1,10 +1,12 @@
 using System.Security.Cryptography;
+using System.Text;
 using AutoMapper;
 using Backend.DbContext;
 using Backend.Dtos.UserDtos;
+using Backend.Extensions;
 using Backend.Models;
 using Backend.Services.IServices;
-using CloudinaryDotNet.Actions;
+using Net.Codecrete.QrCodeGenerator;
 using Role = Backend.Models.Role;
 
 namespace Backend.Services
@@ -237,9 +239,53 @@ namespace Backend.Services
             if (!string.IsNullOrEmpty(model.Password))
                 account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
 
+            // make a copy of management code
+            var managementCodeCopy = model.ManagementCode;
+            if (!string.IsNullOrEmpty(managementCodeCopy) && account.ManagementCode != managementCodeCopy)
+            {
+                var qrCodeImg = GenerateQrCode(managementCodeCopy);
+                if (!String.IsNullOrEmpty(account.QrCode))
+                {
+                    var isDeleteSuccessfully = _imageServices.DeleteFile(account.QrCodePublishId);
+                    if (isDeleteSuccessfully)
+                    {
+                        account.QrCode = String.Empty;
+                        account.QrCodePublishId = String.Empty;
+                    }
+                    else
+                    {
+                        return _mapper.Map<AccountResponse>(account);
+                    }
+                }
+
+                // Create a MemoryStream from the byte array
+                using (MemoryStream stream = new MemoryStream(qrCodeImg))
+                {
+                    var uploadResult = _imageServices.UploadFile(stream, Guid.NewGuid().ToString());
+                    account.QrCode = uploadResult?.Url.ToString();
+                    account.QrCodePublishId = uploadResult?.PublicId;
+                }
+            }
             // copy model to account and save
             _mapper.Map(model, account);
             account.Sex = model._sex;
+            account.Updated = DateTime.UtcNow;
+            _context.Accounts.Update(account);
+            _context.SaveChanges();
+
+            return _mapper.Map<AccountResponse>(account);
+        }
+        
+        public AccountResponse UpdateSelf(int id, UpdateSelfRequest model)
+        {
+            var account = getAccount(id);
+
+            // hash password if it was entered
+            if (!string.IsNullOrEmpty(model.Password))
+                account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
+
+            // copy model to account and save
+            _mapper.Map(model, account);
             account.Updated = DateTime.UtcNow;
             _context.Accounts.Update(account);
             _context.SaveChanges();
@@ -443,6 +489,36 @@ namespace Backend.Services
 
             await _context.SaveChangesAsync();
             return _mapper.Map<AccountResponse>(user);
+        }
+
+        private byte[] GenerateQrCode(string managementCode)
+        {
+            var studentId = Encrypt(managementCode);
+            var borderWidth = Math.Clamp(3, 0, 999999);
+            var qrCode = QrCode.EncodeText(studentId, QrCode.Ecc.Medium);
+            byte[] qrcode = qrCode.ToPng(20, (int)borderWidth);
+            return qrcode;
+        }
+        
+        private string Encrypt(string clearText)
+        {
+            var clearBytes = Encoding.Unicode.GetBytes(clearText);
+            using (Aes encryptor = Aes.Create())
+            {
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(AppSettings.QrCodeKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(clearBytes, 0, clearBytes.Length);
+                        cs.Close();
+                    }
+                    clearText = Convert.ToBase64String(ms.ToArray());
+                }
+            }
+            return clearText;
         }
     }
 }

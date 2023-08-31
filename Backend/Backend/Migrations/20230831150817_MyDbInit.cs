@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Backend.Migrations
 {
-    public partial class MyDb : Migration
+    public partial class MyDbInit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -38,7 +38,8 @@ namespace Backend.Migrations
                     ManagementCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Avatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AvatarPublicId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    QrCode = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    QrCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    QrCodePublishId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

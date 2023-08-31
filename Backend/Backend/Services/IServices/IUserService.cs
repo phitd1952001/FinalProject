@@ -17,6 +17,7 @@ namespace Backend.Services.IServices
         AccountResponse GetById(int id);
         AccountResponse Create(CreateRequest model);
         AccountResponse Update(int id, UpdateRequest model);
+        AccountResponse UpdateSelf(int id, UpdateSelfRequest model);
         bool AdminCheck();
         void Delete(int id);
         Task<AccountResponse> UpLoadAvatar(int id, Stream avatar);

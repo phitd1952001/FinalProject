@@ -1,4 +1,3 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Backend.Authorization;
 using Backend.Dtos.UserDtos;
@@ -135,6 +134,17 @@ namespace Backend.Controllers
                 model.Role = null;
 
             var account = _userService.Update(id, model);
+            return Ok(account);
+        }
+        
+        [HttpPut("update-self/{id:int}")]
+        public ActionResult<AccountResponse> UpdateSelf(int id, UpdateSelfRequest model)
+        {
+            // users can update their own account and admins can update any account
+            if (id != Account.Id && Account.Role != Role.Admin)
+                return Unauthorized(new { message = "Unauthorized" });
+
+            var account = _userService.UpdateSelf(id, model);
             return Ok(account);
         }
 

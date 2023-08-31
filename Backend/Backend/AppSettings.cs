@@ -20,5 +20,8 @@ namespace Backend
         public static string Cloud { get; set; }
         public static string ApiKey { get; set; }
         public static string ApiSecretKey { get; set; }
+        
+        // 
+        public static string QrCodeKey { get; set; }
     }
 }
