@@ -23,6 +23,7 @@ namespace Backend.Dtos.UserDtos
         public bool Sex { get; set; }
         public string? ManagementCode { get; set; }
         public string? Avatar { get; set; }
+        public string? QrCode { get; set; }
         public string JwtToken { get; set; }
 
         [JsonIgnore] // refresh token is returned in http only cookie

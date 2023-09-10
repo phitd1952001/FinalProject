@@ -188,8 +188,8 @@ const SideBar = () => {
                           : "text-white"
                       } w-5 h-5`}
                     />
-                    <span className="d-none d-md-inline-block ml-3">
-                      Manage Subjects
+                    <span className="d-none d-md-inline-block ml-2">
+                      Subjects
                     </span>
                   </div>
                 </Link>
@@ -212,8 +212,8 @@ const SideBar = () => {
                           : "text-white"
                       } w-5 h-5`}
                     />
-                    <span className="d-none d-md-inline-block ml-3">
-                      Manage Rooms
+                    <span className="d-none d-md-inline-block ml-2">
+                      Rooms
                     </span>
                   </div>
                 </Link>

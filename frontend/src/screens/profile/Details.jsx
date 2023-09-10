@@ -9,10 +9,12 @@ function Details({ match }) {
     const user = accountService.userValue;
 
     const [noAvatarImage, setNoAvatarImage] = useState(null);
+    const [noQrImage, setNoQrImage] = useState(null);
 
     useEffect(() => {
         if (user) {
             images.noAvatar.then((img) => setNoAvatarImage(img));
+            images.noQrCode.then((img) => setNoQrImage(img));
         }
     }, []);
 
@@ -118,16 +120,16 @@ function Details({ match }) {
 
                         </div>
                         <div className="col-md-4" style={styles.col}>
-                            <div className="h-100 w-100 d-flex flex-column justify-content-center align-items-center">
-                                <div className="card w-100" style={styles.card}>
+                            <div className="h-100 w-100 d-flex flex-column justify-content-center align-items-start">
+                                <div className="card w-100 mt-0" style={styles.card}>
                                     <div className="card-body" style={styles.cardBody}>
                                         <div className="d-flex flex-column align-items-center text-center">
                                             {user && user.avatar ? (
-                                                <img src={user.avatar} alt="Admin" className="rounded-circle" width="150" height="150" />
+                                                <img src={user.avatar} alt="Admin" className="rounded-circle" width="120" height="120" />
                                             ) : (
                                                 <img
                                                     src={noAvatarImage}
-                                                    alt="" className="rounded-circle" width="150" height="150"
+                                                    alt="" className="rounded-circle" width="120" height="120"
                                                 />
                                             )}
 
@@ -136,6 +138,29 @@ function Details({ match }) {
                                                 <p className="text-secondary mb-1">{user.managementCode}</p>
                                                 <p className="text-muted font-size-sm">{user.address}</p>
                                                 <Link to={`${path}/update`} className="btn btn-primary">Update</Link>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="card w-100 mt-2" style={styles.card}>
+                                    <div className="card-body" style={styles.cardBody}>
+                                        <div className="d-flex flex-column align-items-center text-center">
+                                            {user && user.qrCode ? (
+                                                <img src={user.qrCode} alt="Admin" width="110" height="110" />
+                                            ) : (
+                                                <img
+                                                    src={noQrImage}
+                                                    alt="" width="110" height="110"
+                                                />
+                                            )}
+
+                                            <div className="mt-1">
+                                             {user && user.qrCode ? (
+                                                <h4>Your QR code</h4>
+                                            ) : (
+                                                <h4>Contact Admin To Have QR code</h4>
+                                            )}
+                                               
                                             </div>
                                         </div>
                                     </div>
