@@ -18,6 +18,7 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import { AddEdit } from './AddEdit';
 import { Modal } from '../../../_components';
+import ExcelUpload from './ExcelUpload';
 
 const List = ({ match }) => {
     const { path } = match;
@@ -25,6 +26,7 @@ const List = ({ match }) => {
     const [openModal, setOpenModal] = useState(false);
     const [addMode, setAddMode] = useState(false);
     const [id, setId] = useState(0);
+    const [openImportModal, setOpenImportModal] = useState(false);
 
     useEffect(() => {
         getRooms();
@@ -83,7 +85,11 @@ const List = ({ match }) => {
         <div>
             <h1>Room Management</h1>
             <br />
-            <button onClick={addRoom} className="btn btn-sm btn-success mb-2">Add Room</button>
+            <div className="d-flex">
+                <button onClick={addRoom} className="btn btn-sm btn-success mb-2 mr-2">Add Room</button> 
+                <button onClick={()=>setOpenImportModal(true)} className="btn btn-sm btn-success mb-2">Import Excel</button>
+            </div>
+           
             <DataGrid
                 dataSource={rooms}
                 showBorders={true}
@@ -143,6 +149,10 @@ const List = ({ match }) => {
 
             <Modal title={addMode ? "Add Room" : "Update Room"} show={openModal} onHide={() => setOpenModal(false)} >
                 <AddEdit onHide={onHide} id={addMode ? 0 : id} />
+            </Modal>
+
+            <Modal title={"Import Excel"} show={openImportModal} onHide={() => setOpenImportModal(false)} >
+                <ExcelUpload getRooms={getRooms} setOpenImportModal={setOpenImportModal}/>
             </Modal>
         </div>
     );

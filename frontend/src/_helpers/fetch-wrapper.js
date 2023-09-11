@@ -8,6 +8,7 @@ export const fetchWrapper = {
   put,
   postUpload,
   delete: _delete,
+  postFormData
 };
 
 function get(url) {
@@ -35,6 +36,17 @@ function postUpload(url, body) {
     credentials: "include",
     body: body,
   };
+  return fetch(url, requestOptions).then(handleResponse);
+}
+
+function postFormData(url, body) {
+  const requestOptions = {
+    method: "POST",
+    headers: {...authHeader(url) },
+    credentials: "include",
+    body: body,
+  };
+
   return fetch(url, requestOptions).then(handleResponse);
 }
 

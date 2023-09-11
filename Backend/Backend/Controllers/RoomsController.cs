@@ -1,4 +1,5 @@
 ﻿using Backend.Authorization;
+using Backend.Dtos.ExcelDtos;
 using Backend.Dtos.RoomDtos;
 using Backend.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,7 @@ namespace Backend.Controllers
             var findRoom = await _roomService.GetRoomById(id);
             return Ok(findRoom);
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> Create(CreateRoomRequest createRoomRequest)
         {
@@ -41,7 +42,7 @@ namespace Backend.Controllers
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, UpdateRoomRequest updatedRoomRequest)
         {
-            var updateRoom = await _roomService.UpdateRoom(id ,updatedRoomRequest);
+            var updateRoom = await _roomService.UpdateRoom(id, updatedRoomRequest);
             return Ok(updateRoom);
         }
 
@@ -51,6 +52,52 @@ namespace Backend.Controllers
             await _roomService.DeleteRoom(id);
             return Ok(new { message = "Account deleted successfully" });
         }
+
+        [HttpGet("available-fields")]
+        public IActionResult GetAvailableFields()
+        {
+            List<string> availableFields = _roomService.GetFields();
+            return Ok(availableFields);
+        }
+        
+        [HttpPost("upload-excel")]
+        public async Task<IActionResult> UploadExcelFile([FromForm] UploadExcelModel model)
+        {
+            try
+            {
+                if (model.file == null || model.file.Length == 0)
+                {
+                    return BadRequest("No file uploaded.");
+                }
+
+                var result = await _roomService.UploadExcel(model.file);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions and return an error response
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("final-upload-excel")]
+        public async Task<IActionResult> ImportExcelFile([FromForm] ImportExcelModel model)
+        {
+            try
+            {
+                if (model.file == null || model.file.Length == 0)
+                {
+                    return BadRequest("No file uploaded.");
+                }
+
+                var result = await _roomService.ImportExcel(model.file, model.mapping);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions and return an error response
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }
-

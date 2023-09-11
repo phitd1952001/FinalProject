@@ -79,7 +79,7 @@ function Details({ match }) {
 
                                     <div className="row">
                                         <div className="col-sm-3">
-                                            <h6 className="mb-0">Possition</h6>
+                                            <h6 className="mb-0">Position</h6>
                                         </div>
                                         <div className="col-sm-9 text-secondary">
                                             {user.position}
