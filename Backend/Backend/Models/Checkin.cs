@@ -23,4 +23,9 @@ public class Checkin
     public int SubjectId { get; set; }
     [ForeignKey("SubjectId")]
     public Subject Subject { get; set; }
+    
+    [Required]
+    public int RoomId { get; set; }
+    [ForeignKey("RoomId")]
+    public Room Room { get; set; }
 }

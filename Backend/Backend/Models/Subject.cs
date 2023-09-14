@@ -10,6 +10,8 @@ public class Subject
     public string SubjectCode { get; set; }
     [Required]
     public string Name { get; set; }
+    
+    public int Duration { get; set; }
 
     public string Description { get; set; }
 }

@@ -14,7 +14,7 @@ namespace Backend.DbContext
         
         public DbSet<Class> Classes { get; set; }
 
-        public DbSet<Message> Messages { get; set; }
+        public DbSet<Setting> Settings { get; set; }
 
         public DbSet<Reminder> Reminders { get; set; }
 

@@ -69,7 +69,7 @@ public class SubjectService : ISubjectService
 
     public List<string> GetFields()
     {
-        return new List<string>() { "SubjectCode", "Name", "Description" };
+        return new List<string>() { "SubjectCode", "Name", "Description", "Duration" };
     }
 
     public async Task<List<Dictionary<string, string>>> UploadExcel(IFormFile file)
@@ -147,7 +147,23 @@ public class SubjectService : ISubjectService
                         var value = row[excelColumn].ToString();
 
                         var propertyInfo = typeof(Subject).GetProperty(dataField);
-                        propertyInfo?.SetValue(item, value);
+                        if (propertyInfo?.PropertyType == typeof(int))
+                        {
+                            int intValue;
+                            if (int.TryParse(value, out intValue))
+                            {
+                                // Successfully converted to int
+                                propertyInfo.SetValue(item, intValue);
+                            }
+                            else
+                            {
+                                propertyInfo.SetValue(item, -1);
+                            }
+                        }
+                        else
+                        {
+                            propertyInfo?.SetValue(item, value);
+                        }
                         
                     }
                 }
@@ -174,7 +190,9 @@ public class SubjectService : ISubjectService
 
     private bool CheckValidData(Subject subject)
     {
-        return !string.IsNullOrEmpty(subject.Name) && !string.IsNullOrEmpty(subject.SubjectCode) &&
-               !_context.Subjects.Any(_ => _.SubjectCode == subject.SubjectCode);
+        return !string.IsNullOrEmpty(subject.Name) 
+               && !string.IsNullOrEmpty(subject.SubjectCode) 
+               && subject.Duration > 0
+               && !_context.Subjects.Any(_ => _.SubjectCode == subject.SubjectCode);
     }
 }

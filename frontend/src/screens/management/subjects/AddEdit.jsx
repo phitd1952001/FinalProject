@@ -12,6 +12,7 @@ function AddEdit(props) {
     name: '',
     subjectCode: '',
     description: '',
+    duration: 0
   };
 
   const validationSchema = Yup.object().shape({
@@ -19,6 +20,8 @@ function AddEdit(props) {
       .required('Name is required'),
     subjectCode: Yup.string()
       .required('Subject Code is required'),
+      duration: Yup.number().integer().min(0)
+      .required('Duration is required'),
   });
 
   function onSubmit(fields, { setStatus, setSubmitting }) {
@@ -62,7 +65,7 @@ function AddEdit(props) {
             if (!isAddMode) {
               // get user and set form fields
               subjectService.getById(id).then(subject => {
-                const fields = ['name', 'subjectCode', 'description'];
+                const fields = ['name', 'subjectCode', 'description','duration'];
                 fields.forEach(field => {
                   setFieldValue(field, subject[field], false)
                 });
@@ -82,6 +85,12 @@ function AddEdit(props) {
                 <label>Subject Code</label>
                 <Field name="subjectCode" type="text" className={'form-control' + (errors.subjectCode && touched.subjectCode ? ' is-invalid' : '')} />
                 <ErrorMessage name="subjectCode" component="div" className="invalid-feedback" />
+              </div>
+
+              <div className="form-row">
+                <label>Duration</label>
+                <Field name="duration" type="number" className={'form-control' + (errors.duration && touched.duration ? ' is-invalid' : '')} />
+                <ErrorMessage name="duration" component="div" className="invalid-feedback" />
               </div>
 
               <div className="form-row">

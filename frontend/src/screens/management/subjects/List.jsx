@@ -106,6 +106,7 @@ const List = ({ match }) => {
 
                 <Column dataField="subjectCode" caption="Subject Code" width="25%" />
                 <Column dataField="name" caption="Name" width="25%" />
+                <Column dataField="duration" caption="Duration" width="25%" />
                 <Column dataField="description" caption="Description" width="25%" />
                 <Column
                     width="30%"
