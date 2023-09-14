@@ -1,4 +1,5 @@
 using Backend.Authorization;
+using Backend.Dtos.ExcelDtos;
 using Backend.Dtos.Subject;
 using Backend.Models;
 using Backend.Services.IServices;
@@ -17,6 +18,7 @@ public class SubjectsController : BaseController
     {
         _subjectService = subjectService;
     }
+
     // GET
     [HttpGet]
     public async Task<IActionResult> GetAll()
@@ -52,5 +54,52 @@ public class SubjectsController : BaseController
     {
         var deleteSubject = await _subjectService.Delete(id);
         return Ok(new { message = "Subject deleted successfully" });
+    }
+
+    [HttpGet("available-fields")]
+    public IActionResult GetAvailableFields()
+    {
+        List<string> availableFields = _subjectService.GetFields();
+        return Ok(availableFields);
+    }
+
+    [HttpPost("upload-excel")]
+    public async Task<IActionResult> UploadExcelFile([FromForm] UploadExcelModel model)
+    {
+        try
+        {
+            if (model.file == null || model.file.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+
+            var result = await _subjectService.UploadExcel(model.file);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions and return an error response
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+    [HttpPost("final-upload-excel")]
+    public async Task<IActionResult> ImportExcelFile([FromForm] ImportExcelModel model)
+    {
+        try
+        {
+            if (model.file == null || model.file.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+
+            var result = await _subjectService.ImportExcel(model.file, model.mapping);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions and return an error response
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
     }
 }

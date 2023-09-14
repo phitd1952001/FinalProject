@@ -19,6 +19,7 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import { AddEdit } from './AddEdit';
 import { Modal } from '../../../_components';
+import ExcelUpload from './ExcelUpload';
 
 const List = ({ match }) => {
     const { path } = match;
@@ -26,6 +27,7 @@ const List = ({ match }) => {
     const [openModal, setOpenModal] = useState(false);
     const [addMode, setAddMode] = useState(false);
     const [id, setId] = useState(0);
+    const [openImportModal, setOpenImportModal] = useState(false);
 
     useEffect(() => {
         getSubject();
@@ -84,7 +86,10 @@ const List = ({ match }) => {
         <div>
             <h1>Subject Management</h1>
             <br />
-            <button onClick={addSubject} className="btn btn-sm btn-success mb-2">Add Subject</button>
+            <div className="d-flex">
+                <button onClick={addSubject} className="btn btn-sm btn-success mb-2 mr-2">Add Subject</button>
+                <button onClick={()=>setOpenImportModal(true)} className="btn btn-sm btn-success mb-2">Import Excel</button>
+            </div>
             <DataGrid
                 dataSource={subjects}
                 showBorders={true}
@@ -145,6 +150,10 @@ const List = ({ match }) => {
 
             <Modal title={addMode ? "Add Subject" : "Update Subject"} show={openModal} onHide={() => setOpenModal(false)} >
                 <AddEdit onHide={onHide} id={addMode ? 0 : id} />
+            </Modal>
+
+            <Modal title={"Import Excel"} show={openImportModal} onHide={() => setOpenImportModal(false)} >
+                <ExcelUpload getSubject={getSubject} setOpenImportModal={setOpenImportModal}/>
             </Modal>
         </div>
     );

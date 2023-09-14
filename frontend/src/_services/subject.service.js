@@ -10,6 +10,9 @@ export const subjectService = {
   create,
   update,
   delete: _delete,
+  getFields,
+  uploadExcels,
+  finalUploadExcels
 };
 
 function getAll() {
@@ -31,4 +34,17 @@ function update(id, params) {
 // prefixed with underscore because 'delete' is a reserved word in javascript
 function _delete(id) {
   return fetchWrapper.delete(`${baseUrl}/${id}`);
+}
+
+//excel
+function getFields() {
+  return fetchWrapper.get(`${baseUrl}/available-fields`);
+}
+
+function uploadExcels(fromData) {
+  return fetchWrapper.postFormData(`${baseUrl}/upload-excel`, fromData);
+}
+
+function finalUploadExcels(fromData) {
+  return fetchWrapper.postFormData(`${baseUrl}/final-upload-excel`, fromData);
 }
