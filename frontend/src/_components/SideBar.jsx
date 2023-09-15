@@ -11,6 +11,7 @@ import {
   AiOutlineBank,
   AiOutlineBars,
   AiOutlineDown,
+  AiTwotoneShop
 } from "react-icons/ai";
 
 const styles = {
@@ -214,6 +215,30 @@ const SideBar = () => {
                     />
                     <span className="d-none d-md-inline-block ml-2">
                       Rooms
+                    </span>
+                  </div>
+                </Link>
+              </li>
+              <li className="w-100">
+                <Link
+                  to="/management/classes"
+                  style={{ textDecoration: "none" }}
+                  className={`d-flex align-items-center p-2 text-base justify-content-between  ${
+                    location.pathname === "/management/classes"
+                      ? "bg-light text-dark"
+                      : "text-white"
+                  } rounded-lg sideBarBtn`}
+                >
+                  <div className="d-flex align-items-center">
+                    <AiTwotoneShop
+                      className={`${
+                        location.pathname === "/management/classes"
+                          ? "text-dark"
+                          : "text-white"
+                      } w-5 h-5`}
+                    />
+                    <span className="d-none d-md-inline-block ml-2">
+                      Classes
                     </span>
                   </div>
                 </Link>
