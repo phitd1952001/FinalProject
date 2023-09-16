@@ -19,19 +19,22 @@ public class SubjectService : ISubjectService
         _context = context;
         _mapper = mapper;
     }
-
+    
+    //Get All Subjects
+    public async Task<IEnumerable<Subject>> GetAll()
+    {
+        var listSubject = await _context.Subjects.ToListAsync();
+        return listSubject;
+    }
+    
+    //Find Subjects by Id
     public async Task<Subject> GetById(int id)
     {
         var result = await _context.Subjects.FindAsync(id);
         return result;
     }
-
-    public async Task<List<Subject>> GetAll()
-    {
-        var listSubject = await _context.Subjects.ToListAsync();
-        return listSubject;
-    }
-
+    
+    //Create Subjects
     public async Task<Subject> Create(CreateSubjectRequest model)
     {
         if (await _context.Subjects.AnyAsync(_ => _.SubjectCode == model.SubjectCode))
@@ -45,6 +48,7 @@ public class SubjectService : ISubjectService
         return subject;
     }
 
+    //Update Subjects
     public async Task<Subject> Update(int id, UpdateSubjectRequest model)
     {
         if (await _context.Subjects.AnyAsync(_ => _.SubjectCode == model.SubjectCode && _.Id != id))
@@ -59,6 +63,7 @@ public class SubjectService : ISubjectService
         return subject;
     }
 
+    //Delete Subjects
     public async Task<Subject> Delete(int id)
     {
         var deleteSubject = await GetById(id);
@@ -66,7 +71,8 @@ public class SubjectService : ISubjectService
         await _context.SaveChangesAsync();
         return deleteSubject;
     }
-
+    
+    //Excel
     public List<string> GetFields()
     {
         return new List<string>() { "SubjectCode", "Name", "Description", "Duration" };

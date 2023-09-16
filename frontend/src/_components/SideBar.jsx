@@ -38,7 +38,6 @@ const SideBar = () => {
   if (!user) return null;
 
   const handleManagementToggle = (e) => {
-    console.log("fdasfd");
     setManagementToggle((prev) => !prev);
   };
 
@@ -46,6 +45,7 @@ const SideBar = () => {
     <aside className="w-100 h-100 bg-dark">
       <div className="w-100 px-3 py-4 overflow-auto rounded">
         <ul className="list-unstyled w-100">
+          {/* Avatar Image */}
           <li className="w-100 h-fit d-flex flex-row flex-md-column align-items-center justify-content-center cursor-pointer">
             <div className="shrink-0 ml-2 mb-2">
               {user && user.avatar ? (
@@ -73,6 +73,8 @@ const SideBar = () => {
               </p>
             </div>
           </li>
+
+          {/* Home */}
           <li className="w-100">
             <Link
               to="/"
@@ -91,6 +93,8 @@ const SideBar = () => {
               </div>
             </Link>
           </li>
+
+          {/* Profile */}
           <li className="w-100">
             <Link
               to="/profile"
@@ -113,6 +117,8 @@ const SideBar = () => {
               </div>
             </Link>
           </li>
+
+          {/* Manage Users */}
           <li className="w-100">
             <Link
               to="/admin/users"
@@ -138,6 +144,7 @@ const SideBar = () => {
             </Link>
           </li>
 
+          {/* Managements */}
           <li class="w-100">
             <a
               style={{ textDecoration: "none" }}
@@ -171,6 +178,7 @@ const SideBar = () => {
                 managementToggle ? "d-flex flex-column d-block" : "d-none"
               }`}
             > 
+              {/* Subjects */}
               <li className="w-100">
                 <Link
                   to="/management/subjects"
@@ -195,6 +203,8 @@ const SideBar = () => {
                   </div>
                 </Link>
               </li>
+
+              {/* Rooms */}
               <li className="w-100">
                 <Link
                   to="/management/rooms"
@@ -219,6 +229,8 @@ const SideBar = () => {
                   </div>
                 </Link>
               </li>
+
+              {/* Classes */}
               <li className="w-100">
                 <Link
                   to="/management/classes"

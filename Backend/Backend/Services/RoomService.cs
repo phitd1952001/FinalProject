@@ -81,6 +81,7 @@ namespace Backend.Services
             _context.SaveChanges();
         }
         
+        //Excel
         public List<string> GetFields()
         {
             return new List<string>(){"Name", "NumberOfSeat"};
