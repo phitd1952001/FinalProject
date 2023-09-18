@@ -126,7 +126,7 @@ const List = ({ match }) => {
                                 onClick={() => deleteRoom(data.id)}
                                 width={79}
                                 height={29}
-                                hint="Delete Subject"
+                                hint="Delete Room"
                             />
                         </>
                     )}

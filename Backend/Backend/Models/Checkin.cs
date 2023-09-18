@@ -20,12 +20,7 @@ public class Checkin
     public Account Account { get; set; }
     
     [Required]
-    public int SubjectId { get; set; }
-    [ForeignKey("SubjectId")]
-    public Subject Subject { get; set; }
-    
-    [Required]
-    public int RoomId { get; set; }
-    [ForeignKey("RoomId")]
-    public Room Room { get; set; }
+    public int SlotId { get; set; }
+    [ForeignKey("SlotId")]
+    public Slot Slot { get; set; }
 }

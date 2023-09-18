@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230914154837_AddDB")]
+    [Migration("20230916143557_AddDB")]
     partial class AddDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -132,10 +132,7 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubjectId")
+                    b.Property<int>("SlotId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
@@ -143,9 +140,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoomId");
-
-                    b.HasIndex("SubjectId");
+                    b.HasIndex("SlotId");
 
                     b.HasIndex("UserId");
 
@@ -281,6 +276,39 @@ namespace Backend.Migrations
                     b.ToTable("Settings");
                 });
 
+            modelBuilder.Entity("Backend.Models.Slot", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("Slots");
+                });
+
             modelBuilder.Entity("Backend.Models.Subject", b =>
                 {
                     b.Property<int>("Id")
@@ -365,15 +393,9 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.Models.Checkin", b =>
                 {
-                    b.HasOne("Backend.Models.Room", "Room")
+                    b.HasOne("Backend.Models.Slot", "Slot")
                         .WithMany()
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Backend.Models.Subject", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectId")
+                        .HasForeignKey("SlotId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -385,9 +407,7 @@ namespace Backend.Migrations
 
                     b.Navigation("Account");
 
-                    b.Navigation("Room");
-
-                    b.Navigation("Subject");
+                    b.Navigation("Slot");
                 });
 
             modelBuilder.Entity("Backend.Models.Class", b =>
@@ -405,6 +425,25 @@ namespace Backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Account");
+
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("Backend.Models.Slot", b =>
+                {
+                    b.HasOne("Backend.Models.Room", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Models.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
 
                     b.Navigation("Subject");
                 });

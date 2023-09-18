@@ -30,6 +30,7 @@ namespace Backend.Extensions
             service.AddScoped<IImageServices, ImageServices>();   
             service.AddScoped<IRoomService, RoomService>(); 
             service.AddScoped<IClassService, ClassService>(); 
+            service.AddScoped<ISlotService, SlotService>(); 
             
             return service;
         }

@@ -155,42 +155,6 @@ namespace Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Checkins",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsAccept = table.Column<bool>(type: "bit", nullable: false),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    SubjectId = table.Column<int>(type: "int", nullable: false),
-                    RoomId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Checkins", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Checkins_Accounts_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Checkins_Rooms_RoomId",
-                        column: x => x.RoomId,
-                        principalTable: "Rooms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Checkins_Subjects_SubjectId",
-                        column: x => x.SubjectId,
-                        principalTable: "Subjects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Classes",
                 columns: table => new
                 {
@@ -216,15 +180,68 @@ namespace Backend.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Checkins_RoomId",
-                table: "Checkins",
-                column: "RoomId");
+            migrationBuilder.CreateTable(
+                name: "Slots",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Duration = table.Column<int>(type: "int", nullable: false),
+                    SubjectId = table.Column<int>(type: "int", nullable: false),
+                    RoomId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Slots", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Slots_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Slots_Subjects_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Checkins",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsAccept = table.Column<bool>(type: "bit", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    SlotId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Checkins", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Checkins_Accounts_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Checkins_Slots_SlotId",
+                        column: x => x.SlotId,
+                        principalTable: "Slots",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Checkins_SubjectId",
+                name: "IX_Checkins_SlotId",
                 table: "Checkins",
-                column: "SubjectId");
+                column: "SlotId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Checkins_UserId",
@@ -245,6 +262,16 @@ namespace Backend.Migrations
                 name: "IX_RefreshToken_AccountId",
                 table: "RefreshToken",
                 column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Slots_RoomId",
+                table: "Slots",
+                column: "RoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Slots_SubjectId",
+                table: "Slots",
+                column: "SubjectId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -268,13 +295,16 @@ namespace Backend.Migrations
                 name: "Settings");
 
             migrationBuilder.DropTable(
+                name: "Slots");
+
+            migrationBuilder.DropTable(
+                name: "Accounts");
+
+            migrationBuilder.DropTable(
                 name: "Rooms");
 
             migrationBuilder.DropTable(
                 name: "Subjects");
-
-            migrationBuilder.DropTable(
-                name: "Accounts");
         }
     }
 }

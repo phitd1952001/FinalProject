@@ -1,6 +1,7 @@
 using AutoMapper;
 using Backend.Dtos.Subject;
 using Backend.Dtos.RoomDtos;
+using Backend.Dtos.SlotDtos;
 using Backend.Dtos.UserDtos;
 using Backend.Models;
 
@@ -12,6 +13,10 @@ namespace Backend
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
+                // mapping slot
+                config.CreateMap<CreateSlotRequest, Slot>();
+                config.CreateMap<UpdateSlotRequest, Slot>();
+                
                 // mapping Room
                 config.CreateMap<CreateRoomRequest, Room>();
                 

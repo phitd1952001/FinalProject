@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { subjectService, alertService } from "../../../_services";
+import { slotService, alertService } from "../../../_services";
 
-function ExcelUpload({getSubject, setOpenImportModal}) {
+function ExcelUpload({getSlots, setOpenImportModal}) {
   const [file, setFile] = useState(null);
   const [mapping, setMapping] = useState({});
   const [fields, setFields] = useState([]);
@@ -13,7 +13,7 @@ function ExcelUpload({getSubject, setOpenImportModal}) {
 
   // Fetch available fields from the backend when the component mounts
   useEffect(() => {
-    subjectService
+    slotService
       .getFields()
       .then((response) => {
         console.log(response);
@@ -43,7 +43,7 @@ function ExcelUpload({getSubject, setOpenImportModal}) {
     formData.append("file", file);
 
     try {
-      subjectService
+      slotService
         .uploadExcels(formData)
         .then((response) => {
           console.log(response);
@@ -60,7 +60,6 @@ function ExcelUpload({getSubject, setOpenImportModal}) {
         });
     } catch (error) {
       // Handle errors
-      alertService.error(error);
     }
   };
 
@@ -71,13 +70,13 @@ function ExcelUpload({getSubject, setOpenImportModal}) {
     formData.append("mapping", JSON.stringify(mapping));
 
     try {
-      subjectService
+      slotService
         .finalUploadExcels(formData)
         .then((response) => {
           alertService.success("Import Data successfully", {
             keepAfterRouteChange: true,
           });
-          getSubject();
+          getSlots();
           setOpenImportModal(false);
         })
         .catch((error) => {
@@ -86,7 +85,6 @@ function ExcelUpload({getSubject, setOpenImportModal}) {
       // Handle success or display a confirmation message
     } catch (error) {
       // Handle errors
-      alertService.error(error);
     }
   };
 

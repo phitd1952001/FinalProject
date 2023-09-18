@@ -23,5 +23,6 @@ namespace Backend.DbContext
         public DbSet<Schedule> Schedules { get; set; }
 
         public DbSet<Subject> Subjects { get; set; }
+        public DbSet<Slot> Slots { get; set; }
     }
 }
