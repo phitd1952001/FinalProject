@@ -6,9 +6,11 @@ namespace Backend.Dtos.Subject
     {
         [Required]
         public string SubjectCode { get; set; }
+        
         [Required]
         public string Name { get; set; }
         
+        [Required]
         public int Duration { get; set; }
         
         public string Description { get; set; }

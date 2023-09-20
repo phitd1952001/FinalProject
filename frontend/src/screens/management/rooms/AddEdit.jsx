@@ -60,10 +60,10 @@ function AddEdit(props) {
           useEffect(() => {
             if (!isAddMode) {
               // get room and set form fields
-              roomsService.getById(id).then(subject => {
+              roomsService.getById(id).then(obj => {
                 const fields = ['name', 'numberOfSeat'];
                 fields.forEach(field => {
-                  setFieldValue(field, subject[field], false)
+                  setFieldValue(field, obj[field], false)
                 });
               });
             }

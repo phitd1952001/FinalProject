@@ -94,7 +94,7 @@ const List = ({ match }) => {
                 dataSource={classes}
                 showBorders={true}
                 columnAutoWidth={true}
-                noDataText="No rooms available"
+                noDataText="No classes available"
                 allowColumnResizing={true}
             >
                 <HeaderFilter visible={true} />
