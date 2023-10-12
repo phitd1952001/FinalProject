@@ -19,6 +19,7 @@ import DataGrid, {
 import { AddEdit } from './AddEdit';
 import { Modal } from '../../../_components';
 import ExcelUpload from './ExcelUpload';
+import CheckIn from './CheckIn';
 
 const List = ({ match }) => {
     const { path } = match;
@@ -27,6 +28,7 @@ const List = ({ match }) => {
     const [addMode, setAddMode] = useState(false);
     const [id, setId] = useState(0);
     const [openImportModal, setOpenImportModal] = useState(false);
+    const [openCheckInModal, setOpenCheckInModal] = useState(false);
 
     useEffect(() => {
         getSlots();
@@ -81,6 +83,17 @@ const List = ({ match }) => {
         getSlots();
     }
 
+    const onOpenCheckIn = (id) => {
+        setId(id);
+        setOpenCheckInModal(true);
+    }
+
+    const onHideCheckIn = () => {
+        setId(0);
+        setOpenCheckInModal(false);
+    }
+
+
     return (
         <div>
             <h1>Slot Management</h1>
@@ -114,6 +127,14 @@ const List = ({ match }) => {
                     caption="Actions"
                     cellRender={({ data }) => (
                         <>
+                            <Button
+                                className="mr-1"
+                                type="success"
+                                width={100}
+                                height={29}
+                                text={"CheckIn"}
+                                onClick={() => onOpenCheckIn(data.slotId)}
+                            />
                             <Button
                                 className="mr-1"
                                 type="default"
@@ -156,6 +177,10 @@ const List = ({ match }) => {
 
             <Modal title={"Import Excel"} show={openImportModal} onHide={() => setOpenImportModal(false)} >
                 <ExcelUpload getSlots={getSlots} setOpenImportModal={setOpenImportModal}/>
+            </Modal>
+
+            <Modal title={"CheckIn"} show={openCheckInModal} onHide={() => onHideCheckIn()} >
+                <CheckIn/>
             </Modal>
         </div>
     );
