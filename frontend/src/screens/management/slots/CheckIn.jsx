@@ -1,15 +1,63 @@
 import React, {useState, useEffect} from 'react'
 import images from "../../../_asset/images";
 import { QrReader } from 'react-qr-reader';
+import { checkInService, alertService } from "../../../_services";
 
-const CheckIn = () => {
-   
+const CheckIn = ({id}) => {
+    const [qrCode, setQrCode] = useState(null);
+    const [user, setUser] = useState({});
     const [noAvatarImage, setNoAvatarImage] = useState(null);
+    const [note, setNote] = useState("");
+    const [noteError, setNoteError] = useState("");
     useEffect(() => {
-        // if (user) {
-            images.noAvatar.then((img) => setNoAvatarImage(img));
-        // }
+        images.noAvatar.then((img) => setNoAvatarImage(img));
     }, []);
+
+    useEffect(() => {
+      checkInService.getInfo(qrCode)
+      .then((res)=>{
+        console.log(res);
+        setUser(res);
+        alertService.success("Load Info successfully", {
+          keepAfterRouteChange: true,
+        });
+      })
+      .catch((error) => {
+        alertService.error(error);
+      });
+    }, [qrCode]);
+
+    const confirm=(isAccept, note)=>{
+      let formData = {
+        isAccept: isAccept,
+        note: note,
+        qrCodeString: qrCode,
+        slotId: id
+      }
+
+      checkInService.checkIn(formData)
+      .then((res)=>{
+        setUser({});
+        setQrCode(null);
+        setNote("");
+        setNoteError("");
+        alertService.success("Check In successfully", {
+          keepAfterRouteChange: true,
+        });
+      })
+      .catch((error) => {
+        alertService.error(error);
+      });
+    }
+
+  const onCancel = () =>{
+    if(note.length > 0){
+      confirm(false, note)
+    }
+    else{
+      setNoteError("Note is required")
+    }
+  }
 
   return (
     <>
@@ -21,8 +69,7 @@ const CheckIn = () => {
             <QrReader
                     onResult={( result , error ) => {
                         if (!!result) {
-                            // setData(result?.text);
-                            console.log(result.text)
+                            setQrCode(result?.text);
                         }
 
                         if (!!error) {
@@ -35,11 +82,10 @@ const CheckIn = () => {
           </div>
           <div className="col-md-4" style={styles.col}>
             <div className="h-100 w-100 d-flex flex-column justify-content-center align-items-start">
-              {/* Avatar Image */}
               <div className="card w-100 mt-0" style={styles.card}>
                 <div className="card-body" style={styles.cardBody}>
                   <div className="d-flex flex-column align-items-center text-center">
-                    {/* {user && user.avatar ? (
+                    {user && user.avatar ? (
                       <img
                         src={user.avatar}
                         alt="Admin"
@@ -47,7 +93,7 @@ const CheckIn = () => {
                         width="120"
                         height="120"
                       />
-                    ) : ( */}
+                    ) : (
                       <img
                         src={noAvatarImage}
                         alt=""
@@ -55,25 +101,23 @@ const CheckIn = () => {
                         width="120"
                         height="120"
                       />
-                    {/* )} */}
+                    )}
 
                     <div className="mt-3">
                       <h4>
-                        {/* {user.firstName} {user.lastName} */}
-                        fdsaf
+                        {user.firstName} {user.lastName}
                       </h4>
                       <p className="text-secondary mb-1">
-                        {/* {user.managementCode} */}
-                        fdas
+                        {user.managementCode}
                       </p>
                       <p className="text-muted font-size-sm">
-                        {/* {user.dateOfBirth} */}
-                        fdas
+                        {user.dateOfBirth && new Date(user.dateOfBirth).toISOString().substr(0, 10)}
                       </p>
-                      <textarea placeholder='Note' className="text-muted"/>
+                      <textarea value={note} onChange={(e)=>setNote(e.target.value)} placeholder='Note' className="text-muted"/>
+                      {noteError.length > 0 && (<span className='text-danger mb-1'>{noteError}</span>)}
                       <div className="d-flex justify-content-center">
-                        <button className="btn btn-danger">Cancel</button>
-                        <button className="btn btn-primary ml-2">Accept</button>
+                        <button onClick={()=>onCancel()} className="btn btn-danger">Cancel</button>
+                        <button onClick={()=>confirm(true,"This is Accept")} className="btn btn-primary ml-2">Accept</button>
                       </div>
                     </div>
                   </div>

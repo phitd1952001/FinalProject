@@ -180,7 +180,7 @@ const List = ({ match }) => {
             </Modal>
 
             <Modal title={"CheckIn"} show={openCheckInModal} onHide={() => onHideCheckIn()} >
-                <CheckIn/>
+                <CheckIn id={id}/>
             </Modal>
         </div>
     );

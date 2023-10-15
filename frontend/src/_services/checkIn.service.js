@@ -4,13 +4,13 @@ import config from "config";
 const apiUrl = config.apiUrl;
 const baseUrl = `${apiUrl}/checkIn`;
 
-export const classService = {
+export const checkInService = {
     checkIn,
     getInfo,
 };
 
-function getInfo() {
-    return fetchWrapper.get(`${baseUrl}`);
+function getInfo(qrCode) {
+    return fetchWrapper.get(`${baseUrl}/${qrCode}`);
 }
 
 function checkIn(fromData) {
