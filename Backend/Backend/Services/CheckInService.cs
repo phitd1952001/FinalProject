@@ -1,8 +1,10 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
+using AutoMapper;
 using Backend.DbContext;
 using Backend.Dtos.CheckInDtos;
+using Backend.Dtos.UserDtos;
 using Backend.Models;
 using Backend.Services.IServices;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +14,43 @@ namespace Backend.Services;
 public class CheckInService : ICheckInService
 {
     private readonly ApplicationDbContext _context;
+    private readonly IMapper _mapper;
 
-    public CheckInService(ApplicationDbContext context)
+    public CheckInService(ApplicationDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
+    }
+
+    public async Task<IEnumerable<CheckInViewDetailDtos>> GetAllCheckIn(int slotId)
+    {
+        var listCheckIn = await _context.Checkins.Where(_ => _.SlotId == slotId).ToListAsync();
+        var userIds = listCheckIn.Select(_ => _.UserId);
+        var accounts = await _context.Accounts.Where(_ => userIds.Contains(_.Id)).ToListAsync();
+
+        var result = new List<CheckInViewDetailDtos>();
+
+        foreach (var checkin in listCheckIn)
+        {
+            var account = accounts.FirstOrDefault(_ => _.Id == checkin.UserId);
+            if (account == null)
+            {
+                continue;
+            }
+            
+            var ck = new CheckInViewDetailDtos()
+            {
+                Id = checkin.Id,
+                DateTime = checkin.DateTime,
+                IsAccept = checkin.IsAccept,
+                Note = checkin.Note,
+                User = _mapper.Map<AccountResponse>(account)
+            };
+            
+            result.Add(ck);
+        }
+        
+        return result;
     }
 
     public async Task<Object> CheckInConfirm(CheckInConfirmDtos input)
@@ -77,6 +112,15 @@ public class CheckInService : ICheckInService
             studentInDb.LastName,
             studentInDb.Avatar
         };
+    }
+    
+    public async Task Delete(int id)
+    {
+        var checkin = await _context.Checkins
+            .FirstOrDefaultAsync(_ => _.Id == id);
+
+        _context.Remove(checkin);
+        _context.SaveChanges();
     }
 
     private string Decrypt(string cipherText)

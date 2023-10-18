@@ -20,6 +20,7 @@ import { AddEdit } from './AddEdit';
 import { Modal } from '../../../_components';
 import ExcelUpload from './ExcelUpload';
 import CheckIn from './CheckIn';
+import ViewDetails from './ViewDetails';
 
 const List = ({ match }) => {
     const { path } = match;
@@ -29,6 +30,7 @@ const List = ({ match }) => {
     const [id, setId] = useState(0);
     const [openImportModal, setOpenImportModal] = useState(false);
     const [openCheckInModal, setOpenCheckInModal] = useState(false);
+    const [openViewDetailsModal, setOpenViewDetailsModal] = useState(false);
 
     useEffect(() => {
         getSlots();
@@ -93,6 +95,17 @@ const List = ({ match }) => {
         setOpenCheckInModal(false);
     }
 
+    // view details
+    const onOpenViewDetail = (id) => {
+        setId(id);
+        setOpenViewDetailsModal(true);
+    }
+
+    const onHideViewDetail = () => {
+        setId(0);
+        setOpenViewDetailsModal(false);
+    }
+
 
     return (
         <div>
@@ -117,13 +130,13 @@ const List = ({ match }) => {
                 <Grouping autoExpandAll={false} />
                 <FilterRow visible={true} />
                 
-                <Column dataField="name" caption="Name" width="15%" />
-                <Column dataField="startTime" caption="Start Time" width="15%" dataType="datetime" />
-                <Column dataField="duration" caption="Duration" width="15%" />
-                <Column dataField="subjectName" caption="Subject Name" width="15%" />
-                <Column dataField="roomName" caption="Room Name" width="15%" />
+                <Column dataField="name" caption="Name" width="10%" />
+                <Column dataField="startTime" caption="Start Time" width="20%" dataType="datetime" />
+                <Column dataField="duration" caption="Duration" width="10%" />
+                <Column dataField="subjectName" caption="Subject Name" width="10%" />
+                <Column dataField="roomName" caption="Room Name" width="10%" />
                 <Column
-                    width="25%"
+                    width="40%"
                     caption="Actions"
                     cellRender={({ data }) => (
                         <>
@@ -134,6 +147,14 @@ const List = ({ match }) => {
                                 height={29}
                                 text={"CheckIn"}
                                 onClick={() => onOpenCheckIn(data.slotId)}
+                            />
+                             <Button
+                                className="mr-1"
+                                type="normal"
+                                width={150}
+                                height={29}
+                                text={"View Details"}
+                                onClick={() => onOpenViewDetail(data.slotId)}
                             />
                             <Button
                                 className="mr-1"
@@ -181,6 +202,10 @@ const List = ({ match }) => {
 
             <Modal title={"CheckIn"} show={openCheckInModal} onHide={() => onHideCheckIn()} >
                 <CheckIn id={id}/>
+            </Modal>
+
+            <Modal title={"View Details"} show={openViewDetailsModal} onHide={() => onHideViewDetail()} >
+                <ViewDetails id={id} />
             </Modal>
         </div>
     );

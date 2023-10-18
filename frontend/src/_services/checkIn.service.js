@@ -7,6 +7,8 @@ const baseUrl = `${apiUrl}/checkIn`;
 export const checkInService = {
     checkIn,
     getInfo,
+    getAccountInfoBySlotId,
+    deleteCheckIn
 };
 
 function getInfo(qrCode) {
@@ -15,4 +17,12 @@ function getInfo(qrCode) {
 
 function checkIn(fromData) {
     return fetchWrapper.post(`${baseUrl}`, fromData);
+}
+
+function getAccountInfoBySlotId(id) {
+    return fetchWrapper.get(`${baseUrl}/info/${id}`);
+}
+
+function deleteCheckIn(id) {
+    return fetchWrapper.delete(`${baseUrl}/${id}`);
 }
