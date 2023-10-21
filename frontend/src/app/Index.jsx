@@ -8,22 +8,26 @@ import { Profile } from '@/screens/profile';
 import { Admin } from '@/screens/admin';
 import { Account } from '@/screens/account';
 import { Management } from '@/screens/management';
+import { DashboardIndex } from '../screens/dashboard/Index';
+
+import ThemeProvider from '../theme';
 
 function App() {
     const { pathname } = useLocation();  
 
     return (
-        <div>
+        <ThemeProvider>
             <Switch>
                 <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
                 <PrivateRoute exact path="/" component={Home} />
                 <PrivateRoute path="/profile" component={Profile} />
+                <PrivateRoute path="/dashboard" component={DashboardIndex} />
                 <PrivateRoute path="/admin" roles={[Role.Admin]} component={Admin} />
                 <PrivateRoute path="/management" roles={[Role.Admin, Role.Staff]} component={Management} />
                 <Route path="/account" component={Account} />
                 <Redirect from="*" to="/" />
             </Switch>
-        </div>
+        </ThemeProvider>
     );
 }
 

@@ -12,7 +12,8 @@ import {
   AiOutlineBars,
   AiOutlineDown,
   AiTwotoneShop,
-  AiFillBuild
+  AiFillBuild,
+  AiFillDashboard
 } from "react-icons/ai";
 
 const styles = {
@@ -115,6 +116,32 @@ const SideBar = () => {
                   } w-5 h-5`}
                 />
                 <span className="d-none d-md-inline-block ml-3">Profile</span>
+              </div>
+            </Link>
+          </li>
+
+          {/* Dashboard */}
+          <li className="w-100">
+            <Link
+              to="/dashboard"
+              style={{ textDecoration: "none" }}
+              className={`d-flex align-items-center p-2 text-base justify-content-between  ${
+                location.pathname === "/dashboard"
+                  ? "bg-light text-dark"
+                  : "text-white"
+              } rounded-lg sideBarBtn`}
+            >
+              <div className="d-flex align-items-center">
+                <AiFillDashboard
+                  className={`${
+                    location.pathname === "/dashboard"
+                      ? "text-dark"
+                      : "text-white"
+                  } w-5 h-5`}
+                />
+                <span className="d-none d-md-inline-block ml-3">
+                  DashBoard
+                </span>
               </div>
             </Link>
           </li>
