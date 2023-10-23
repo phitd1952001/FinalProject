@@ -6,3 +6,4 @@ export * from './class.service';
 export * from './slot.service';
 export * from './checkIn.service';
 export * from './dashboard.service';
+export * from './setting.service';

@@ -13,7 +13,9 @@ import {
   AiOutlineDown,
   AiTwotoneShop,
   AiFillBuild,
-  AiFillDashboard
+  AiFillDashboard,
+  AiFillCalendar,
+  AiFillSetting
 } from "react-icons/ai";
 
 const styles = {
@@ -27,6 +29,7 @@ const SideBar = () => {
   const [user, setUser] = useState({});
   const [noAvatarImage, setNoAvatarImage] = useState(null);
   const [managementToggle, setManagementToggle] = useState(false);
+  const [scheduleToggle, setScheduleToggle] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -41,6 +44,10 @@ const SideBar = () => {
 
   const handleManagementToggle = (e) => {
     setManagementToggle((prev) => !prev);
+  };
+
+  const handleScheduleToggle = (e) => {
+    setScheduleToggle((prev) => !prev);
   };
 
   return (
@@ -309,6 +316,70 @@ const SideBar = () => {
                   </div>
                 </Link>
               </li>
+            </ul>
+          </li>
+
+          {/* Schedule */}
+          <li class="w-100">
+            <a
+              style={{ textDecoration: "none" }}
+              onClick={(e) => handleScheduleToggle(e)}
+              className={`d-flex align-items-center p-2 text-base justify-content-between  ${
+                scheduleToggle ? "bg-light text-dark" : "text-white"
+              } rounded-lg sideBarBtn mb-2`}
+            >
+              <div className="w-100 d-flex align-items-center justify-content-between">
+                <div>
+                  <AiFillCalendar
+                    className={`${
+                      scheduleToggle ? "text-dark" : "text-white"
+                    } w-5 h-5`}
+                  />
+                  <span className="d-none d-md-inline-block ml-3">
+                    Schedule Management
+                  </span>
+                </div>
+                <div className="d-flex align-items-center justify-content-end">
+                  <AiOutlineDown
+                    className={`${
+                      scheduleToggle ? "text-dark" : "text-white"
+                    } w-5 h-5`}
+                  />
+                </div>
+              </div>
+            </a>
+            <ul
+              className={`${
+                scheduleToggle ? "d-flex flex-column d-block" : "d-none"
+              }`}
+            > 
+              {/* setting */}
+              <li className="w-100">
+                <Link
+                  to="/schedule/setting"
+                  style={{ textDecoration: "none" }}
+                  className={`d-flex align-items-center p-2 text-base justify-content-between  ${
+                    location.pathname === "/schedule/setting"
+                      ? "bg-light text-dark"
+                      : "text-white"
+                  } rounded-lg sideBarBtn`}
+                >
+                  <div className="d-flex align-items-center">
+                    <AiFillSetting
+                      className={`${
+                        location.pathname === "/schedule/setting"
+                          ? "text-dark"
+                          : "text-white"
+                      } w-5 h-5`}
+                    />
+                    <span className="d-none d-md-inline-block ml-2">
+                      Setting
+                    </span>
+                  </div>
+                </Link>
+              </li>
+
+              
             </ul>
           </li>
 

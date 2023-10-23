@@ -4,6 +4,7 @@ using Backend.Dtos.RoomDtos;
 using Backend.Dtos.SlotDtos;
 using Backend.Dtos.UserDtos;
 using Backend.Models;
+using Backend.Dtos.SettingDtos;
 
 namespace Backend
 {
@@ -13,6 +14,8 @@ namespace Backend
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
+                // mapping setting
+                config.CreateMap<SettingUpsertDtos, Setting>();
                 // mapping slot
                 config.CreateMap<CreateSlotRequest, Slot>();
                 config.CreateMap<UpdateSlotRequest, Slot>();

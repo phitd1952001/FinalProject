@@ -33,6 +33,7 @@ namespace Backend.Extensions
             service.AddScoped<ISlotService, SlotService>(); 
             service.AddScoped<ICheckInService, CheckInService>();
             service.AddScoped<IDashBoardService, DashboardService>();
+            service.AddScoped<ISettingService, SettingService>();
 
             return service;
         }
