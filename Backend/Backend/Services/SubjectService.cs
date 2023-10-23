@@ -75,7 +75,7 @@ public class SubjectService : ISubjectService
     //Excel
     public List<string> GetFields()
     {
-        return new List<string>() { "SubjectCode", "Name", "Description", "Duration" };
+        return new List<string>() { "SubjectCode", "Name", "Description", "Duration", "Credit" };
     }
 
     public async Task<List<Dictionary<string, string>>> UploadExcel(IFormFile file)
@@ -199,6 +199,7 @@ public class SubjectService : ISubjectService
         return !string.IsNullOrEmpty(subject.Name) 
                && !string.IsNullOrEmpty(subject.SubjectCode) 
                && subject.Duration > 0
+               && subject.Credit > 0
                && !_context.Subjects.Any(_ => _.SubjectCode == subject.SubjectCode);
     }
 }

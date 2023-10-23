@@ -12,7 +12,9 @@ namespace Backend.Dtos.Subject
         
         [Required]
         public int Duration { get; set; }
-        
+        [Required]
+        public int Credit { get; set; }
+
         public string Description { get; set; }
     }
 }
