@@ -78,6 +78,7 @@ const List = ({ match }) => {
         setOpenModal(true);
     }
 
+    // Slot
     const onHide = () => {
         setAddMode(false);
         setOpenModal(false);
@@ -85,6 +86,7 @@ const List = ({ match }) => {
         getSlots();
     }
 
+    // CheckIn
     const onOpenCheckIn = (id) => {
         setId(id);
         setOpenCheckInModal(true);

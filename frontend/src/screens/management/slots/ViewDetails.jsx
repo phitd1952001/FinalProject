@@ -100,7 +100,7 @@ const ViewDetails = ({ id }) => {
       <Button
         text="Export to Excel"
         onClick={exportToExcel}
-        width={120}
+        width={180}
         icon="export"
       />
       <DataGrid
@@ -129,7 +129,7 @@ const ViewDetails = ({ id }) => {
         <Column
           dataField="user.managementCode"
           caption="Management Code"
-          width="10%"
+          width="20%"
         />
         <Column
           dataField="dateTime"
@@ -138,10 +138,10 @@ const ViewDetails = ({ id }) => {
           dataType="datetime"
           format="yyyy-MM-dd HH:mm:ss"
         />
-        <Column dataField="isAccept" caption="Is Accept" width="10%" />
-        <Column dataField="note" caption="Note" width="30%" />
+        <Column dataField="isAccept" caption="Is Accept" width="15%" />
+        <Column dataField="note" caption="Note" width="17%" />
         <Column
-          width="10%"
+          width="13%"
           caption="Actions"
           cellRender={({ data }) => (
             <>
@@ -163,7 +163,7 @@ const ViewDetails = ({ id }) => {
         />
         <Paging defaultPageSize={10} />
         <Summary>
-          <TotalItem column="dateTime" summaryType="count" />
+          <TotalItem column="user.managementCode" summaryType="count" />
         </Summary>
       </DataGrid>
     </div>

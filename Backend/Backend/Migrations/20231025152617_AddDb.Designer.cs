@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231023141207_initdb")]
-    partial class initdb
+    [Migration("20231025152617_AddDb")]
+    partial class AddDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
