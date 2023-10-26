@@ -378,8 +378,6 @@ const SideBar = () => {
                   </div>
                 </Link>
               </li>
-
-              
             </ul>
           </li>
 
