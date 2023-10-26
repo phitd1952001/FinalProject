@@ -19,6 +19,7 @@ builder.Services
     .AddDatabase()
     .AddAutoMapper()
     .AddService()
+    .AddBackgroundService()
     .AddCloudinary()
     .AddEndpointsApiExplorer()
     .AddSwagger()

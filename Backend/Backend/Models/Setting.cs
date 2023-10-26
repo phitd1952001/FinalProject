@@ -22,4 +22,6 @@ public class Setting
     [Required]
     [Range(0, 101)]
     public int NoOfTimeSlot { get; set; }
+    [Required]
+    public int NoOfSlotAllowOneStudentInDay { get; set; }
 }

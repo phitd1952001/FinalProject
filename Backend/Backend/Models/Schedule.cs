@@ -7,12 +7,9 @@ public class Schedule
 {
     [Key]
     public int Id { get; set; }
-    
-    [Required]
-    public int UserId { get; set; }
 
     [Required]
-    public int SubjectId { get; set; }
+    public string SubjectCode { get; set; }
     
     public int Color { get; set; }
     
@@ -20,5 +17,5 @@ public class Schedule
     
     public int Slot { get; set; }
     
-    public int RoomId { get; set; }
+    public int? RoomId { get; set; }
 }

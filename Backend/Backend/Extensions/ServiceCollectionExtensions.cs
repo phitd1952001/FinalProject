@@ -4,6 +4,7 @@ using Backend.DbContext;
 using Backend.Services;
 using Backend.Services.IServices;
 using CloudinaryDotNet;
+using Backend.BackgroundServices;
 
 namespace Backend.Extensions
 {
@@ -34,10 +35,18 @@ namespace Backend.Extensions
             service.AddScoped<ICheckInService, CheckInService>();
             service.AddScoped<IDashBoardService, DashboardService>();
             service.AddScoped<ISettingService, SettingService>();
+            service.AddScoped<IAutomationGenerateSchedule, AutomationGenerateSchedule>();
 
             return service;
         }
-        
+
+        public static IServiceCollection AddBackgroundService(this IServiceCollection service)
+        {
+            service.AddHostedService<LongRunningService>();
+            service.AddSingleton<BackgroundWorkerQueue>();
+            return service;
+        }
+
         public static IServiceCollection AddAutoMapper(this IServiceCollection service)
         {
             //auto mapper config

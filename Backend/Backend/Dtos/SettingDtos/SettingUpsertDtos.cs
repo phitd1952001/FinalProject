@@ -20,5 +20,7 @@ namespace Backend.Dtos.SettingDtos
         [Required]
         [Range(0, 101)]
         public int NoOfTimeSlot { get; set; }
+        [Required]
+        public int NoOfSlotAllowOneStudentInDay { get; set; }
     }
 }
