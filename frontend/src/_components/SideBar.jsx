@@ -43,10 +43,12 @@ const SideBar = () => {
   if (!user) return null;
 
   const handleManagementToggle = (e) => {
+    setScheduleToggle(false);
     setManagementToggle((prev) => !prev);
   };
 
   const handleScheduleToggle = (e) => {
+    setManagementToggle(false);
     setScheduleToggle((prev) => !prev);
   };
 
