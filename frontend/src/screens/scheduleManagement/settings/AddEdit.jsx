@@ -16,6 +16,7 @@ function AddEdit(props) {
     internalDistance: 0,
     externalDistance: 0,
     noOfTimeSlot: 0,
+    noOfSlotAllowOneStudentInDay: 0
   };
 
   const validationSchema = Yup.object().shape({
@@ -31,8 +32,10 @@ function AddEdit(props) {
       .required('Internal Distance is required'),
     externalDistance: Yup.number().integer().min(0)
       .required('External Distance is required'),
-      noOfTimeSlot: Yup.number().integer().min(0)
+    noOfTimeSlot: Yup.number().integer().min(0)
       .required('No Of Time Slot is required'),
+    noOfSlotAllowOneStudentInDay: Yup.number().integer().min(0)
+      .required('No Of Slot Allow One Student In Day is required'),
   });
 
   function onSubmit(fields, { setStatus, setSubmitting }) {
@@ -76,7 +79,7 @@ function AddEdit(props) {
             if (!isAddMode) {
               // get setting and set form fields
               settingsService.getById(id).then(obj => {
-                const fields = ['startDate', 'endDate', 'concurrencyLevelDefault', 'internalDistance','externalDistance','noOfTimeSlot'];
+                const fields = ['startDate', 'endDate', 'concurrencyLevelDefault', 'internalDistance','externalDistance','noOfTimeSlot', 'noOfSlotAllowOneStudentInDay'];
                 fields.forEach(field => {
                   if (field === 'startDate' || field === 'endDate') {
                     //const vietnamTime = DateTime.fromISO(obj[field], { zone: 'Asia/Ho_Chi_Minh' });
@@ -148,6 +151,12 @@ function AddEdit(props) {
                 <label>No Of Time Slot</label>
                 <Field name="noOfTimeSlot" type="text" className={'form-control' + (errors.noOfTimeSlot && touched.noOfTimeSlot ? ' is-invalid' : '')} />
                 <ErrorMessage name="noOfTimeSlot" component="div" className="invalid-feedback" />
+              </div>
+
+              <div className="form-row">
+                <label>No Of Slot Allow One Student In Day</label>
+                <Field name="noOfSlotAllowOneStudentInDay" type="text" className={'form-control' + (errors.noOfSlotAllowOneStudentInDay && touched.noOfSlotAllowOneStudentInDay ? ' is-invalid' : '')} />
+                <ErrorMessage name="noOfSlotAllowOneStudentInDay" component="div" className="invalid-feedback" />
               </div>
 
               <div className="form-group d-flex justify-content-center">

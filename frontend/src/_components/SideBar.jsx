@@ -336,7 +336,7 @@ const SideBar = () => {
                     } w-5 h-5`}
                   />
                   <span className="d-none d-md-inline-block ml-3">
-                    Schedule Management
+                    Schedule
                   </span>
                 </div>
                 <div className="d-flex align-items-center justify-content-end">
