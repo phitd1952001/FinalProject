@@ -17,7 +17,6 @@ namespace Backend.Services
         public static int ConcurrencyLevelDefault;
         public static int D2; // external distance 10 - 4 
         public static int D1;
-        public static HashSet<Account> Students = new HashSet<Account>();
         public static HashSet<StudentCourses> StudentCourses = new HashSet<StudentCourses>();
         public static HashSet<Subject> Subjects = new HashSet<Subject>();
         public static Graph Graph;
@@ -57,7 +56,6 @@ namespace Backend.Services
             HashSet<Subject> coursesDb;
             HashSet<Class> @class;
 
-            Students = _db.Accounts.Where(_=>_.Role == Role.Student).AsNoTracking().ToHashSet();
             coursesDb = _db.Subjects.AsNoTracking().ToHashSet();
             @class = _db.Classes.Include(_=>_.Subject).Include(_=>_.Account).AsNoTracking().ToHashSet();
 
@@ -105,6 +103,7 @@ namespace Backend.Services
             }
         }
 
+        //TODO: recheck
         private void StoreScheduleResult()
         {
             List<Schedule> results = new List<Schedule>();
@@ -334,7 +333,7 @@ namespace Backend.Services
                 {
                     var valid = true;
                     for (int r = 0; r < alArc.Count; r++)
-                    {
+                    {                     
                         var @ref = alArc.ElementAt(r).Child.Color;
                         if (@ref != -1)
                         {
@@ -355,11 +354,25 @@ namespace Backend.Services
 
                             if (a != j || b != k)
                             {
+                                var subject = Subjects.FirstOrDefault(_=>_.SubjectCode == alArc.ElementAt(r).Child.Id);
+                                var internalDistance = D1;
+                                var externalDistance = D2;
+                                
+                                if (subject != null)
+                                {
+                                    var numberOfTimePrepare = subject.Credit * 0.6;
+                                    externalDistance = (int)Math.Ceiling(numberOfTimePrepare);
+                                    if (externalDistance < 1)
+                                    {
+                                        internalDistance = 2;
+                                    }
+                                }
+
                                 // external distance between 2 color
-                                if (Math.Abs(j - a) <= D2)
+                                if (Math.Abs(j - a) == externalDistance)
                                 {
                                     // Internal distance between 2 color
-                                    if (Math.Abs(k - b) <= D1)
+                                    if (Math.Abs(k - b) <= internalDistance)
                                     {
                                         valid = false;
                                         break;
