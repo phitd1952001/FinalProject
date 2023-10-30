@@ -23,6 +23,9 @@ export const accountService = {
   updateSelf,
   handleUpload,
   delete: _delete,
+  getFields,
+  uploadExcels,
+  finalUploadExcels,
   user: userSubject.asObservable(),
   get userValue() {
     return userSubject.value;
@@ -126,6 +129,19 @@ function _delete(id) {
     }
     return x;
   });
+}
+
+//excel
+function getFields() {
+  return fetchWrapper.get(`${baseUrl}/available-fields`);
+}
+
+function uploadExcels(fromData) {
+  return fetchWrapper.postFormData(`${baseUrl}/upload-excel`, fromData);
+}
+
+function finalUploadExcels(fromData) {
+  return fetchWrapper.postFormData(`${baseUrl}/final-upload-excel`, fromData);
 }
 
 // helper functions

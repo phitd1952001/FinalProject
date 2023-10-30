@@ -20,6 +20,7 @@ import { accountService } from '../../../_services';
 import { Role } from "../../../_helpers/role";
 import { Modal } from '../../../_components';
 import { AddEdit } from './AddEdit';
+import ExcelUpload from './ExcelUpload';
 
 function List({ match }) {
     const { path } = match;
@@ -27,6 +28,7 @@ function List({ match }) {
     const [openModal, setOpenModal] = useState(false);
     const [addMode, setAddMode] = useState(false);
     const [id, setId] = useState(0);
+    const [openImportModal, setOpenImportModal] = useState(false);
 
     useEffect(() => {
         getUser();
@@ -85,7 +87,10 @@ function List({ match }) {
         <div>
             <h1 className="text-red-400">Users Management</h1>
             <br />
-            <button onClick={addUser} className="btn btn-sm btn-success mb-2">Add User</button>
+            <div className="d-flex">
+                <button onClick={addUser} className="btn btn-sm btn-success mb-2 mr-2">Add User</button>
+                <button onClick={()=>setOpenImportModal(true)} className="btn btn-sm btn-success mb-2">Import Excel</button>
+            </div>
             <DataGrid
                 dataSource={users}
                 showBorders={true}
@@ -152,6 +157,10 @@ function List({ match }) {
 
             <Modal title={addMode ? "Add User" : "Update User"} show={openModal} onHide={() => setOpenModal(false)} >
                 <AddEdit onHide={onHide} id={addMode ? 0 : id} />
+            </Modal>
+
+            <Modal title={"Import Excel"} show={openImportModal} onHide={() => setOpenImportModal(false)} >
+                <ExcelUpload getAccounts={getUser} setOpenImportModal={setOpenImportModal}/>
             </Modal>
         </div>
     );

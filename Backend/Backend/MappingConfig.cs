@@ -29,6 +29,8 @@ namespace Backend
                 config.CreateMap<UpdateSubjectRequest, Subject>();
 
                 // mapping user
+                config.CreateMap<UploadExcelUserDtos , Account>();
+                
                 config.CreateMap<Account, AccountResponse>();
 
                 config.CreateMap<Account, AuthenticateResponse>();

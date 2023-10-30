@@ -21,5 +21,8 @@ namespace Backend.Services.IServices
         bool AdminCheck();
         void Delete(int id);
         Task<AccountResponse> UpLoadAvatar(int id, Stream avatar);
+        List<string> GetFields();
+        Task<List<Dictionary<string, string>>> UploadExcel(IFormFile file);
+        Task<IList<AccountResponse>> ImportExcel(IFormFile file, string mapping);
     }
 }

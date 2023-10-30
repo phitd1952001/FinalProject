@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Backend.Authorization;
+using Backend.Dtos.ExcelDtos;
 using Backend.Dtos.UserDtos;
 using Backend.Models;
 using Backend.Services.IServices;
@@ -194,6 +195,53 @@ namespace Backend.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+        
+        [HttpGet("available-fields")]
+        public IActionResult GetAvailableFields()
+        {
+            List<string> availableFields = _userService.GetFields();
+            return Ok(availableFields);
+        }
+
+        [HttpPost("upload-excel")]
+        public async Task<IActionResult> UploadExcelFile([FromForm] UploadExcelModel model)
+        {
+            try
+            {
+                if (model.file == null || model.file.Length == 0)
+                {
+                    return BadRequest("No file uploaded.");
+                }
+
+                var result = await _userService.UploadExcel(model.file);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions and return an error response
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("final-upload-excel")]
+        public async Task<IActionResult> ImportExcelFile([FromForm] ImportExcelModel model)
+        {
+            try
+            {
+                if (model.file == null || model.file.Length == 0)
+                {
+                    return BadRequest("No file uploaded.");
+                }
+
+                var result = await _userService.ImportExcel(model.file, model.mapping);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions and return an error response
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
     }
