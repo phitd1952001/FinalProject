@@ -5,7 +5,7 @@ const Modal = (props) => {
   return (
     <BoostrapModal
       {...props}
-      size="lg"
+      size="xl"
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >

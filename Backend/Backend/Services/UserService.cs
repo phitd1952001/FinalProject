@@ -693,7 +693,7 @@ namespace Backend.Services
                     account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(data.Password);
 
                     var managementCodeCopy = data.ManagementCode;
-                    if (!string.IsNullOrEmpty(managementCodeCopy) && account.ManagementCode != managementCodeCopy)
+                    if (!string.IsNullOrEmpty(managementCodeCopy))
                     {
                         var qrCodeImg = GenerateQrCode(managementCodeCopy);
                         if (!String.IsNullOrEmpty(account.QrCode) && !String.IsNullOrEmpty(account.QrCodePublishId))

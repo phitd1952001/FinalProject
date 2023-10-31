@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { accountService, alertService } from "../../../_services";
 
-function ExcelUpload({getAccounts, setOpenImportModal}) {
+function ExcelUpload({ getAccounts, setOpenImportModal }) {
   const [file, setFile] = useState(null);
   const [mapping, setMapping] = useState({});
   const [fields, setFields] = useState([]);
@@ -143,27 +143,29 @@ function ExcelUpload({getAccounts, setOpenImportModal}) {
       {uploadStep === 2 && excelData.length > 0 && (
         <div>
           <h2>Step 3: Display Excel Data</h2>
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                {headers.map((column) => (
-                  <th scope="col" key={column}>
-                    {column}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {excelData.length >= 2 &&
-                excelData.slice(1).map((row, rowIndex) => (
-                  <tr scope="row" key={rowIndex}>
-                    {columnIndex.map((column, colIndex) => (
-                      <td key={colIndex}>{row[column]}</td>
-                    ))}
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  {headers.map((column) => (
+                    <th scope="col" key={column}>
+                      {column}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {excelData.length >= 2 &&
+                  excelData.slice(1).map((row, rowIndex) => (
+                    <tr scope="row" key={rowIndex}>
+                      {columnIndex.map((column, colIndex) => (
+                        <td key={colIndex}>{row[column]}</td>
+                      ))}
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

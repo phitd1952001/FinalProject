@@ -21,6 +21,7 @@ import { Role } from "../../../_helpers/role";
 import { Modal } from '../../../_components';
 import { AddEdit } from './AddEdit';
 import ExcelUpload from './ExcelUpload';
+import images from "../../../_asset/images";
 
 function List({ match }) {
     const { path } = match;
@@ -29,6 +30,14 @@ function List({ match }) {
     const [addMode, setAddMode] = useState(false);
     const [id, setId] = useState(0);
     const [openImportModal, setOpenImportModal] = useState(false);
+
+    const [noAvatarImage, setNoAvatarImage] = useState(null);
+    const [noQrImage, setNoQrImage] = useState(null);
+
+    useEffect(() => {
+        images.noAvatar.then((img) => setNoAvatarImage(img));
+        images.noQrCode.then((img) => setNoQrImage(img));
+    }, []);
 
     useEffect(() => {
         getUser();
@@ -107,6 +116,24 @@ function List({ match }) {
 
                 <Column dataField="title" caption="Name" width="15%" />
                 <Column dataField="email" caption="Email" width="30%" />
+                <Column
+                    caption="avatar"
+                    width="20%"
+                    cellRender={({ data }) => (
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                            <img src={data.avatar ? data.avatar : noAvatarImage} alt="Avatar" style={{ width: '80px', height: '80px' }} />
+                        </div>
+                    )}
+                />
+                <Column
+                    caption="QRcode"
+                    width="20%"
+                    cellRender={({ data }) => (
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                            <img src={data.qrCode ? data.qrCode : noQrImage} alt="QrCode" style={{ width: '80px', height: '80px' }} />
+                        </div>
+                    )}
+                />
                 <Column
                     caption="Role"
                     width="25%"
