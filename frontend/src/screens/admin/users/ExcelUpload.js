@@ -10,6 +10,7 @@ function ExcelUpload({ getAccounts, setOpenImportModal }) {
   const [uploadStep, setUploadStep] = useState(1);
   const [excelData, setExcelData] = useState([]);
   const [allSelectsFilled, setAllSelectsFilled] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Fetch available fields from the backend when the component mounts
   useEffect(() => {
@@ -64,6 +65,7 @@ function ExcelUpload({ getAccounts, setOpenImportModal }) {
   };
 
   const handleFinalUpload = async () => {
+    setLoading(true);
     // Include the selected mapping in the request
     const formData = new FormData();
     formData.append("file", file);
@@ -76,10 +78,12 @@ function ExcelUpload({ getAccounts, setOpenImportModal }) {
           alertService.success("Import Data successfully", {
             keepAfterRouteChange: true,
           });
+          setLoading(false);
           getAccounts();
           setOpenImportModal(false);
         })
         .catch((error) => {
+          setLoading(false);
           alertService.error(error);
         });
       // Handle success or display a confirmation message
@@ -133,7 +137,7 @@ function ExcelUpload({ getAccounts, setOpenImportModal }) {
             </div>
           ))}
           {allSelectsFilled && (
-            <button className="btn btn-success" onClick={handleFinalUpload}>
+            <button disabled={loading} className="btn btn-success" onClick={handleFinalUpload}>
               Upload with Mapping
             </button>
           )}
