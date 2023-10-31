@@ -180,15 +180,15 @@ namespace Backend.Controllers
                 return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
         }
         
-        [HttpPost("avatar/upload")]
-        public async Task<IActionResult> UploadFile()
+        [HttpPost("avatar/upload/{id:int}")]
+        public async Task<IActionResult> UploadFile(int id)
         {
             try
             {
                 var file = Request.Form.Files[0];
                 using var stream = file.OpenReadStream();
 
-                var result = await _userService.UpLoadAvatar(Account.Id, stream);
+                var result = await _userService.UpLoadAvatar(id, stream);
 
                 return Ok(result);
             }

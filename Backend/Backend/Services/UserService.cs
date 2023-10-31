@@ -247,7 +247,7 @@ namespace Backend.Services
             var managementCodeCopy = model.ManagementCode;
             if (!string.IsNullOrEmpty(managementCodeCopy)
                 && account.ManagementCode != managementCodeCopy
-                && _context.Accounts.Any(_ => _.ManagementCode == model.ManagementCode && _.Id != id))
+                && !_context.Accounts.Any(_ => _.ManagementCode == model.ManagementCode && _.Id != id))
             {
                 var qrCodeImg = GenerateQrCode(managementCodeCopy);
                 if (!String.IsNullOrEmpty(account.QrCode))
@@ -472,7 +472,7 @@ namespace Backend.Services
             );
         }
 
-        public async Task<AccountResponse> UpLoadAvatar(int id, Stream avatar)
+        public async Task<string> UpLoadAvatar(int id, Stream avatar)
         {
             var user = await _context.Accounts.FindAsync(id);
             if (!String.IsNullOrEmpty(user.Avatar))
@@ -485,7 +485,7 @@ namespace Backend.Services
                 }
                 else
                 {
-                    return _mapper.Map<AccountResponse>(user);
+                    return string.Empty;
                 }
             }
 
@@ -493,9 +493,8 @@ namespace Backend.Services
 
             user.Avatar = uploadResult?.Url.ToString();
             user.AvatarPublicId = uploadResult?.PublicId;
-
-            await _context.SaveChangesAsync();
-            return _mapper.Map<AccountResponse>(user);
+            
+            return user.Avatar;
         }
 
         private byte[] GenerateQrCode(string managementCode)

@@ -22,14 +22,17 @@ import { Modal } from '../../../_components';
 import { AddEdit } from './AddEdit';
 import ExcelUpload from './ExcelUpload';
 import images from "../../../_asset/images";
+import UploadAvatar from './UploadAvatar';
 
 function List({ match }) {
     const { path } = match;
     const [users, setUsers] = useState(null);
     const [openModal, setOpenModal] = useState(false);
     const [addMode, setAddMode] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(undefined);
     const [id, setId] = useState(0);
     const [openImportModal, setOpenImportModal] = useState(false);
+    const [openAvatarModal, setOpenAvatarModal] = useState(false);
 
     const [noAvatarImage, setNoAvatarImage] = useState(null);
     const [noQrImage, setNoQrImage] = useState(null);
@@ -90,6 +93,16 @@ function List({ match }) {
         setOpenModal(false);
         setId(0);
         getUser();
+    }
+
+    const updateAvatar = (user) => {
+        setSelectedUser(user);
+        setOpenAvatarModal(true);
+    }
+
+    const onHideAvatar = () => {
+        setOpenAvatarModal(false);
+        setSelectedUser(undefined);
     }
 
     return (
@@ -155,6 +168,14 @@ function List({ match }) {
                                 onClick={() => updateUser(data.id)}
                             />
                             <Button
+                                className="mr-1"
+                                type="success"
+                                width={79}
+                                height={29} 
+                                text={"Avatar"} 
+                                onClick={() => updateAvatar(data)}
+                            />
+                            <Button
                                 text={data.isDeleting ? "Deleting" : "Delete"}
                                 type="danger"
                                 disabled={data.isDeleting}
@@ -188,6 +209,10 @@ function List({ match }) {
 
             <Modal title={"Import Excel"} show={openImportModal} onHide={() => setOpenImportModal(false)} >
                 <ExcelUpload getAccounts={getUser} setOpenImportModal={setOpenImportModal}/>
+            </Modal>
+
+            <Modal title={"Upload Image"} show={openAvatarModal} onHide={onHideAvatar} >
+                <UploadAvatar user={selectedUser} getAccounts={getUser} onHide={onHideAvatar}/>
             </Modal>
         </div>
     );

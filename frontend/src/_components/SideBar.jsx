@@ -182,7 +182,7 @@ const SideBar = () => {
           </li>
 
           {/* Managements */}
-          <li class="w-100">
+          <li className="w-100">
             <a
               style={{ textDecoration: "none" }}
               onClick={(e) => handleManagementToggle(e)}
@@ -322,7 +322,7 @@ const SideBar = () => {
           </li>
 
           {/* Schedule */}
-          <li class="w-100">
+          <li className="w-100">
             <a
               style={{ textDecoration: "none" }}
               onClick={(e) => handleScheduleToggle(e)}

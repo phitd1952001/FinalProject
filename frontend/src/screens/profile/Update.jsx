@@ -2,43 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import images from "../../_asset/images";
 import { accountService, alertService } from "../../_services";
-
-const styles = {
-  avatarContainer: {
-    position: "relative",
-    width: "150px",
-    height: "150px",
-    borderRadius: "50%",
-    overflow: "hidden",
-  },
-  avatar: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-  },
-  changeAvatar: {
-    position: "absolute",
-    bottom: "10px",
-    left: "50%",
-    transform: "translateX(-50%)",
-    backgroundColor: "#007bff",
-    color: "#fff",
-    border: "none",
-    padding: "5px 10px",
-    borderRadius: "5px",
-    cursor: "pointer",
-  },
-  deleteIcon: {
-    position: "absolute",
-    top: "10px",
-    right: "10px",
-    color: "#dc3545",
-    cursor: "pointer",
-    zIndex: 1,
-  },
-};
 
 function Update({ history }) {
   const [user, setUser] = useState(accountService.userValue);
@@ -87,42 +51,8 @@ function Update({ history }) {
       });
   }
 
-  function uploadAvatar() {
-    accountService
-      .handleUpload(event.target.files[0])
-      .then(() => {
-        alertService.success("Upload successful", {
-          keepAfterRouteChange: true,
-        });
-      })
-      .catch((error) => {
-        alertService.error(error);
-      });
-  }
-
-  const [noAvatarImage, setNoAvatarImage] = useState(null);
-
-  useEffect(() => {
-    images.noAvatar.then((img) => setNoAvatarImage(img));
-  }, []);
-
   return (
     <>
-      <div>
-        <h1>Avatar Upload</h1>
-      </div>
-
-      <div className="container my-5">
-        <div style={styles.avatarContainer}>
-          {user.avatar ? (
-            <img style={styles.avatar} src={user.avatar} alt="Avatar" />
-          ) : (
-            <img style={styles.avatar} src={noAvatarImage} alt="Avatar" />
-          )}
-        </div>
-      </div>
-      <input type="file" onChange={uploadAvatar} />
-
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
