@@ -24,6 +24,7 @@ const List = ({ match }) => {
     const [settings, setSettings] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [addMode, setAddMode] = useState(false);
+    const [isGenerating, setIsGenerating] = useState(false);
     const [id, setId] = useState(0);
 
     useEffect(() => {
@@ -79,12 +80,39 @@ const List = ({ match }) => {
         getSettings();
     }
 
+    const generateSchedule = () =>{
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will delete all current calendar and create new one",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setIsGenerating(true)
+                settingsService.generateSchedule().then(() => {
+                    setIsGenerating(false)
+                    Swal.fire(
+                        'Generating!',
+                        'Your schedule is generating, You will received email when it finish.',
+                        'success'
+                    )
+                }).catch(err=>{
+                    setIsGenerating(false)
+                });
+            }
+        })
+    }
+
     return (
         <div>
             <h1>Setting Management</h1>
             <br />
             <div className="d-flex">
                {settings.length === 0 && (<button onClick={addSetting} className="btn btn-sm btn-success mb-2 mr-2">Add Setting</button> )} 
+               <button disabled={isGenerating} onClick={generateSchedule} className="btn btn-sm btn-success mb-2 mr-2">Generate Schedule</button>
             </div>
            
             <DataGrid

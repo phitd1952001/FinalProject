@@ -18,74 +18,87 @@ namespace Backend.Services
         public static int D2; // external distance 10 - 4 
         public static int D1;
         public static HashSet<StudentCourses> StudentCourses = new HashSet<StudentCourses>();
-        public static HashSet<Subject> Subjects = new HashSet<Subject>();
+        public static HashSet<SubjectMatrix> Subjects = new HashSet<SubjectMatrix>();
         public static Graph Graph;
         public static HashSet<Node> AllNodesHashSet;
-        private readonly ApplicationDbContext _db;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public AutomationGenerateSchedule(ApplicationDbContext db)
+        public AutomationGenerateSchedule(IServiceScopeFactory serviceScopeFactory)
         {
-            _db = db;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         public async Task Schedule()
         {
-            var begin = DateTime.Now;
+            try
+            {
+                var begin = DateTime.Now;
 
-            GetDataFromDb();
+                GetDataFromDb();
 
-            var adj = BuildMatrix();
+                var adj = BuildMatrix();
 
-            PrintMatrix(ref adj);
+                PrintMatrix(ref adj);
 
-            Console.WriteLine("Matrix build success Take " + (DateTime.Now - begin));
+                Console.WriteLine("Matrix build success Take " + (DateTime.Now - begin));
 
-            var sortedGraph = Graph.SortAdjMatrix();
+                var sortedGraph = Graph.SortAdjMatrix();
 
-            Schedule(sortedGraph);
+                Schedule(sortedGraph);
 
-            PrintSchedule();
+                PrintSchedule();
 
-            StoreScheduleResult();
+                StoreScheduleResult();
 
-            Console.WriteLine($"Finish!!!! Take: {DateTime.Now - begin}");
+                Console.WriteLine($"Finish!!!! Take: {DateTime.Now - begin}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         private void GetDataFromDb()
         {
             HashSet<Subject> coursesDb;
             HashSet<Class> @class;
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var _db = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                
+                coursesDb = _db.Subjects.AsNoTracking().ToHashSet();
+                @class = _db.Classes.Include(_=>_.Subject).Include(_=>_.Account).AsNoTracking().ToHashSet();
 
-            coursesDb = _db.Subjects.AsNoTracking().ToHashSet();
-            @class = _db.Classes.Include(_=>_.Subject).Include(_=>_.Account).AsNoTracking().ToHashSet();
+                var setting = _db.Settings.First();
 
-            var setting = _db.Settings.First();
+                StartDate = setting.StartDate;
+                EndDate = setting.EndDate;
+                ConcurrencyLevelDefault = setting.ConcurrencyLevelDefault;
+                D1 = setting.InternalDistance;
+                D2 = setting.ExternalDistance;
+                NoOfTimeSlots = setting.NoOfTimeSlot;
+                NoOfSlotAllowOneStudentInDay = setting.NoOfSlotAllowOneStudentInDay;
+                MaxScheduleDays = (EndDate - StartDate).Days;
+                ConcurrencyLevel = new int[MaxScheduleDays, NoOfTimeSlots];
 
-            StartDate = setting.StartDate;
-            EndDate = setting.EndDate;
-            ConcurrencyLevelDefault = setting.ConcurrencyLevelDefault;
-            D1 = setting.InternalDistance;
-            D2 = setting.ExternalDistance;
-            NoOfTimeSlots = setting.NoOfTimeSlot;
-            NoOfSlotAllowOneStudentInDay = setting.NoOfSlotAllowOneStudentInDay;
-            MaxScheduleDays = (EndDate - StartDate).Days;
-            ConcurrencyLevel = new int[MaxScheduleDays, NoOfTimeSlots];
-
-            var result = _db.Schedules.ToList();
+                var result = _db.Schedules.ToList();
             
-            _db.RemoveRange(result);
-            _db.SaveChanges();
+                _db.RemoveRange(result);
+                _db.SaveChanges();
+            }
             
             foreach (var item in coursesDb)
             {
-                var value = item.SubjectCode.Substring(0, 7);
+                var value = item.SubjectCode;
 
                 if (!Subjects.Any(x => x.SubjectCode == value))
                 {
-                    Subjects.Add(new Subject()
+                    Subjects.Add(new SubjectMatrix()
                     {
                         SubjectCode = value,
-                        Name = value
+                        Name = value,
+                        Credit = item.Credit
                     });
                 }
             }
@@ -98,7 +111,7 @@ namespace Backend.Services
                 StudentCourses.Add(new StudentCourses()
                 {
                     StudentId = item.Account.ManagementCode,
-                    CourseCode = item.Subject.SubjectCode.Substring(0, 7)
+                    CourseCode = item.Subject.SubjectCode
                 });
             }
         }
@@ -132,9 +145,12 @@ namespace Backend.Services
                 results.Add(result);
             }
 
-            _db.Schedules.AddRange(results);
-            _db.SaveChanges();
-            
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var _db = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                _db.Schedules.AddRange(results);
+                _db.SaveChanges();
+            }
         }
 
         private int?[,] BuildMatrix()
@@ -360,16 +376,12 @@ namespace Backend.Services
                                 
                                 if (subject != null)
                                 {
-                                    var numberOfTimePrepare = subject.Credit * 0.6;
+                                    var numberOfTimePrepare = subject.Credit * 0.6 + 1;
                                     externalDistance = (int)Math.Ceiling(numberOfTimePrepare);
-                                    if (externalDistance < 1)
-                                    {
-                                        internalDistance = 2;
-                                    }
                                 }
 
                                 // external distance between 2 color
-                                if (Math.Abs(j - a) == externalDistance)
+                                if (Math.Abs(j - a) < externalDistance)
                                 {
                                     // Internal distance between 2 color
                                     if (Math.Abs(k - b) <= internalDistance)

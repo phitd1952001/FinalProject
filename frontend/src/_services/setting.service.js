@@ -9,11 +9,16 @@ export const settingsService = {
   getById,
   create,
   update,
-  delete: _delete
+  delete: _delete,
+  generateSchedule
 };
 
 function getAll() {
   return fetchWrapper.get(baseUrl);
+}
+
+function generateSchedule() {
+  return fetchWrapper.get(`${apiUrl}/Schedule`);
 }
 
 function getById(id) {
