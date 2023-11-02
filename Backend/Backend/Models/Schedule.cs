@@ -16,6 +16,4 @@ public class Schedule
     public DateTime Date { get; set; }
     
     public int Slot { get; set; }
-    
-    public int? RoomId { get; set; }
 }

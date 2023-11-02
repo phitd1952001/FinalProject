@@ -24,5 +24,6 @@ namespace Backend.DbContext
 
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Slot> Slots { get; set; }
+        public DbSet<ScheduleRoomMap> ScheduleRoomMaps { get; set; }
     }
 }

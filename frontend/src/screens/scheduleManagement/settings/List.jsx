@@ -112,7 +112,7 @@ const List = ({ match }) => {
             <br />
             <div className="d-flex">
                {settings.length === 0 && (<button onClick={addSetting} className="btn btn-sm btn-success mb-2 mr-2">Add Setting</button> )} 
-               <button disabled={isGenerating} onClick={generateSchedule} className="btn btn-sm btn-success mb-2 mr-2">Generate Schedule</button>
+               {settings.length !== 0 && (<button disabled={isGenerating} onClick={generateSchedule} className="btn btn-sm btn-success mb-2 mr-2">Generate Schedule</button> )} 
             </div>
            
             <DataGrid

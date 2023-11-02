@@ -151,6 +151,153 @@ namespace Backend.Services
                 _db.Schedules.AddRange(results);
                 _db.SaveChanges();
             }
+
+            GenerateSlot();
+        }
+
+        private void GenerateSlot()
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var _db = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                
+                var scheduleRoomMapOld = _db.ScheduleRoomMaps.ToList();
+                _db.ScheduleRoomMaps.RemoveRange(scheduleRoomMapOld);
+                
+                var slotsOld = _db.Slots.ToList();
+                _db.Slots.RemoveRange(slotsOld);
+                
+                _db.SaveChanges();
+                
+                var rooms = _db.Rooms.ToList();
+                var classes = _db.Classes.ToList();
+                var subjects = _db.Subjects.ToList();
+                
+                var schedules = _db.Schedules.ToList();
+
+                foreach (var schedule in schedules)
+                {
+                    var subject = subjects.FirstOrDefault(_ => _.SubjectCode == schedule.SubjectCode);
+                    if (subject == null)
+                        continue;
+                    
+                    var slots = _db.Slots.ToList();
+                    var scheduleRoomMaps = _db.ScheduleRoomMaps.ToList();
+                    
+                    var numberOfRoomNeeded = classes.Count(_ => _.SubjectId == subject.Id);
+
+                    var skip = 0;
+                    var nameIndex = 0;
+                    foreach (var room in rooms)
+                    {
+                        if (numberOfRoomNeeded == 0)
+                            break;
+                        
+                        if (!IsValidRoomValid(slots, scheduleRoomMaps, room.Id, schedule))
+                            continue;
+                       
+                        var take = numberOfRoomNeeded < room.NumberOfSeat ? numberOfRoomNeeded : room.NumberOfSeat;
+                        
+                        var @class = classes
+                            .Where(_ => _.SubjectId == subject.Id)
+                            .OrderBy(_ => _.UserId)
+                            .Skip(skip).Take(take).ToList();
+
+                        var studentIds = @class.Select(_ => _.UserId);
+                        
+                        _db.ScheduleRoomMaps.Add(new ScheduleRoomMap()
+                        {
+                            RoomId = room.Id,
+                            SchedulerId = schedule.Id,
+                            StudentIds = String.Join(',', studentIds)
+                        });
+
+                        _db.Slots.Add(new Slot()
+                        {
+                            Name = schedule.SubjectCode + "-" +(nameIndex + 1),
+                            StartTime = CalculateStartTime(schedule.Date, schedule.Slot),
+                            Duration = subject.Duration,
+                            SubjectId = subject.Id,
+                            RoomId = room.Id
+                        });
+                        
+                        _db.SaveChanges();
+                        
+                        skip = room.NumberOfSeat;
+                        numberOfRoomNeeded -= @class.Count;
+                        nameIndex++;
+                    }
+                    
+                    skip = 0;
+                    nameIndex = 0;
+                }
+            }
+        }
+        
+        private bool IsValidRoomValid(List<Slot> slots, List<ScheduleRoomMap> scheduleRoomMaps, int roomId, Schedule schedule)
+        {
+            if (schedule.Slot < 0 || schedule.Slot > 3)
+            {
+                Console.WriteLine("Invalid slot. Slot should be in the range [0, 2].");
+                return false;
+            }
+
+            DateTime startTime = CalculateStartTime(schedule.Date, schedule.Slot);
+
+            var isRoomInUsed = slots.Any(_ => _.StartTime == startTime && _.RoomId == roomId) 
+                               || scheduleRoomMaps.Any(_=>_.RoomId == roomId && _.SchedulerId == schedule.Id);
+            if (!isRoomInUsed)
+                return true;
+            
+            return false;
+        }
+        
+        private DateTime CalculateStartTime(DateTime date, int slot)
+        {
+            DateTime startTime;
+
+            if (slot == 0)
+            {
+                startTime = date.Date.AddHours(7);
+            }
+            else if (slot == 1)
+            {
+                startTime = date.Date.AddHours(9);
+            }
+            else if (slot == 2)
+            {
+                startTime = date.Date.AddHours(13);
+            }
+            else
+            {
+                startTime = date.Date.AddHours(15);
+            }
+
+            return startTime;
+        }
+        
+        private DateTime CalculateEndTime(DateTime date, int slot)
+        {
+            DateTime endTime;
+
+            if (slot == 0)
+            {
+                endTime = date.Date.AddHours(9);
+            }
+            else if (slot == 1)
+            {
+                endTime = date.Date.AddHours(11);
+            }
+            else if (slot == 2)
+            {
+                endTime = date.Date.AddHours(15);
+            }
+            else
+            {
+                endTime = date.Date.AddHours(17);
+            }
+
+            return endTime;
         }
 
         private int?[,] BuildMatrix()
