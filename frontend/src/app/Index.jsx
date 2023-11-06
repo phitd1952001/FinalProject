@@ -10,8 +10,10 @@ import { Account } from '@/screens/account';
 import { Management } from '@/screens/management';
 import { DashboardIndex } from '../screens/dashboard/Index';
 import { Schedule } from '../screens/scheduleManagement/Index';
+import { UserCalendar } from '../screens/userCalendar/Index';
 
 import ThemeProvider from '../theme';
+
 
 
 function App() {
@@ -27,6 +29,7 @@ function App() {
                 <PrivateRoute path="/admin" roles={[Role.Admin]} component={Admin} />
                 <PrivateRoute path="/management" roles={[Role.Admin, Role.Staff]} component={Management} />
                 <PrivateRoute path="/schedule" roles={[Role.Admin, Role.Staff]} component={Schedule} />
+                <PrivateRoute path="/calendar" component={UserCalendar} />
                 <Route path="/account" component={Account} />
                 <Redirect from="*" to="/" />
             </Switch>

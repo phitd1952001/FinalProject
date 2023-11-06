@@ -15,7 +15,7 @@ import {
   AiFillBuild,
   AiFillDashboard,
   AiFillCalendar,
-  AiFillSetting
+  AiFillSetting,
 } from "react-icons/ai";
 
 const styles = {
@@ -148,9 +148,7 @@ const SideBar = () => {
                       : "text-white"
                   } w-5 h-5`}
                 />
-                <span className="d-none d-md-inline-block ml-3">
-                  DashBoard
-                </span>
+                <span className="d-none d-md-inline-block ml-3">DashBoard</span>
               </div>
             </Link>
           </li>
@@ -214,7 +212,7 @@ const SideBar = () => {
               className={`${
                 managementToggle ? "d-flex flex-column d-block" : "d-none"
               }`}
-            > 
+            >
               {/* Subjects */}
               <li className="w-100">
                 <Link
@@ -260,9 +258,7 @@ const SideBar = () => {
                           : "text-white"
                       } w-5 h-5`}
                     />
-                    <span className="d-none d-md-inline-block ml-2">
-                      Rooms
-                    </span>
+                    <span className="d-none d-md-inline-block ml-2">Rooms</span>
                   </div>
                 </Link>
               </li>
@@ -312,9 +308,7 @@ const SideBar = () => {
                           : "text-white"
                       } w-5 h-5`}
                     />
-                    <span className="d-none d-md-inline-block ml-2">
-                      Slots
-                    </span>
+                    <span className="d-none d-md-inline-block ml-2">Slots</span>
                   </div>
                 </Link>
               </li>
@@ -354,7 +348,32 @@ const SideBar = () => {
               className={`${
                 scheduleToggle ? "d-flex flex-column d-block" : "d-none"
               }`}
-            > 
+            >
+              {/* Calendar */}
+              <li className="w-100">
+                <Link
+                  to="/schedule/calendar"
+                  style={{ textDecoration: "none" }}
+                  className={`d-flex align-items-center p-2 text-base justify-content-between  ${
+                    location.pathname === "/schedule/calendar"
+                      ? "bg-light text-dark"
+                      : "text-white"
+                  } rounded-lg sideBarBtn`}
+                >
+                  <div className="d-flex align-items-center">
+                    <AiFillCalendar
+                      className={`${
+                        location.pathname === "/schedule/calendar"
+                          ? "text-dark"
+                          : "text-white"
+                      } w-5 h-5`}
+                    />
+                    <span className="d-none d-md-inline-block ml-2">
+                      Calendar
+                    </span>
+                  </div>
+                </Link>
+              </li>
               {/* setting */}
               <li className="w-100">
                 <Link

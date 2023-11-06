@@ -35,6 +35,7 @@ namespace Backend.Extensions
             service.AddScoped<ICheckInService, CheckInService>();
             service.AddScoped<IDashBoardService, DashboardService>();
             service.AddScoped<ISettingService, SettingService>();
+            service.AddScoped<ICalendarService, CalendarService>();
             service.AddScoped<IAutomationGenerateSchedule, AutomationGenerateSchedule>();
 
             return service;
