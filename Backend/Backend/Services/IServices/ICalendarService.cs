@@ -2,5 +2,6 @@
 {
     public interface ICalendarService
     {
+        Task<object> GetAllScheduler();
     }
 }

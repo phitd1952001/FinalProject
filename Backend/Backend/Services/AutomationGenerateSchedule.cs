@@ -215,7 +215,7 @@ namespace Backend.Services
                         _db.Slots.Add(new Slot()
                         {
                             Name = schedule.SubjectCode + "-" +(nameIndex + 1),
-                            StartTime = CalculateStartTime(schedule.Date, schedule.Slot),
+                            StartTime = MatrixCalculator.CalculateStartTime(schedule.Date, schedule.Slot),
                             Duration = subject.Duration,
                             SubjectId = subject.Id,
                             RoomId = room.Id
@@ -242,7 +242,7 @@ namespace Backend.Services
                 return false;
             }
 
-            DateTime startTime = CalculateStartTime(schedule.Date, schedule.Slot);
+            DateTime startTime = MatrixCalculator.CalculateStartTime(schedule.Date, schedule.Slot);
 
             var isRoomInUsed = slots.Any(_ => _.StartTime == startTime && _.RoomId == roomId) 
                                || scheduleRoomMaps.Any(_=>_.RoomId == roomId && _.SchedulerId == schedule.Id);
@@ -250,54 +250,6 @@ namespace Backend.Services
                 return true;
             
             return false;
-        }
-        
-        private DateTime CalculateStartTime(DateTime date, int slot)
-        {
-            DateTime startTime;
-
-            if (slot == 0)
-            {
-                startTime = date.Date.AddHours(7);
-            }
-            else if (slot == 1)
-            {
-                startTime = date.Date.AddHours(9);
-            }
-            else if (slot == 2)
-            {
-                startTime = date.Date.AddHours(13);
-            }
-            else
-            {
-                startTime = date.Date.AddHours(15);
-            }
-
-            return startTime;
-        }
-        
-        private DateTime CalculateEndTime(DateTime date, int slot)
-        {
-            DateTime endTime;
-
-            if (slot == 0)
-            {
-                endTime = date.Date.AddHours(9);
-            }
-            else if (slot == 1)
-            {
-                endTime = date.Date.AddHours(11);
-            }
-            else if (slot == 2)
-            {
-                endTime = date.Date.AddHours(15);
-            }
-            else
-            {
-                endTime = date.Date.AddHours(17);
-            }
-
-            return endTime;
         }
 
         private int?[,] BuildMatrix()

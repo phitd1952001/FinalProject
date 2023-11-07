@@ -7,3 +7,4 @@ export * from './slot.service';
 export * from './checkIn.service';
 export * from './dashboard.service';
 export * from './setting.service';
+export * from './calendar.service';
