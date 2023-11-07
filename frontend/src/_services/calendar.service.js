@@ -5,9 +5,14 @@ const apiUrl = config.apiUrl;
 const baseUrl = `${apiUrl}/calendar`;
 
 export const calendarService = {
-  getAll
+  getAll,
+  getByUserId
 };
 
 function getAll() {
   return fetchWrapper.get(baseUrl);
+}
+
+function getByUserId() {
+  return fetchWrapper.get(`${baseUrl}/user`);
 }

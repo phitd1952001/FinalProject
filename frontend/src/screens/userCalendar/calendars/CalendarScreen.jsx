@@ -9,7 +9,7 @@ const CalendarScreen = () => {
   const [data, setData] = useState([]);
 
   useEffect(()=>{
-    calendarService.then(res=>{
+    calendarService.getByUserId().then(res=>{
       const result = res.map(convertObject);
       setData(result)
     }).catch(e=>console.log(e))
@@ -20,8 +20,8 @@ const CalendarScreen = () => {
     obj.endDate = new Date(obj.endDate);
     return {
       text: obj.text,
-      startDate: `new Date("${obj.startDate.toISOString()}")`,
-      endDate: `new Date("${obj.endDate.toISOString()}")`,
+      startDate: obj.startDate,
+      endDate:  obj.endDate,
       description: `'${obj.description}'`
     };
   }
@@ -33,7 +33,7 @@ const CalendarScreen = () => {
       </div>
       <br />
       <Scheduler
-        timeZone="America/Los_Angeles"
+        timeZone="Asia/Bangkok"
         editing={{
           allowAdding: false,
           allowDeleting: false,

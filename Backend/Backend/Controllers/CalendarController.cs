@@ -21,4 +21,10 @@ public class CalendarController: BaseController
     {
         return Ok(await _calendarService.GetAllScheduler());
     }
+
+    [HttpGet("user")]
+    public async Task<IActionResult> GetSchedulerByUserId()
+    {
+        return Ok(await _calendarService.GetSchedulerByUserId(Account.Id));
+    }
 }
