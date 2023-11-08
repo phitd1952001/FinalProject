@@ -155,8 +155,25 @@ namespace Backend.Services
             GenerateSlot();
 
             GenerateReminderEmail();
-        }
 
+            SentMailToNotiAdmin();
+;        }
+
+        private void SentMailToNotiAdmin()
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var _db = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                var admins = _db.Accounts.Where(_=>_.Role == Role.Admin).ToList();
+
+                var emailService = scope.ServiceProvider.GetService<IEmailService>();
+                foreach (var admin in admins)
+                {
+                    emailService.Send(admin.Email, "Schedule Generated Completed", "Your Exam Schedule is generated")
+                        .GetAwaiter().GetResult();
+                }
+            }
+        }
         private void GenerateReminderEmail()
         {
             using (var scope = _serviceScopeFactory.CreateScope())
