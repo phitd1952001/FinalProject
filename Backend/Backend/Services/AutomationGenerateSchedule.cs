@@ -153,6 +153,72 @@ namespace Backend.Services
             }
 
             GenerateSlot();
+
+            GenerateReminderEmail();
+        }
+
+        private void GenerateReminderEmail()
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var _db = scope.ServiceProvider.GetService<ApplicationDbContext>();
+
+                var oldReminders = _db.Reminders.ToList();
+                _db.Reminders.RemoveRange(oldReminders);
+                _db.SaveChanges();
+
+                var schedulers = _db.Schedules.ToList();
+                var schedulerRoomMapped = _db.ScheduleRoomMaps.ToList();
+                var subjects = _db.Subjects.ToList();
+                var rooms = _db.Rooms.ToList();
+                var students = _db.Accounts.Where(_ => _.Role == Models.Role.Student).ToList();
+
+                var reminders = new List<Reminder>();
+
+                foreach (var item in schedulers)
+                {
+                    var subject = subjects.FirstOrDefault(_ => _.SubjectCode == item.SubjectCode);
+                    if (subject == null)
+                        continue;
+
+                    var schedulerRoomMap = schedulerRoomMapped.Where(_ => _.SchedulerId == item.Id);
+                    if (schedulerRoomMap == null)
+                        continue;
+
+                    var numberOfRoomForOneSubject = schedulerRoomMap.Select(_ => _.RoomId);
+                    foreach (var roomId in numberOfRoomForOneSubject)
+                    {
+                        var room = rooms.FirstOrDefault(_ => _.Id == roomId);
+                        if (room == null)
+                            continue;
+
+                        var schedulerRoomMapForEachRoom = schedulerRoomMap.FirstOrDefault(_ => _.RoomId == roomId);
+
+                        var studentIds = schedulerRoomMapForEachRoom.StudentIds.Split(",").Select(_ => Convert.ToInt32(_)).ToList();
+
+                        var studentMails = students.Where(_ => studentIds.Contains(_.Id)).Select(_ => _.Email).Distinct().ToList();
+                        
+                        foreach (var mail in studentMails)
+                        {
+                            var startDate = MatrixCalculator.CalculateStartTime(item.Date, item.Slot);
+
+                            string message = String.Empty;
+
+                            message += "You will help and exam in the next 45 minutes for subject " + item.SubjectCode + " at " + room.Name;
+
+                            reminders.Add(new Reminder()
+                            {
+                                Message = message,
+                                To = mail,
+                                DateTimePerformed = startDate.AddMinutes(-45),
+                            });
+                        }
+                    }
+                }
+
+                _db.Reminders.AddRange(reminders);
+                _db.SaveChanges();
+            }
         }
 
         private void GenerateSlot()

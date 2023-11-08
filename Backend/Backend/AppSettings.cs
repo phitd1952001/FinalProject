@@ -23,5 +23,8 @@ namespace Backend
         
         // 
         public static string QrCodeKey { get; set; }
+
+        // interval time chrone job send mail
+        public static int ChroneJobTimeInterval { get; set; }
     }
 }

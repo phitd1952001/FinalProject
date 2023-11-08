@@ -5,6 +5,7 @@ using Backend.Services;
 using Backend.Services.IServices;
 using CloudinaryDotNet;
 using Backend.BackgroundServices;
+using Backend.Workers;
 
 namespace Backend.Extensions
 {
@@ -38,6 +39,8 @@ namespace Backend.Extensions
             service.AddScoped<ICalendarService, CalendarService>();
             service.AddScoped<IAutomationGenerateSchedule, AutomationGenerateSchedule>();
 
+            service.AddTransient<IReminderService, ReminderService>();
+
             return service;
         }
 
@@ -45,6 +48,12 @@ namespace Backend.Extensions
         {
             service.AddHostedService<LongRunningService>();
             service.AddSingleton<BackgroundWorkerQueue>();
+            return service;
+        }
+
+        public static IServiceCollection AddChroneJobService(this IServiceCollection service)
+        {
+            service.AddHostedService<AutomationMailSender>();
             return service;
         }
 
