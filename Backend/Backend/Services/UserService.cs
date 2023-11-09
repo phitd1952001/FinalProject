@@ -280,6 +280,9 @@ namespace Backend.Services
             _context.Accounts.Update(account);
             _context.SaveChanges();
 
+            if(account.QrCode != null)
+                SendMailNotiQrCodeCreated(account.Email, account.QrCode);
+
             return _mapper.Map<AccountResponse>(account);
         }
 
@@ -506,6 +509,15 @@ namespace Backend.Services
             return qrcode;
         }
 
+        private void SendMailNotiQrCodeCreated(string mail, string qrCode)
+        {
+            string message = System.IO.File.ReadAllTextAsync("HtmlEmails/QrCodeNoti.html").GetAwaiter().GetResult();
+            message = message.Replace("[[name]]", mail);
+            message = message.Replace("[[qrcode]]", qrCode);
+
+            _emailService.Send(mail, "Your QrCode Is Created", message);
+        }
+
         private string Encrypt(string clearText)
         {
             var clearBytes = Encoding.Unicode.GetBytes(clearText);
@@ -711,6 +723,9 @@ namespace Backend.Services
                             var uploadResult = _imageServices.UploadFile(stream, Guid.NewGuid().ToString());
                             account.QrCode = uploadResult?.Url.ToString();
                             account.QrCodePublishId = uploadResult?.PublicId;
+
+                            if (account.QrCode != null)
+                                SendMailNotiQrCodeCreated(account.Email, account.QrCode);
                         }
                     }
 
