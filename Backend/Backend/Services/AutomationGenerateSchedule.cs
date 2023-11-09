@@ -167,9 +167,11 @@ namespace Backend.Services
                 var admins = _db.Accounts.Where(_=>_.Role == Role.Admin).ToList();
 
                 var emailService = scope.ServiceProvider.GetService<IEmailService>();
+
+                var message = System.IO.File.ReadAllTextAsync("HtmlEmails/ScheduleGenertedNoti.html").GetAwaiter().GetResult();
                 foreach (var admin in admins)
                 {
-                    emailService.Send(admin.Email, "Schedule Generated Completed", "Your Exam Schedule is generated")
+                    emailService.Send(admin.Email, "Schedule Generated Completed", message)
                         .GetAwaiter().GetResult();
                 }
             }
