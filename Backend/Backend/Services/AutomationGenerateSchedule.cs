@@ -221,9 +221,10 @@ namespace Backend.Services
                         {
                             var startDate = MatrixCalculator.CalculateStartTime(item.Date, item.Slot);
 
-                            string message = String.Empty;
-
-                            message += "You will help and exam in the next 45 minutes for subject " + item.SubjectCode + " at " + room.Name;
+                            string message = System.IO.File.ReadAllTextAsync("HtmlEmails/ExamReminder.html").GetAwaiter().GetResult();
+                            message = message.Replace("[[name]]", mail);
+                            message = message.Replace("[[code]]", item.SubjectCode);
+                            message = message.Replace("[[room]]", room.Name);
 
                             reminders.Add(new Reminder()
                             {
