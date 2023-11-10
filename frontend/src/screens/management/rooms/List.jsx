@@ -87,6 +87,7 @@ const List = ({ match }) => {
             <br />
             <div className="d-flex">
                 <button onClick={addRoom} className="btn btn-sm btn-success mb-2 mr-2">Add Room</button> 
+                <a href="https://drive.google.com/uc?id=189GevltUrUz191AJH3N4U0dVs7aJOOrm" rel="noopener noreferrer" className="mr-2 btn btn-sm btn-warning mb-2">Excel Template</a>
                 <button onClick={()=>setOpenImportModal(true)} className="btn btn-sm btn-success mb-2">Import Excel</button>
             </div>
            

@@ -88,6 +88,7 @@ const List = ({ match }) => {
             <br />
             <div className="d-flex">
                 <button onClick={addSubject} className="btn btn-sm btn-success mb-2 mr-2">Add Subject</button>
+                <a href="https://drive.google.com/uc?id=15Uoqv-CZrcxLzrHTS2G1K4IPc1KmCj4u" rel="noopener noreferrer" className="mr-2 btn btn-sm btn-warning mb-2">Excel Template</a>
                 <button onClick={()=>setOpenImportModal(true)} className="btn btn-sm btn-success mb-2">Import Excel</button>
             </div>
             <DataGrid
