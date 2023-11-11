@@ -2,6 +2,8 @@ import React from "react";
 import "./style.css";
 
 function Home() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <>
       <div
@@ -213,7 +215,10 @@ function Home() {
                       comprehensive course. Acquire practical skills in
                       programming, data management, and network administration.
                     </p>
-                    <a href="#!" className="btn btn-primary">
+                    <a
+                      href="https://greenwich.edu.vn/en/course/computing/"
+                      className="btn btn-primary text-white"
+                    >
                       Read More
                     </a>
                   </div>
@@ -247,7 +252,10 @@ function Home() {
                       decision-making, financial analysis, and effective
                       leadership.
                     </p>
-                    <a href="#!" className="btn btn-primary">
+                    <a
+                      href="https://greenwich.edu.vn/en/course/business-management/"
+                      className="btn btn-primary text-white"
+                    >
                       Read More
                     </a>
                   </div>
@@ -281,7 +289,10 @@ function Home() {
                       organizing successful events, conferences, and
                       exhibitions.
                     </p>
-                    <a href="#!" className="btn btn-primary">
+                    <a
+                      href="https://greenwich.edu.vn/en/course/graphic-and-digital-design/"
+                      className="btn btn-primary text-white"
+                    >
                       Read More
                     </a>
                   </div>
@@ -306,13 +317,13 @@ function Home() {
             <div className="row">
               <div className="col-lg-4 col-md-12 mb-4 mb-lg-0">
                 <img
-                  src="https://cdn.pixabay.com/photo/2016/06/25/12/52/laptop-1478822_960_720.jpg"
+                  src="https://res.cloudinary.com/dafhoj5q5/image/upload/v1699718697/lb0xz3qhvqqyeehlkc3x.jpg"
                   className="w-100 shadow-1-strong rounded mb-4"
                   alt="Boat on Calm Water"
                 />
 
                 <img
-                  src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain1.webp"
+                  src="https://res.cloudinary.com/dafhoj5q5/image/upload/v1699719992/tq2snj6p8mjgtrwmch72.jpg"
                   className="w-100 shadow-1-strong rounded mb-4"
                   alt="Wintry Mountain Landscape"
                 />
@@ -320,13 +331,13 @@ function Home() {
 
               <div className="col-lg-4 mb-4 mb-lg-0">
                 <img
-                  src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain2.webp"
+                  src="https://res.cloudinary.com/dafhoj5q5/image/upload/v1699720652/syhtxqpuwxa5pk8rsoux.jpg"
                   className="w-100 shadow-1-strong rounded mb-4"
                   alt="Mountains in the Clouds"
                 />
 
                 <img
-                  src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
+                  src="https://res.cloudinary.com/dafhoj5q5/image/upload/v1699719779/ennqoqjbcwyr3dbbthrv.jpg"
                   className="w-100 shadow-1-strong rounded mb-4"
                   alt="Boat on Calm Water"
                 />
@@ -334,13 +345,13 @@ function Home() {
 
               <div className="col-lg-4 mb-4 mb-lg-0">
                 <img
-                  src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(18).webp"
+                  src="https://res.cloudinary.com/dafhoj5q5/image/upload/v1699719465/re07s0hrkrhuvqjhxwqw.jpg"
                   className="w-100 shadow-1-strong rounded mb-4"
                   alt="Waves at Sea"
                 />
 
                 <img
-                  src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain3.webp"
+                  src="https://res.cloudinary.com/dafhoj5q5/image/upload/v1699720235/a2p3fdhakr6y15uxsa1v.jpg"
                   className="w-100 shadow-1-strong rounded mb-4"
                   alt="Yosemite National Park"
                 />
@@ -452,80 +463,49 @@ function Home() {
           <section className="">
             <div className="container text-center text-md-start mt-5">
               <div className="row mt-3">
-                <div className="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                {/* Column 1 - Introduction */}
+                <div className="col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
                   <h6 className="text-uppercase fw-bold mb-4">
-                    <i className="bi bi-gem me-3"></i>Company name
+                    <i className="bi bi-gem"></i>Introduction
                   </h6>
                   <p>
-                    Here you can use rows and columns to organize your footer
-                    content. Lorem ipsum dolor sit amet, consectetur adipisicing
-                    elit.
+                    Greenwich Vietnam: A global collaboration between the
+                    University of Greenwich, UK, and FPT University. Attracts
+                    diverse students worldwide.
+                  </p>
+                  <p>
+                    Graduates receive a globally recognized Bachelor's degree
+                    from the University of Greenwich, UK.
                   </p>
                 </div>
 
-                <div className="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-                  <h6 className="text-uppercase fw-bold mb-4">Products</h6>
+                {/* Column 2 - System Locations */}
+                <div className="col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
+                  <h6 className="text-uppercase fw-bold mb-4">
+                    System Locations
+                  </h6>
                   <p>
-                    <a href="#!" className="text-reset">
-                      Angular
-                    </a>
-                  </p>
-                  <p>
-                    <a href="#!" className="text-reset">
-                      React
-                    </a>
-                  </p>
-                  <p>
-                    <a href="#!" className="text-reset">
-                      Vue
-                    </a>
-                  </p>
-                  <p>
-                    <a href="#!" className="text-reset">
-                      Laravel
-                    </a>
+                    <strong>HO CHI MINH</strong>
+                    <br />
+                    Cong Hoa Garden Building, 20 Cong Hoa, Ward 12, Tan Binh
+                    District, Ho Chi Minh City
+                    <br />
+                    Hotline: 0933.108.554 - 0971.294.545
+                    <br />
+                    Phone: 028.7300.2266
                   </p>
                 </div>
 
-                <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-                  <h6 className="text-uppercase fw-bold mb-4">Useful links</h6>
+                {/* Column 3 - Contact */}
+                <div className="col-md-4 col-lg-4 col-xl-4 mx-auto mb-md-0 mb-4">
+                  <h6 className="text-uppercase fw-bold ms-3 mb-4">Contact</h6>
                   <p>
-                    <a href="#!" className="text-reset">
-                      Pricing
-                    </a>
+                    <i className="bi bi-telephone me-3"></i> Hotline:
+                    086.779.1686
                   </p>
                   <p>
-                    <a href="#!" className="text-reset">
-                      Settings
-                    </a>
-                  </p>
-                  <p>
-                    <a href="#!" className="text-reset">
-                      Orders
-                    </a>
-                  </p>
-                  <p>
-                    <a href="#!" className="text-reset">
-                      Help
-                    </a>
-                  </p>
-                </div>
-
-                <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-                  <h6 className="text-uppercase fw-bold mb-4">Contact</h6>
-                  <p>
-                    <i className="bi bi-location me-3"></i> New York, NY 10012,
-                    US
-                  </p>
-                  <p>
-                    <i className="bi bi-envelope me-3"></i>
-                    info@example.com
-                  </p>
-                  <p>
-                    <i className="bi bi-phone me-3"></i> + 01 234 567 88
-                  </p>
-                  <p>
-                    <i className="bi bi-print me-3"></i> + 01 234 567 89
+                    <i className="bi bi-envelope me-3"></i> Email:
+                    info@greenwich.edu.vn
                   </p>
                 </div>
               </div>
@@ -536,12 +516,12 @@ function Home() {
             className="text-center py-4"
             style={{ backgroundColor: "#08090a" }}
           >
-            © 2021 Copyright:
+            © {currentYear}{" "}
             <a
               className="text-reset fw-bold"
-              href="https://tuyensinh.greenwich.edu.vn/"
+              href="https://greenwich.edu.vn/en/english/"
             >
-              greenwichUniversity.com
+              Greenwich.edu.vn. All Right Reserved
             </a>
           </div>
         </footer>
