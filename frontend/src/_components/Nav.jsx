@@ -44,6 +44,9 @@ function Nav() {
           >
             <ul className="navbar-nav">
               <div className="navbar-nav ml-8">
+                <NavLink to={`/`} className="nav-item nav-link">
+                  Home
+                </NavLink>
                 <NavLink to={`/calendar`} className="nav-item nav-link">
                   My Exam Calendar
                 </NavLink>
