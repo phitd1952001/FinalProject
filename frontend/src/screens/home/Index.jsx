@@ -102,24 +102,24 @@ function Home() {
         <section id="about" className="about mt-5">
           <div className="container-fluid">
             <h2 className="h1-responsive font-weight-bold text-center my-2">
-              About
+              Introduction to Greenwich University Vietnam
             </h2>
 
             <p className="text-center w-responsive mx-auto mb-1">
-              Do you have any questions? Please do not hesitate to contact us
-              directly. Our team will come back to you within a matter of hours
-              to help you.
+              Welcome to Greenwich University Vietnam! If you have any
+              questions, feel free to contact us directly. Our team will get
+              back to you within a matter of hours to assist you.
             </p>
             <div className="row  pt-5 pb-5">
               <div
                 className="col-lg-5 align-items-stretch video-box"
                 style={{
                   backgroundImage:
-                    'url("https://cdn.pixabay.com/photo/2018/01/17/07/06/laptop-3087585_960_720.jpg")',
+                    'url("https://res.cloudinary.com/dafhoj5q5/image/upload/v1699690731/sphs6nsv5t6uatmtumx5.jpg")',
                 }}
               >
                 <a
-                  href="https://www.youtube.com/watch?v=jDDaplaOz7Q"
+                  href="https://www.youtube.com/watch?v=hyTkx3y4AHY"
                   className="venobox play-btn mb-4"
                   data-vbtype="video"
                   data-autoplay="true"
@@ -129,41 +129,45 @@ function Home() {
               <div className="col-lg-7 d-flex flex-column justify-content-center align-items-stretch">
                 <div className="content">
                   <h3>
-                    Eum ipsam laborum deleniti{" "}
-                    <strong>velit pariatur architecto aut nihil</strong>
+                    About Greenwich University Vietnam{" "}
+                    <strong>Empowering Minds, Enriching Futures</strong>
                   </h3>
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Duis aute irure dolor in reprehenderit
+                    Welcome to Greenwich University Vietnam, where we take pride
+                    in offering a diverse and high-quality learning experience.
+                    Our commitment is to create a positive learning environment
+                    and support the comprehensive development of our students.
                   </p>
                   <p className="font-italic">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua.
+                    Our vision is to be a premier university, producing
+                    high-quality graduates who make a positive impact on the
+                    community and society. Our mission is to provide quality
+                    education, promote research, and foster the personal
+                    development of every student.
                   </p>
                   <ul>
                     <li>
-                      <i className="bx bx-check-double"></i> Ullamco laboris
-                      nisi ut aliquip ex ea commodo consequat.
+                      <i className="bx bx-check-double"></i> Dedicated to
+                      delivering top-notch education through an experienced
+                      faculty and a diverse curriculum.
                     </li>
                     <li>
-                      <i className="bx bx-check-double"></i> Duis aute irure
-                      dolor in reprehenderit in voluptate velit.
+                      <i className="bx bx-check-double"></i> Students not only
+                      learn in modern facilities but also have opportunities to
+                      engage in extracurricular activities and interesting
+                      research projects.
                     </li>
                     <li>
-                      <i className="bx bx-check-double"></i> Ullamco laboris
-                      nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                      dolor in reprehenderit in voluptate trideta storacalaperda
-                      mastiro dolore eu fugiat nulla pariatur.
+                      <i className="bx bx-check-double"></i> If you have any
+                      questions or seek more information, reach out to us
+                      anytime. We're here to assist you with your educational
+                      and personal development queries.
                     </li>
                   </ul>
                   <p>
-                    Ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit
-                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                    occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum
+                    Thank you for considering Greenwich University Vietnam. We
+                    eagerly anticipate the opportunity to welcome you into our
+                    academic community!
                   </p>
                 </div>
               </div>
@@ -190,7 +194,7 @@ function Home() {
                     data-mdb-ripple-color="light"
                   >
                     <img
-                      src="https://cdn.pixabay.com/photo/2016/09/08/04/12/programmer-1653351_960_720.png"
+                      src="https://res.cloudinary.com/dafhoj5q5/image/upload/v1699691764/j14j6ezslnsshsiexaoy.png"
                       className="img-fluid"
                     />
                     <a href="#!">
@@ -201,10 +205,13 @@ function Home() {
                     </a>
                   </div>
                   <div className="card-body">
-                    <h5 className="card-title">Information Technology</h5>
-                    <p className="card-text">
-                      Some quick example text to build on the card title and
-                      make up the bulk of the card's content.
+                    <h5 className="card-title font-weight-bold">
+                      Information Technology
+                    </h5>
+                    <p className="card-text text-muted">
+                      Dive into the world of Information Technology with our
+                      comprehensive course. Acquire practical skills in
+                      programming, data management, and network administration.
                     </p>
                     <a href="#!" className="btn btn-primary">
                       Read More
@@ -220,7 +227,7 @@ function Home() {
                     data-mdb-ripple-color="light"
                   >
                     <img
-                      src="https://cdn.pixabay.com/photo/2017/09/25/11/55/cyberspace-2784907_960_720.jpg"
+                      src="https://res.cloudinary.com/dafhoj5q5/image/upload/v1699692028/l7tisfb0qllp9l6owbzx.jpg"
                       className="img-fluid"
                     />
                     <a href="#!">
@@ -231,10 +238,14 @@ function Home() {
                     </a>
                   </div>
                   <div className="card-body">
-                    <h5 className="card-title">Electronic Engineering</h5>
-                    <p className="card-text">
-                      Some quick example text to build on the card title and
-                      make up the bulk of the card's content.
+                    <h5 className="card-title font-weight-bold">
+                      Business Administration
+                    </h5>
+                    <p className="card-text text-muted">
+                      Develop strong managerial skills and business acumen in
+                      our Business Administration course. Learn strategic
+                      decision-making, financial analysis, and effective
+                      leadership.
                     </p>
                     <a href="#!" className="btn btn-primary">
                       Read More
@@ -250,7 +261,7 @@ function Home() {
                     data-mdb-ripple-color="light"
                   >
                     <img
-                      src="https://cdn.pixabay.com/photo/2020/12/05/14/08/man-5806012_960_720.jpg"
+                      src="https://res.cloudinary.com/dafhoj5q5/image/upload/v1699692270/gn7xalgxgnyi7espmvkf.webp"
                       className="img-fluid"
                     />
                     <a href="#!">
@@ -261,10 +272,14 @@ function Home() {
                     </a>
                   </div>
                   <div className="card-body">
-                    <h5 className="card-title">Civil Engineering</h5>
-                    <p className="card-text">
-                      Some quick example text to build on the card title and
-                      make up the bulk of the card's content.
+                    <h5 className="card-title font-weight-bold">
+                      Event Management
+                    </h5>
+                    <p className="card-text text-muted">
+                      Dive into the exciting field of Event Management. From
+                      planning to execution, our course covers all aspects of
+                      organizing successful events, conferences, and
+                      exhibitions.
                     </p>
                     <a href="#!" className="btn btn-primary">
                       Read More
