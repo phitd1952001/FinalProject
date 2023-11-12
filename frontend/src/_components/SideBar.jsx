@@ -17,6 +17,7 @@ import {
   AiFillCalendar,
   AiFillSetting,
 } from "react-icons/ai";
+import { Role } from "../_helpers";
 
 const styles = {
   avatar: {
@@ -154,30 +155,32 @@ const SideBar = () => {
           </li>
 
           {/* Manage Users */}
-          <li className="w-100">
-            <Link
-              to="/admin/users"
-              style={{ textDecoration: "none" }}
-              className={`d-flex align-items-center p-2 text-base justify-content-between  ${
-                location.pathname === "/admin/users"
-                  ? "bg-light text-dark"
-                  : "text-white"
-              } rounded-lg sideBarBtn`}
-            >
-              <div className="d-flex align-items-center">
-                <AiFillDatabase
-                  className={`${
-                    location.pathname === "/admin/users"
-                      ? "text-dark"
-                      : "text-white"
-                  } w-5 h-5`}
-                />
-                <span className="d-none d-md-inline-block ml-3">
-                  Manage Users
-                </span>
-              </div>
-            </Link>
-          </li>
+          {user.role === Role.Admin && (
+            <li className="w-100">
+              <Link
+                to="/admin/users"
+                style={{ textDecoration: "none" }}
+                className={`d-flex align-items-center p-2 text-base justify-content-between  ${
+                  location.pathname === "/admin/users"
+                    ? "bg-light text-dark"
+                    : "text-white"
+                } rounded-lg sideBarBtn`}
+              >
+                <div className="d-flex align-items-center">
+                  <AiFillDatabase
+                    className={`${
+                      location.pathname === "/admin/users"
+                        ? "text-dark"
+                        : "text-white"
+                    } w-5 h-5`}
+                  />
+                  <span className="d-none d-md-inline-block ml-3">
+                    Manage Users
+                  </span>
+                </div>
+              </Link>
+            </li>
+          )}
 
           {/* Managements */}
           <li className="w-100">
@@ -213,81 +216,87 @@ const SideBar = () => {
                 managementToggle ? "d-flex flex-column d-block" : "d-none"
               }`}
             >
-              {/* Subjects */}
-              <li className="w-100">
-                <Link
-                  to="/management/subjects"
-                  style={{ textDecoration: "none" }}
-                  className={`d-flex align-items-center p-2 text-base justify-content-between  ${
-                    location.pathname === "/management/subjects"
-                      ? "bg-light text-dark"
-                      : "text-white"
-                  } rounded-lg sideBarBtn`}
-                >
-                  <div className="d-flex align-items-center">
-                    <AiFillContainer
-                      className={`${
+              {(user.role === Role.Admin || user.role == Role.Staff) && (
+                <>
+                  {/* Subjects */}
+                  <li className="w-100">
+                    <Link
+                      to="/management/subjects"
+                      style={{ textDecoration: "none" }}
+                      className={`d-flex align-items-center p-2 text-base justify-content-between  ${
                         location.pathname === "/management/subjects"
-                          ? "text-dark"
+                          ? "bg-light text-dark"
                           : "text-white"
-                      } w-5 h-5`}
-                    />
-                    <span className="d-none d-md-inline-block ml-2">
-                      Subjects
-                    </span>
-                  </div>
-                </Link>
-              </li>
+                      } rounded-lg sideBarBtn`}
+                    >
+                      <div className="d-flex align-items-center">
+                        <AiFillContainer
+                          className={`${
+                            location.pathname === "/management/subjects"
+                              ? "text-dark"
+                              : "text-white"
+                          } w-5 h-5`}
+                        />
+                        <span className="d-none d-md-inline-block ml-2">
+                          Subjects
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
 
-              {/* Rooms */}
-              <li className="w-100">
-                <Link
-                  to="/management/rooms"
-                  style={{ textDecoration: "none" }}
-                  className={`d-flex align-items-center p-2 text-base justify-content-between  ${
-                    location.pathname === "/management/rooms"
-                      ? "bg-light text-dark"
-                      : "text-white"
-                  } rounded-lg sideBarBtn`}
-                >
-                  <div className="d-flex align-items-center">
-                    <AiOutlineBank
-                      className={`${
+                  {/* Rooms */}
+                  <li className="w-100">
+                    <Link
+                      to="/management/rooms"
+                      style={{ textDecoration: "none" }}
+                      className={`d-flex align-items-center p-2 text-base justify-content-between  ${
                         location.pathname === "/management/rooms"
-                          ? "text-dark"
+                          ? "bg-light text-dark"
                           : "text-white"
-                      } w-5 h-5`}
-                    />
-                    <span className="d-none d-md-inline-block ml-2">Rooms</span>
-                  </div>
-                </Link>
-              </li>
+                      } rounded-lg sideBarBtn`}
+                    >
+                      <div className="d-flex align-items-center">
+                        <AiOutlineBank
+                          className={`${
+                            location.pathname === "/management/rooms"
+                              ? "text-dark"
+                              : "text-white"
+                          } w-5 h-5`}
+                        />
+                        <span className="d-none d-md-inline-block ml-2">
+                          Rooms
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
 
-              {/* Classes */}
-              <li className="w-100">
-                <Link
-                  to="/management/classes"
-                  style={{ textDecoration: "none" }}
-                  className={`d-flex align-items-center p-2 text-base justify-content-between  ${
-                    location.pathname === "/management/classes"
-                      ? "bg-light text-dark"
-                      : "text-white"
-                  } rounded-lg sideBarBtn`}
-                >
-                  <div className="d-flex align-items-center">
-                    <AiTwotoneShop
-                      className={`${
+                  {/* Classes */}
+                  <li className="w-100">
+                    <Link
+                      to="/management/classes"
+                      style={{ textDecoration: "none" }}
+                      className={`d-flex align-items-center p-2 text-base justify-content-between  ${
                         location.pathname === "/management/classes"
-                          ? "text-dark"
+                          ? "bg-light text-dark"
                           : "text-white"
-                      } w-5 h-5`}
-                    />
-                    <span className="d-none d-md-inline-block ml-2">
-                      Classes
-                    </span>
-                  </div>
-                </Link>
-              </li>
+                      } rounded-lg sideBarBtn`}
+                    >
+                      <div className="d-flex align-items-center">
+                        <AiTwotoneShop
+                          className={`${
+                            location.pathname === "/management/classes"
+                              ? "text-dark"
+                              : "text-white"
+                          } w-5 h-5`}
+                        />
+                        <span className="d-none d-md-inline-block ml-2">
+                          Classes
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                </>
+              )}
 
               {/* Slots */}
               <li className="w-100">
@@ -374,7 +383,8 @@ const SideBar = () => {
                   </div>
                 </Link>
               </li>
-              {/* setting */}
+              {(user.role === Role.Admin || user.role == Role.Staff) && (
+             
               <li className="w-100">
                 <Link
                   to="/schedule/setting"
@@ -399,6 +409,7 @@ const SideBar = () => {
                   </div>
                 </Link>
               </li>
+              )}
             </ul>
           </li>
 

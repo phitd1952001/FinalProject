@@ -22,11 +22,22 @@ function Account({ history, match }) {
 
   return (
     <>
-      <Alert />
-      <div className="container">
+      <div
+      style={{
+          backgroundImage: 'url(https://capstonevietnam-fileserver.nvcms.net/CRM/IMAGES/2023/06/27/greenwich%20university.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          minHeight: '100vh',
+          padding: '0', 
+          margin: '0', 
+        }}
+      >
+      <div className="container"
+      >
+        <Alert />
         <div className="row">
           <div className="col-sm-8 offset-sm-2 mt-5">
-            <div className="card m-3">
+            <div className="card m-3" style={{opacity:'0.97'}}>
               <Switch>
                 <Route path={`${path}/login`} component={Login} />
                 <Route path={`${path}/register`} component={Register} />
@@ -43,6 +54,7 @@ function Account({ history, match }) {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </>
   );

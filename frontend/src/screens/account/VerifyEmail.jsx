@@ -39,7 +39,7 @@ function VerifyEmail({ history }) {
 
     return (
         <div>
-            <h3 className="card-header">Verify Email</h3>
+            <h3 className="card-header bg-dark text-white text-center">Verify Email</h3>
             <div className="card-body">{getBody()}</div>
         </div>
     )

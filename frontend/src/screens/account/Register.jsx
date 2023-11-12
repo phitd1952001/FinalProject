@@ -53,7 +53,7 @@ function Register({ history }) {
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
             {({ errors, touched, isSubmitting }) => (
                 <Form>
-                    <h3 className="card-header">Register</h3>
+                    <h3 className="card-header bg-dark text-white text-center">Register</h3>
                     <div className="card-body">
                         <div className="form-row">
                             <div className="form-group col">
@@ -105,7 +105,7 @@ function Register({ history }) {
                                 {isSubmitting && <span className="spinner-border spinner-border-sm mr-1"></span>}
                                 Register
                             </button>
-                            <Link to="login" className="btn btn-link">Cancel</Link>
+                            <Link to="login"  className="ml-2 btn btn-light btn-outline-primary">Cancel</Link>
                         </div>
                     </div>
                 </Form>

@@ -102,7 +102,7 @@ function ResetPassword({ history }) {
 
     return (
         <div>
-            <h3 className="card-header">Reset Password</h3>
+            <h3 className="card-header bg-dark text-white text-center">Reset Password</h3>
             <div className="card-body">{getBody()}</div>
         </div>
     )

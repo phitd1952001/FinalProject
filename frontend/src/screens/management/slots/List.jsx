@@ -21,6 +21,8 @@ import { Modal } from '../../../_components';
 import ExcelUpload from './ExcelUpload';
 import CheckIn from './CheckIn';
 import ViewDetails from './ViewDetails';
+import { accountService } from "../../../_services";
+import {Role} from '../../../_helpers'
 
 const List = ({ match }) => {
     const { path } = match;
@@ -31,6 +33,7 @@ const List = ({ match }) => {
     const [openImportModal, setOpenImportModal] = useState(false);
     const [openCheckInModal, setOpenCheckInModal] = useState(false);
     const [openViewDetailsModal, setOpenViewDetailsModal] = useState(false);
+    const user = accountService.userValue;
 
     useEffect(() => {
         getSlots();
@@ -159,7 +162,9 @@ const List = ({ match }) => {
                                 text={"View Details"}
                                 onClick={() => onOpenViewDetail(data.slotId)}
                             />
-                            <Button
+                            {(user.role === Role.Admin || user.role == Role.Staff) && (
+                                <>
+                                <Button
                                 className="mr-1"
                                 type="default"
                                 width={79}
@@ -176,6 +181,8 @@ const List = ({ match }) => {
                                 height={29}
                                 hint="Delete Slot"
                             />
+                                </>
+                            )}
                         </>
                     )}
                 />

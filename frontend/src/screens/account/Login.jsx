@@ -38,7 +38,7 @@ function Login({ history, location }) {
         >
             {({ errors, touched, isSubmitting }) => (
                 <Form>
-                    <h3 className="card-header">Login</h3>
+                    <h3 className="card-header bg-dark text-white text-center">Login</h3>
                     <div className="card-body">
                         <div className="form-group">
                             <label>Email</label>
@@ -84,12 +84,12 @@ function Login({ history, location }) {
                                     )}
                                     Login
                                 </button>
-                                <Link to="register" className="btn btn-link">
+                                <Link to="register" className="ml-2 btn btn-light btn-outline-primary">
                                     Register
                                 </Link>
                             </div>
                             <div className="form-group col text-right">
-                                <Link to="forgot-password" className="btn btn-link pr-0">
+                                <Link to="forgot-password" className="btn btn-light btn-outline-primary">
                                     Forgot Password?
                                 </Link>
                             </div>

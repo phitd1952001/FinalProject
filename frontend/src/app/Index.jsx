@@ -27,8 +27,8 @@ function App() {
                 <PrivateRoute path="/profile" component={Profile} />
                 <PrivateRoute path="/dashboard" component={DashboardIndex} />
                 <PrivateRoute path="/admin" roles={[Role.Admin]} component={Admin} />
-                <PrivateRoute path="/management" roles={[Role.Admin, Role.Staff]} component={Management} />
-                <PrivateRoute path="/schedule" roles={[Role.Admin, Role.Staff]} component={Schedule} />
+                <PrivateRoute path="/management" roles={[Role.Admin, Role.Staff, Role.Supervisor]} component={Management} />
+                <PrivateRoute path="/schedule" roles={[Role.Admin, Role.Staff, Role.Supervisor]} component={Schedule} />
                 <PrivateRoute path="/calendar" component={UserCalendar} />
                 <Route path="/account" component={Account} />
                 <Redirect from="*" to="/" />
