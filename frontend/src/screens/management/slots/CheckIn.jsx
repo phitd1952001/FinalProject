@@ -14,7 +14,7 @@ const CheckIn = ({id}) => {
     }, []);
 
     useEffect(() => {
-      checkInService.getInfo(qrCode)
+      checkInService.getInfo(encodeURIComponent(qrCode))
       .then((res)=>{
         console.log(res);
         setUser(res);

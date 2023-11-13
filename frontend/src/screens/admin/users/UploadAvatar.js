@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { accountService, alertService } from "../../../_services";
 import images from "../../../_asset/images";
-import { set } from "lodash";
+
 const styles = {
   avatarContainer: {
     position: "relative",
@@ -37,7 +37,7 @@ const styles = {
   },
 };
 
-function UploadAvatar({ user, getAccounts, onHide }) {
+function UploadAvatar({ user, onHide }) {
     function upload() {
     accountService
       .handleUpload(user.id, event.target.files[0])
@@ -45,10 +45,11 @@ function UploadAvatar({ user, getAccounts, onHide }) {
         alertService.success("Upload successful", {
           keepAfterRouteChange: true,
         });
-        getAccounts();
         onHide();
       })
       .catch((error) => {
+        console.log(error)
+        onHide();
         alertService.error(error);
       });
   }
@@ -71,7 +72,7 @@ function UploadAvatar({ user, getAccounts, onHide }) {
       <div>
         <div className="container my-5">
           <div style={styles.avatarContainer}>
-            {user.avatar ? (
+            {user !== undefined && user.avatar ? (
               <img style={styles.avatar} src={user.avatar} alt="Avatar" />
             ) : (
               <img style={styles.avatar} src={noAvatarImage} alt="Avatar" />

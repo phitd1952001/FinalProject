@@ -9,7 +9,8 @@ namespace Backend.Dtos.UserDtos
     {
         private string? _password;
         private string? _confirmPassword;
-        public Role? Role;
+        [EnumDataType(typeof(Role))]
+        public Role Role { get; set; }
         private string? _email;
     
         public string Title { get; set; }

@@ -16,7 +16,7 @@ namespace Backend.Services.IServices
         IEnumerable<AccountResponse> GetAll();
         AccountResponse GetById(int id);
         AccountResponse Create(CreateRequest model);
-        AccountResponse Update(int id, UpdateRequest model);
+        AccountResponse Update(int id, UpdateRequest model, Role role);
         AccountResponse UpdateSelf(int id, UpdateSelfRequest model);
         bool AdminCheck();
         void Delete(int id);

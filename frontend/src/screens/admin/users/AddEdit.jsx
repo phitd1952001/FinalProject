@@ -192,7 +192,8 @@ function AddEdit(props) {
                                         <option value={0}>Admin</option>
                                         <option value={1}>Staff</option>
                                         <option value={2}>Supervisor</option>
-                                        <option value={3}>User</option>
+                                        <option value={3}>Student</option>
+                                        <option value={4}>User</option>
                                     </Field>
                                     <ErrorMessage name="role" component="div" className="invalid-feedback" />
                                 </div>

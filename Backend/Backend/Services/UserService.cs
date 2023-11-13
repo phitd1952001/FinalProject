@@ -231,10 +231,10 @@ namespace Backend.Services
             return _mapper.Map<AccountResponse>(account);
         }
 
-        public AccountResponse Update(int id, UpdateRequest model)
+        public AccountResponse Update(int id, UpdateRequest model, Role role)
         {
             var account = getAccount(id);
-
+            
             // validate
             if (account.Email != model.Email && _context.Accounts.Any(x => x.Email == model.Email))
                 throw new AppException($"Email '{model.Email}' is already registered");
@@ -274,9 +274,15 @@ namespace Backend.Services
             }
 
             // copy model to account and save
+            var currentRole = account.Role;
             _mapper.Map(model, account);
             account.Sex = model._sex;
             account.Updated = DateTime.UtcNow;
+            
+            // only admins can update role
+            if (role != Role.Admin)
+                account.Role = currentRole;
+            
             _context.Accounts.Update(account);
             _context.SaveChanges();
 
@@ -494,6 +500,8 @@ namespace Backend.Services
 
             user.Avatar = uploadResult?.Url.ToString();
             user.AvatarPublicId = uploadResult?.PublicId;
+
+            _context.SaveChanges();
             
             return user.Avatar;
         }

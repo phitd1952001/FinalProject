@@ -103,6 +103,7 @@ function List({ match }) {
     const onHideAvatar = () => {
         setOpenAvatarModal(false);
         setSelectedUser(undefined);
+        getUser();
     }
 
     return (
@@ -213,7 +214,7 @@ function List({ match }) {
             </Modal>
 
             <Modal title={"Upload Image"} show={openAvatarModal} onHide={onHideAvatar} >
-                <UploadAvatar user={selectedUser} getAccounts={getUser} onHide={onHideAvatar}/>
+                <UploadAvatar user={selectedUser} onHide={onHideAvatar}/>
             </Modal>
         </div>
     );

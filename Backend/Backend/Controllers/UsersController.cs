@@ -130,11 +130,7 @@ namespace Backend.Controllers
             if (id != Account.Id && Account.Role != Role.Admin)
                 return Unauthorized(new { message = "Unauthorized" });
 
-            // only admins can update role
-            if (Account.Role != Role.Admin)
-                model.Role = null;
-
-            var account = _userService.Update(id, model);
+            var account = _userService.Update(id, model, Account.Role);
             return Ok(account);
         }
         
@@ -190,7 +186,7 @@ namespace Backend.Controllers
 
                 var result = await _userService.UpLoadAvatar(id, stream);
 
-                return Ok(result);
+                return Ok();
             }
             catch (Exception ex)
             {
