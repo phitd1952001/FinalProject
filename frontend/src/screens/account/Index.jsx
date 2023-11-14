@@ -24,7 +24,7 @@ function Account({ history, match }) {
     <>
       <div
       style={{
-          backgroundImage: 'url(https://capstonevietnam-fileserver.nvcms.net/CRM/IMAGES/2023/06/27/greenwich%20university.jpg)',
+          backgroundImage: 'url(https://res.cloudinary.com/dafhoj5q5/image/upload/v1699931809/pzhtjulx9ch1h2p4yler.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           minHeight: '100vh',

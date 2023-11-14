@@ -37,13 +37,13 @@ function Home() {
           <div className="carousel-item active">
             <img
               className="img-fluid w-100 h-100 overflow-hidden d-block w-100"
-              src="https://cdn.pixabay.com/photo/2016/11/14/05/15/academic-1822682_960_720.jpg"
+              src="https://res.cloudinary.com/dafhoj5q5/image/upload/v1699931809/pzhtjulx9ch1h2p4yler.jpg"
               alt="..."
             />
             <div className="carousel-caption d-block">
-              <h5>Shree Suryodaya Secondary School</h5>
+              <h5>Welcome to Greenwich University</h5>
               <p>
-                Some representative placeholder content for the first slide.
+                Explore knowledge and innovation with our programs and research.
               </p>
             </div>
           </div>
@@ -54,22 +54,21 @@ function Home() {
               alt="..."
             />
             <div className="carousel-caption d-block">
-              <h5>Shree Suryodaya Secondary School</h5>
-              <p>
-                Some representative placeholder content for the second slide.
-              </p>
+              <h5>Empowering Futures at Greenwich University</h5>
+              <p>Commitment to success sets Greenwich apart as a leader.</p>
             </div>
           </div>
           <div className="carousel-item">
             <img
               className="img-fluid w-100 h-100 overflow-hidden d-block w-100"
-              src="https://cdn.pixabay.com/photo/2017/09/08/00/37/friend-2727305_960_720.jpg"
+              src="https://greenwich.edu.vn/wp-content/uploads/2022/06/IMG_8042-Edit-1024x683.jpg"
               alt="..."
             />
             <div className="carousel-caption d-block">
-              <h5>Shree Suryodaya Secondary School</h5>
+              <h5>Inspiring Minds at Greenwich University</h5>
               <p>
-                Some representative placeholder content for the third slide.
+                Join a community of forward-thinking individuals in a vibrant
+                environment.
               </p>
             </div>
           </div>
