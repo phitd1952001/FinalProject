@@ -22,7 +22,7 @@ import ExcelUpload from './ExcelUpload';
 import CheckIn from './CheckIn';
 import ViewDetails from './ViewDetails';
 import { accountService } from "../../../_services";
-import {Role} from '../../../_helpers'
+import {Role} from '../../../_helpers';
 
 const List = ({ match }) => {
     const { path } = match;
@@ -117,9 +117,13 @@ const List = ({ match }) => {
             <h1>Slot Management</h1>
             <br />
             <div className="d-flex">
+            {(user.role === Role.Admin || user.role == Role.Staff) && (
+                <>
                 <button onClick={addSlot} className="btn btn-sm btn-success mb-2 mr-2">Add Slot</button> 
                 <a href="https://drive.google.com/uc?id=1MbSHZgDSihLW-2dwy3QmuGYgS1yasoHS" rel="noopener noreferrer" className="mr-2 btn btn-sm btn-warning mb-2">Excel Template</a>
                 <button onClick={()=>setOpenImportModal(true)} className="btn btn-sm btn-success mb-2">Import Excel</button>
+                </>
+            )}
             </div>
            
             <DataGrid

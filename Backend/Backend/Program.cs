@@ -2,6 +2,7 @@ using Backend;
 using Backend.Extensions;
 using Backend.Initializer;
 using Backend.Middleware;
+using Backend.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,9 +23,11 @@ builder.Services
     .AddBackgroundService()
     .AddChroneJobService()
     .AddCloudinary()
+    .AddChatService()
     .AddEndpointsApiExplorer()
     .AddSwagger()
-    .AddCORS();
+    .AddCORS()
+    .AddSignalR();
 
 var app = builder.Build();
 
@@ -45,6 +48,8 @@ app.UseMiddleware<ErrorHandlerMiddleware>();
 
 // custom jwt auth middleware
 app.UseMiddleware<JwtMiddleware>();;
+
+app.MapHub<ChatHub>("/chat");
 
 app.MapControllers();
 

@@ -27,7 +27,7 @@ public class EmailService : IEmailService
         email.Body = builder.ToMessageBody();
 
         // dùng SmtpClient của MailKit
-        using var smtp = new MailKit.Net.Smtp.SmtpClient(); //using gửi xong xóa để k làm chậm hệ thống
+        using var smtp = new MailKit.Net.Smtp.SmtpClient(); // Using finished deleted so as not to slow down the system.
 
         try
         {
@@ -37,7 +37,7 @@ public class EmailService : IEmailService
         }
         catch (Exception ex)
         {
-            // Gửi mail thất bại, nội dung email sẽ lưu vào thư mục mailssave
+            // Failed to send an email, email content will be saved in mailssave folder.
             System.IO.Directory.CreateDirectory("mailssave");
             var emailsavefile = string.Format(@"mailssave/{0}.eml", Guid.NewGuid());
             await email.WriteToAsync(emailsavefile);

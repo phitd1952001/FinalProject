@@ -21,6 +21,7 @@ namespace Backend.Services
         public static HashSet<SubjectMatrix> Subjects = new HashSet<SubjectMatrix>();
         public static Graph Graph;
         public static HashSet<Node> AllNodesHashSet;
+        
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
         public AutomationGenerateSchedule(IServiceScopeFactory serviceScopeFactory)

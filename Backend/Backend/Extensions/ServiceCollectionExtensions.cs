@@ -5,6 +5,7 @@ using Backend.Services;
 using Backend.Services.IServices;
 using CloudinaryDotNet;
 using Backend.BackgroundServices;
+using Backend.Dtos.ChatDtos;
 using Backend.Workers;
 
 namespace Backend.Extensions
@@ -38,7 +39,8 @@ namespace Backend.Extensions
             service.AddScoped<ISettingService, SettingService>();
             service.AddScoped<ICalendarService, CalendarService>();
             service.AddScoped<IAutomationGenerateSchedule, AutomationGenerateSchedule>();
-
+            service.AddScoped<IChatService, ChatService>();
+            
             service.AddTransient<IReminderService, ReminderService>();
 
             return service;
@@ -48,6 +50,13 @@ namespace Backend.Extensions
         {
             service.AddHostedService<LongRunningService>();
             service.AddSingleton<BackgroundWorkerQueue>();
+            return service;
+        }
+        
+        public static IServiceCollection AddChatService(this IServiceCollection service)
+        {
+            service.AddSingleton<IDictionary<string, UserConnection>>(opts => new Dictionary<string, UserConnection>());
+            service.AddSingleton<IDictionary<string, string>>(opts => new Dictionary<string, string>());
             return service;
         }
 

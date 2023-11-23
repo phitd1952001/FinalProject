@@ -118,8 +118,6 @@ public class ClassService : IClassService
     public async Task DeleteClass(int classId)
     {
         var @class = await _context.Classes
-            .Include(_ => _.Subject)
-            .Include(_ => _.Account)
             .FirstOrDefaultAsync(_ => _.Id == classId);
 
         _context.Remove(@class);

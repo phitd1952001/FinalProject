@@ -436,7 +436,10 @@ function Home() {
                     </div>
                   </form>
 
-                  <div className="text-center text-md-left">
+                  <div
+                    className="text-center text-md-left"
+                    style={{ color: "white" }}
+                  >
                     <a className="btn btn-primary">Send</a>
                   </div>
                   <div className="status"></div>

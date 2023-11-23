@@ -18,6 +18,7 @@ namespace Backend.Middleware
 
         public async Task Invoke(HttpContext context, ApplicationDbContext dataContext, IJwtUtils jwtUtils)
         {
+            // extract jwt token out of request header
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             var accountId = jwtUtils.ValidateJwtToken(token);
             if (accountId != null)

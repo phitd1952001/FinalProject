@@ -123,7 +123,6 @@ const CheckIn = ({id}) => {
                   </div>
                 </div>
               </div>
-            
             </div>
           </div>
         </div>

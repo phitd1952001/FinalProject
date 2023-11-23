@@ -30,12 +30,12 @@ const ViewDetails = ({ id }) => {
   const dataGridRef = useRef(null);
 
   const getAll = () => {
-    // Gọi API để lấy danh sách check-in dựa trên slotId
+    // Call API to get check-in list based on slotId
     checkInService
       .getAccountInfoBySlotId(id)
       .then((res) => {
         console.log(res);
-        setCheckInData(res); // Lưu dữ liệu vào trạng thái
+        setCheckInData(res); // Save data to state
 
         alertService.success("Load Info successfully", {
           keepAfterRouteChange: true,
