@@ -16,6 +16,7 @@ import {
   AiFillDashboard,
   AiFillCalendar,
   AiFillSetting,
+  AiFillMessage
 } from "react-icons/ai";
 import { Role } from "../_helpers";
 
@@ -150,6 +151,30 @@ const SideBar = () => {
                   } w-5 h-5`}
                 />
                 <span className="d-none d-md-inline-block ml-3">DashBoard</span>
+              </div>
+            </Link>
+          </li>
+
+           {/* Chat */}
+           <li className="w-100">
+            <Link
+              to="/chat"
+              style={{ textDecoration: "none" }}
+              className={`d-flex align-items-center p-2 text-base justify-content-between  ${
+                location.pathname === "/chat"
+                  ? "bg-light text-dark"
+                  : "text-white"
+              } rounded-lg sideBarBtn`}
+            >
+              <div className="d-flex align-items-center">
+                <AiFillMessage
+                  className={`${
+                    location.pathname === "/chat"
+                      ? "text-dark"
+                      : "text-white"
+                  } w-5 h-5`}
+                />
+                <span className="d-none d-md-inline-block ml-3">Chat</span>
               </div>
             </Link>
           </li>

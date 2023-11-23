@@ -50,6 +50,9 @@ function Nav() {
                 <NavLink to={`/calendar`} className="nav-item nav-link">
                   My Exam Calendar
                 </NavLink>
+                <NavLink to={`/chat`} className="nav-item nav-link">
+                  Chat With Staff
+                </NavLink>
               </div>
             </ul>
             <ul className="navbar-nav" style={styles.avatarMargin}>

@@ -11,10 +11,9 @@ import { Management } from '@/screens/management';
 import { DashboardIndex } from '../screens/dashboard/Index';
 import { Schedule } from '../screens/scheduleManagement/Index';
 import { UserCalendar } from '../screens/userCalendar/Index';
+import Chat from '../screens/chat/Chat';
 
 import ThemeProvider from '../theme';
-
-
 
 function App() {
     const { pathname } = useLocation();  
@@ -30,6 +29,7 @@ function App() {
                 <PrivateRoute path="/management" roles={[Role.Admin, Role.Staff, Role.Supervisor]} component={Management} />
                 <PrivateRoute path="/schedule" roles={[Role.Admin, Role.Staff, Role.Supervisor]} component={Schedule} />
                 <PrivateRoute path="/calendar" component={UserCalendar} />
+                <PrivateRoute path="/chat" component={Chat} />
                 <Route path="/account" component={Account} />
                 <Redirect from="*" to="/" />
             </Switch>

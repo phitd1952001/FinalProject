@@ -8,3 +8,4 @@ export * from './checkIn.service';
 export * from './dashboard.service';
 export * from './setting.service';
 export * from './calendar.service';
+export * from './chat.service';

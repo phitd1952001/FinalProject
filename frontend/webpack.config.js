@@ -70,6 +70,7 @@ module.exports = {
     // global app config object
     config: JSON.stringify({
       apiUrl: "http://localhost:5235/api",
+      signalRUrl : "http://localhost:5235/chat",
     }),
   },
   performance: {

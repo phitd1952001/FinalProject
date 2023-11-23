@@ -5,6 +5,8 @@ import { render } from 'react-dom';
 import { history } from './_helpers';
 import { accountService } from './_services';
 import { App } from './app/Index';
+import { Provider } from "react-redux";
+import { store } from './redux';
 
 import './styles.less';
 import 'devextreme/dist/css/dx.common.css';
@@ -15,9 +17,11 @@ accountService.refreshToken().finally(startApp);
 
 function startApp() { 
     render(
-        <Router history={history}>
-            <App />
-        </Router>,
+        <Provider store={store}>
+            <Router history={history}>
+                <App />
+            </Router>
+        </Provider>,
         document.getElementById('app')
     );
 }

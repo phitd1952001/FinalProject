@@ -9,11 +9,11 @@ namespace Backend.Services;
 public class ChatService : IChatService
 {
     private readonly ApplicationDbContext _context;
-    private readonly ImageServices _imageServices;
+    private readonly IImageServices _imageServices;
 
     public ChatService(
         ApplicationDbContext context,
-        ImageServices imageServices
+        IImageServices imageServices
     )
     {
         _context = context;
