@@ -2,7 +2,7 @@ namespace Backend.Dtos.ChatDtos;
 
 public class GetChatByUserIdResponse
 {
-    public string Id { get; set; }
+    public int Id { get; set; }
     public string Type { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
@@ -14,8 +14,8 @@ public class GetChatByUserIdResponse
 
 public class ChatUserResponse
 {
-    public string ChatId { get; set; }
-    public string UserId { get; set; }
+    public int ChatId { get; set; }
+    public int UserId { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 }
