@@ -2,9 +2,9 @@ import React, { Fragment, useState } from "react";
 import { userStatus } from "../../utility/chatHelper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Modal from "../Modal/Modal";
-import agent from "../../../../app/api/agent";
+import { chatService } from "../../../../_services";
 import "./ChatHeader.css";
-import { useAppSelector } from "../../../../app/store/configureStore";
+import { useSelector } from "react-redux";
 import {faEllipsisVertical, faPlus, faRightFromBracket, faTrash} from "@fortawesome/free-solid-svg-icons";
 
 const ChatHeader = ({ chat }) => {
@@ -12,18 +12,18 @@ const ChatHeader = ({ chat }) => {
   const [showAddFriendModal, setShowAddFriendModal] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
 
-  const socket = useAppSelector((state) => state.chat.socket);
+  const socket = useSelector((state) => state.chat.socket);
 
   const searchFriends = async (e) => {
    if (e.target.value.length){
-     await agent.Chat.searchUsers(e.target.value).then((res)=>{
+     await chatService.searchUsers(e.target.value).then((res)=>{
        setSuggestions(res);
      });
    }
   };
 
   const addNewFriend = async (id) => {
-   await agent.Chat.addFriendToGroupChat(id, chat.id)
+   await chatService.addFriendToGroupChat(id, chat.id)
        .then((res)=>{
          socket.invoke("AddUserToGroup", res);
          setShowAddFriendModal(false);
@@ -31,13 +31,13 @@ const ChatHeader = ({ chat }) => {
   };
 
   const leaveChat = async () => {
-    await agent.Chat.leaveCurrentChat(chat.id).then((res)=>{
+    await chatService.leaveCurrentChat(chat.id).then((res)=>{
         socket.invoke("LeaveCurrentChat", res);
     });
   };
 
   const deleteChat = async () => {
-    await agent.Chat.deleteCurrentChat(chat.id).then((res)=>{
+    await chatService.deleteCurrentChat(chat.id).then((res)=>{
         socket.invoke("DeleteChat", res);
     })
   };

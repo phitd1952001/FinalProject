@@ -1,23 +1,23 @@
 import React, { useState, Fragment, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Friend from "../Friend/Friend";
-import { setCurrentChat } from "../../reducers/chatSlice";
+import { setCurrentChat } from "../../../../redux/actions/chatActions";
 import Modal from "../Modal/Modal";
-import agent from "../../../../app/api/agent";
+import { chatService } from "../../../../_services";
 import "./FriendList.css";
-import { useAppSelector } from "../../../../app/store/configureStore";
+import { useSelector } from "react-redux";
 
 const FriendList = () => {
   const dispatch = useDispatch();
-  const chats = useAppSelector((state) => state.chat.chats);
-  const socket = useAppSelector((state) => state.chat.socket);
+  const chats = useSelector((state) => state.chat.chats);
+  const socket = useSelector((state) => state.chat.socket);
 
   const [showFriendsModal, setShowFriendsModal] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
     (async () => {
-      await agent.Account.loadStaff().then((res) => {
+      await chatService.loadStaff().then((res) => {
         setSuggestions(res);
       });
     })();
@@ -29,14 +29,14 @@ const FriendList = () => {
 
   const searchFriends = async (e) => {
     if (e.target.value.length > 0) {
-      await agent.Account.searchUsers(e.target.value).then((res) => {
+      await chatService.searchUsers(e.target.value).then((res) => {
         setSuggestions(res);
       });
     }
   };
 
   const addNewFriend = async (id) => {
-    await agent.Chat.createChat(id).then((res) => {
+    await chatService.createChat(id).then((res) => {
       socket.invoke("AddFriend", { chats: res });
       setShowFriendsModal(false);
     });

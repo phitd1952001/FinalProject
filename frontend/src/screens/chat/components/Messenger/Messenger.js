@@ -3,10 +3,10 @@ import ChatHeader from "../ChatHeader/ChatHeader";
 import MessageBox from "../MessageBox/MessageBox";
 import MessageInput from "../MessageInput/MessageInput";
 import "./Messenger.css";
-import { useAppSelector } from "../../../../app/store/configureStore";
+import { useSelector } from "react-redux";
 
 const Messenger = () => {
-  const chat = useAppSelector((state) => state.chat.currentChat);
+  const chat = useSelector((state) => state.chat.currentChat);
   const activeChat = () => {
     return Object.keys(chat).length > 0;
   };

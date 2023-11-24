@@ -1,19 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import Message from "../Message/Message";
-import { paginateMessages } from "../../reducers/chatSlice";
+import { paginateMessages } from "../../../../redux/actions/chatActions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./MessageBox.css";
-import agent from "../../../../app/api/agent";
-import { useAppSelector } from "../../../../app/store/configureStore";
+import { chatService } from "../../../../_services";
+import { useSelector } from "react-redux";
 import {faSpinner} from "@fortawesome/free-solid-svg-icons";
 
 const MessageBox = ({ chat }) => {
   const dispatch = useDispatch();
 
-  const user = useAppSelector((state) => state.account.user);
-  const scrollBottom = useAppSelector((state) => state.chat.scrollBottom);
-  const senderTyping = useAppSelector((state) => state.chat.senderTyping);
+  const user = useSelector((state) => state.account.user);
+  const scrollBottom = useSelector((state) => state.chat.scrollBottom);
+  const senderTyping = useSelector((state) => state.chat.senderTyping);
   const [loading, setLoading] = useState(false);
   const [scrollUp, setScrollUp] = useState(0);
 
@@ -29,7 +29,7 @@ const MessageBox = ({ chat }) => {
       const pagination = chat.Pagination;
       const page = typeof pagination === "undefined" ? 1 : pagination.page;
 
-      await agent.Chat.paginateMessages(
+      await chatService.paginateMessages(
         chat.id,
         parseInt(page) + 1
       ).then((res)=>{

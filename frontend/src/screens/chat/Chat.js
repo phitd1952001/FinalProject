@@ -16,16 +16,15 @@ import {
   addUserToGroup,
   leaveCurrentChat,
   deleteCurrentChat,
-} from "./reducers/chatSlice";
-import agent from "../../app/api/agent";
-import { useAppSelector, useAppDispatch } from "../../app/store/configureStore";
+} from "../../redux/actions/chatActions";
 import config from "config";
+import { chatService } from "../../_services";
 
 const Chat = () => {
   const signalRUrl = config.signalRUrl;
-  const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.account.user);
-  const chats = useAppSelector((state) => state.chat.chats);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.account.user);
+  const chats = useSelector((state) => state.chat.chats);
 
   useEffect(() => {
     if (chats) {
@@ -102,7 +101,7 @@ const Chat = () => {
 
   const getChats = async () => {
     try {
-      const res = await agent.Chat.fetchChats();
+      const res = await chatService.fetchChats();
       return res;
     } catch (error) {
       console.error(error);

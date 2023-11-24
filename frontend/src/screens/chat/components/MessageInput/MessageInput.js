@@ -1,19 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faFaceSmile, faPhotoFilm, faTimes, faUpload} from '@fortawesome/free-solid-svg-icons';
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import { incrementScroll } from "../../reducers/chatSlice";
+import { incrementScroll } from "../../../../redux/actions/chatActions";
 import "./MessageInput.css";
-import agent from "../../../../app/api/agent";
-import { useAppSelector } from "../../../../app/store/configureStore";
+import { chatService } from "../../../../_services";
 
 const MessageInput = ({ chat }) => {
   const dispatch = useDispatch();
-  const user = useAppSelector((state) => state.account.user);
-  const socket = useAppSelector((state) => state.chat.socket);
-  const newMessage = useAppSelector((state) => state.chat.newMessage);
+  const user = useSelector((state) => state.account.user);
+  const socket = useSelector((state) => state.chat.socket);
+  const newMessage = useSelector((state) => state.chat.newMessage);
 
   const fileUpload = useRef();
   const msgInput = useRef();
@@ -75,7 +74,7 @@ const MessageInput = ({ chat }) => {
     formData.append("id", chat.id);
     formData.append("image", image);
 
-    await agent.Chat.uploadImageChats(formData).then((res)=>{
+    await chatService.uploadImageChats(formData).then((res)=>{
       sendMessage(res);
     });
   };

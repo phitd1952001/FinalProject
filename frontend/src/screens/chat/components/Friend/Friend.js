@@ -1,9 +1,9 @@
 import React from "react";
 import { userStatus } from "../../utility/chatHelper";
 import "./Friend.css";
-import { useAppSelector } from "../../../../app/store/configureStore";
+import { useSelector } from "react-redux";
 const Friend = ({ chat, click, ...props }) => {
-  const currentChat = useAppSelector((state) => state.chat.currentChat);
+  const currentChat = useSelector((state) => state.chat.currentChat);
 
   const isChatOpened = () => {
     return currentChat.id === chat.id ? "opened" : "";

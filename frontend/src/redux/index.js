@@ -1,9 +1,9 @@
 import { applyMiddleware, createStore, combineReducers, compose } from "redux";
 
-import chatReducer from "./reducers/chatReducer";
+import chat from "./reducers/chatReducer";
 
 export const allReducers = combineReducers({
-    chatReducer
+    chat
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
