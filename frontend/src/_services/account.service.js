@@ -26,6 +26,8 @@ export const accountService = {
   getFields,
   uploadExcels,
   finalUploadExcels,
+  loadStaff,
+  searchStaff,
   user: userSubject.asObservable(),
   get userValue() {
     return userSubject.value;
@@ -142,6 +144,14 @@ function uploadExcels(fromData) {
 
 function finalUploadExcels(fromData) {
   return fetchWrapper.postFormData(`${baseUrl}/final-upload-excel`, fromData);
+}
+
+function loadStaff() {
+  return fetchWrapper.get(`${baseUrl}/load-staff`);
+}
+
+function searchStaff(term) {
+  return fetchWrapper.get(`${baseUrl}/search-staffs/${term}`);
 }
 
 // helper functions

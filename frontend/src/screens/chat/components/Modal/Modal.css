@@ -24,7 +24,7 @@
 }
 
 .modal-mask .modal-wrapper .modal-container .modal-header {
-  background-color: #d1adcc;
+  background-color: #2999d4;
   padding: 1px;
   color: white;
   border-top-left-radius: 10px;
@@ -56,7 +56,7 @@
 }
 
 .modal-mask .modal-wrapper .modal-container .modal-footer button {
-  background-color: #d1adcc;
+  background-color: #2999d4;
   border: none;
   padding: 5px;
   width: 70px;

@@ -4,6 +4,8 @@ using Backend.Dtos.ExcelDtos;
 using Backend.Dtos.UserDtos;
 using Backend.Models;
 using Backend.Services.IServices;
+using Backend.Dtos.ChatDtos;
+using Microsoft.AspNetCore.Identity;
 
 namespace Backend.Controllers
 {
@@ -239,6 +241,20 @@ namespace Backend.Controllers
                 // Handle exceptions and return an error response
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
+        }
+
+        [HttpGet("search-staffs/{term}")]
+        public ActionResult<IEnumerable<AccountResponse>> Search(string term)
+        {
+            var result = _userService.SearchStaff(term);
+            return Ok(result);
+        }
+
+        [HttpGet("load-staff")]
+        public async Task<ActionResult<IEnumerable<UserInMessage>>> LoadStaff()
+        {
+            var result = _userService.LoadStaff();
+            return Ok(result);
         }
     }
 }

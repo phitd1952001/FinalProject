@@ -3,9 +3,10 @@ import { useDispatch } from "react-redux";
 import Friend from "../Friend/Friend";
 import { setCurrentChat } from "../../../../redux/actions/chatActions";
 import Modal from "../Modal/Modal";
-import { chatService } from "../../../../_services";
+import { chatService, accountService } from "../../../../_services";
 import "./FriendList.css";
 import { useSelector } from "react-redux";
+import { AiOutlineUserAdd } from "react-icons/ai";
 
 const FriendList = () => {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ const FriendList = () => {
 
   useEffect(() => {
     (async () => {
-      await chatService.loadStaff().then((res) => {
+      await accountService.loadStaff().then((res) => {
         setSuggestions(res);
       });
     })();
@@ -29,14 +30,19 @@ const FriendList = () => {
 
   const searchFriends = async (e) => {
     if (e.target.value.length > 0) {
-      await chatService.searchUsers(e.target.value).then((res) => {
+      await accountService.searchStaff(e.target.value).then((res) => {
+        setSuggestions(res);
+      });
+    }
+    else{
+      await accountService.loadStaff().then((res) => {
         setSuggestions(res);
       });
     }
   };
 
-  const addNewFriend = async (id) => {
-    await chatService.createChat(id).then((res) => {
+    const addNewFriend = async (id) => {
+      await chatService.createChat(id).then((res) => {
       socket.invoke("AddFriend", { chats: res });
       setShowFriendsModal(false);
     });
@@ -44,16 +50,14 @@ const FriendList = () => {
 
   return (
     <div id="friends" className="shadow-light">
-      <div>
-        <div id="title">
-          <h3 className="text-xl font-bold">Staff</h3>
-          <button onClick={() => setShowFriendsModal(true)}>
-            Choose Staff
+      <div style={{paddingBottom:'10px',borderBottom: "1px solid black"}}>
+        <div id="title" style={{marginTop:'10px', display:'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+          <h3 className="text-xl font-bold" style={{marginTop:'10px', display:'flex', justifyContent: 'center', alignItems: 'center'}}>Staff</h3>
+          <button onClick={() => setShowFriendsModal(true)} style={{textAlign: 'center'}}>
+            <AiOutlineUserAdd /><span style={{textAlign: 'center'}}>Staff</span>
           </button>
         </div>
       </div>
-
-      <hr />
 
       <div id="friends-box">
         {chats.length > 0 ? (
@@ -77,10 +81,18 @@ const FriendList = () => {
           <Fragment key="body">
             <p>Find Staff by typing their name bellow</p>
             <input
+              style={{
+                padding: '10px',
+                fontSize: '16px',
+                borderRadius: '10px',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                outline: 'none',
+              }}
               onInput={(e) => searchFriends(e)}
               type="text"
               placeholder="Search..."
             />
+
             <div id="suggestions">
               {suggestions.map((user, i) => {
                 return (

@@ -18,12 +18,12 @@ import {
   deleteCurrentChat,
 } from "../../redux/actions/chatActions";
 import config from "config";
-import { chatService } from "../../_services";
+import { chatService, accountService } from "../../_services";
 
 const Chat = () => {
   const signalRUrl = config.signalRUrl;
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.account.user);
+  const user = accountService.userValue;
   const chats = useSelector((state) => state.chat.chats);
 
   useEffect(() => {
@@ -110,7 +110,7 @@ const Chat = () => {
   };
 
   return (
-    <div id="chat-container">
+    <div id="chat-container" style={{marginTop:'50px'}}>
       <div id="chat-wrap">
         <FriendList />
         <Messenger />

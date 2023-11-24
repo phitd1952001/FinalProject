@@ -202,6 +202,19 @@ namespace Backend.Services
             return _mapper.Map<IList<AccountResponse>>(accounts);
         }
 
+        public IEnumerable<AccountResponse> LoadStaff()
+        {
+            var accounts = _context.Accounts.Where(_=>_.Role == Role.Staff);
+            return _mapper.Map<IList<AccountResponse>>(accounts);
+        }
+
+        public IEnumerable<AccountResponse> SearchStaff(string keyword)
+        {
+            var accounts = _context.Accounts.Where(_ => _.Role == Role.Staff 
+                && (_.FirstName.ToLower().Contains(keyword.ToLower().Trim()) || _.LastName.ToLower().Contains(keyword.ToLower().Trim())));
+            return _mapper.Map<IList<AccountResponse>>(accounts);
+        }
+
         public AccountResponse GetById(int id)
         {
             var account = getAccount(id);

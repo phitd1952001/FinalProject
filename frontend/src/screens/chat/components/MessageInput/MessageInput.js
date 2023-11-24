@@ -6,11 +6,11 @@ import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { incrementScroll } from "../../../../redux/actions/chatActions";
 import "./MessageInput.css";
-import { chatService } from "../../../../_services";
+import { chatService, accountService } from "../../../../_services";
 
 const MessageInput = ({ chat }) => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.account.user);
+  const user = accountService.userValue;
   const socket = useSelector((state) => state.chat.socket);
   const newMessage = useSelector((state) => state.chat.newMessage);
 

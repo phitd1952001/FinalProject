@@ -4,14 +4,14 @@ import Message from "../Message/Message";
 import { paginateMessages } from "../../../../redux/actions/chatActions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./MessageBox.css";
-import { chatService } from "../../../../_services";
+import { chatService, accountService } from "../../../../_services";
 import { useSelector } from "react-redux";
 import {faSpinner} from "@fortawesome/free-solid-svg-icons";
 
 const MessageBox = ({ chat }) => {
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.account.user);
+  const user = accountService.userValue;
   const scrollBottom = useSelector((state) => state.chat.scrollBottom);
   const senderTyping = useSelector((state) => state.chat.senderTyping);
   const [loading, setLoading] = useState(false);

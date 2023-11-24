@@ -21,7 +21,7 @@ const Modal = (props) => {
             <div className='modal-wrapper'>
                 <div className='modal-container'>
 
-                    <div className='modal-header'>
+                    <div className='modal-header' style={{padding:'10px' ,textAlign: 'center'}}>
                         {findByKey('header')}
                     </div>
 

@@ -24,5 +24,7 @@ namespace Backend.Services.IServices
         List<string> GetFields();
         Task<List<Dictionary<string, string>>> UploadExcel(IFormFile file);
         Task<IList<AccountResponse>> ImportExcel(IFormFile file, string mapping);
+        IEnumerable<AccountResponse> LoadStaff();
+        IEnumerable<AccountResponse> SearchStaff(string keyword);
     }
 }

@@ -1,7 +1,8 @@
 #friends {
     display: flex;
     flex-direction: column;
-    background-color: #fff;
+    background-color: #cbe1f8;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 1rem;
     border-radius: 20px;
 }
@@ -25,9 +26,9 @@
 
 #friends #title button {
     border: none;
-    background-color: #d1adcc;
+    background-color: #2999d4;
     color: white;
-    width: 60px;
+    width: 80px;
     padding: 5px;
     border-radius: 10px;
     cursor: pointer;
