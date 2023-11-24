@@ -20,7 +20,6 @@ public class ChatHub : Hub
         userSockets = _userSockets;
     }
 
-
     public async Task Join(UserResponse user)
     {
         var sockets = new HashSet<string>();

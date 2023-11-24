@@ -4,7 +4,7 @@ namespace Backend.Dtos.ChatDtos;
 
 public class ChatModel
 {
-    public string Id { get; set; }
+    public int Id { get; set; }
     public string Type { get; set; }
     public List<UserInChatSignalR> Users { get; set; } // Represents the users involved in the chat
     public List<object> Messages { get; set; } // Represents the chat message content

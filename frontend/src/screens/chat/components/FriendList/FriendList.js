@@ -43,6 +43,7 @@ const FriendList = () => {
 
   const addNewFriend = async (id) => {
     await chatService.createChat(id).then((res) => {
+      console.log(res);
       socket.invoke("AddFriend", { chats: res });
       setShowFriendsModal(false);
     }); 

@@ -59,7 +59,6 @@ const Chat = () => {
           });
 
           connection.on("received", (message) => {
-            console.log("received", message);
             let payload = {
               message,
               userId: user.id,
@@ -68,6 +67,7 @@ const Chat = () => {
           });
 
           connection.on("new-chat", (chat) => {
+            console.log("new-chat", chat);
             dispatch(createChat(chat));
           });
 

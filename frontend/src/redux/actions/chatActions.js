@@ -45,8 +45,8 @@ export const setSocket = (socket) => {
     return {type: SET_SOCKET, payload: socket}
 }
 
-export const receivedMessage = (message, userId) => {
-    return {type: RECEIVED_MESSAGE, payload: {message, userId}}
+export const receivedMessage = (payload) => {
+    return {type: RECEIVED_MESSAGE, payload} 
 }
 
 export const senderTyping = (sender) => {

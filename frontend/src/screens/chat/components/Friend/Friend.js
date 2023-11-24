@@ -23,7 +23,7 @@ const Friend = ({ chat, click, ...props }) => {
           style={{ borderRadius: '50%' }}
           width="40"
           height="40"
-          src={chat.users[0].avatar.length > 0 ? chat.users[0].avatar : "https://i.pinimg.com/originals/ff/a0/9a/ffa09aec412db3f54deadf1b3781de2a.png"}
+          src={chat.users[0].avatar ? chat.users[0].avatar : "https://i.pinimg.com/originals/ff/a0/9a/ffa09aec412db3f54deadf1b3781de2a.png"}
           alt="User avatar"
         />
         <div className="friend-info">
