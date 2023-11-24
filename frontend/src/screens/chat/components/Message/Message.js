@@ -7,7 +7,7 @@ const Message = ({ user, chat, index, message }) => {
 
         if (index + 1 === chat.messages.length) return
 
-        return message.fromUserId === chat.messages[index + 1].fromUserId ? 'mb-5' : 'mb-10'
+        return message.fromUserId === chat.messages[index + 1].fromUserId ? 'mb-2' : 'mb-4'
     }
 
     return (

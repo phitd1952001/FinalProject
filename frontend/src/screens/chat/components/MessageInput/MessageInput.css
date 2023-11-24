@@ -16,13 +16,13 @@
 #input-container #image-upload-container #message-notification {
     display: flex;
     cursor: pointer;
-    border: 1px solid #d1adcc;
+    border: 1px solid #2999d4;
     border-radius: 15px;
     padding: 5px;
 }
 
 #input-container #image-upload-container #message-notification .fa-icon {
-    color: #d1adcc;
+    color: #2999d4;
     margin-right: 5px;
 }
 
@@ -56,7 +56,7 @@
 
 #input-container .fa-icon {
     font-size: 20px;
-    color: #d1adcc;
+    color: #2999d4;
     position: absolute;
     right: 5px;
     top: 8px;

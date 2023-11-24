@@ -20,16 +20,17 @@ const Friend = ({ chat, click, ...props }) => {
     <div onClick={click} className={`friend-list ${isChatOpened()}`} {...props}>
       <div>
         <img
+          style={{ borderRadius: '50%' }}
           width="40"
           height="40"
-          src="https://bsnl.ch/wp-content/uploads/2019/03/avatar-default-circle.png"
+          src={chat.users[0].avatar.length > 0 ? chat.users[0].avatar : "https://i.pinimg.com/originals/ff/a0/9a/ffa09aec412db3f54deadf1b3781de2a.png"}
           alt="User avatar"
         />
         <div className="friend-info">
-          <h4 className="m-0 font-bold">
+          <h4 className="m-0" style={{fontSize:'15px', fontWeight: 'bold'}}>
             {chat.users[0].firstName} {chat.users[0].lastName}
           </h4>
-          <h5 className="m-0">{lastMessage()}</h5>
+          <h5 className="m-0" style={{fontSize:'13px'}}>{lastMessage()}</h5>
         </div>
       </div>
       <div className="friend-status">

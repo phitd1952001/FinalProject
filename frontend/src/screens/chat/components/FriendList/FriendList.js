@@ -41,11 +41,11 @@ const FriendList = () => {
     }
   };
 
-    const addNewFriend = async (id) => {
-      await chatService.createChat(id).then((res) => {
+  const addNewFriend = async (id) => {
+    await chatService.createChat(id).then((res) => {
       socket.invoke("AddFriend", { chats: res });
       setShowFriendsModal(false);
-    });
+    }); 
   };
 
   return (
@@ -63,9 +63,7 @@ const FriendList = () => {
         {chats.length > 0 ? (
           chats.map((chat, i) => {
             return (
-              <>
-                <Friend click={() => openChat(chat)} chat={chat} key={i} />
-              </>
+              <Friend click={() => openChat(chat)} chat={chat} key={i} />
             );
           })
         ) : (

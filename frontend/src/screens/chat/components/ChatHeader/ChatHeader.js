@@ -48,7 +48,7 @@ const ChatHeader = ({ chat }) => {
         {chat.users.map((user) => {
           return (
             <div className="chatter-info" key={user.id}>
-              <h3 className="font-bold">
+              <h3 className="font-bold" style={{fontSize:'20px'}}>
                 {user.firstName} {user.lastName}
               </h3>
               <div className="chatter-status">

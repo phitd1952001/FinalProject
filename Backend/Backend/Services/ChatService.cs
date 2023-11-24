@@ -53,7 +53,7 @@ public class ChatService : IChatService
                     var userResponse = new UserResponse()
                     {
                         Id = user.Id,
-                        Avatar = string.Empty,
+                        Avatar = user.Avatar,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         Email = user.Email,
@@ -86,7 +86,7 @@ public class ChatService : IChatService
                         User = new UserInMessage()
                         {
                             Id = userWroteMessage.Id,
-                            Avatar = string.Empty,
+                            Avatar = userWroteMessage.Avatar,
                             FirstName = userWroteMessage.FirstName,
                             LastName = userWroteMessage.LastName,
                             Email = userWroteMessage.Email,
@@ -176,7 +176,7 @@ public class ChatService : IChatService
                 new UserInMessage()
                 {
                     Id = partnerInfo.Id,
-                    Avatar = string.Empty,
+                    Avatar = partnerInfo.Avatar,
                     FirstName = partnerInfo.FirstName,
                     LastName = partnerInfo.LastName,
                     Email = partnerInfo.Email,
@@ -200,7 +200,7 @@ public class ChatService : IChatService
                 new UserInMessage()
                 {
                     Id = userInfo.Id,
-                    Avatar = string.Empty,
+                    Avatar = userInfo.Avatar,
                     FirstName = userInfo.FirstName,
                     LastName = userInfo.LastName,
                     Email = userInfo.Email
@@ -248,7 +248,7 @@ public class ChatService : IChatService
                 User = new UserInMessage()
                 {
                     Id = userInfo.Id,
-                    Avatar = string.Empty,
+                    Avatar = userInfo.Avatar,
                     FirstName = userInfo.FirstName,
                     LastName = userInfo.LastName,
                     Email = userInfo.Email,
@@ -305,7 +305,7 @@ public class ChatService : IChatService
                 User = new UserInMessage()
                 {
                     Id = userInfo.Id,
-                    Avatar = string.Empty,
+                    Avatar = userInfo.Avatar,
                     FirstName = userInfo.FirstName,
                     LastName = userInfo.LastName,
                     Email = userInfo.Email,
@@ -321,7 +321,7 @@ public class ChatService : IChatService
             var userResponse = new UserResponse()
             {
                 Id = user.Id,
-                Avatar = string.Empty,
+                Avatar = user.Avatar,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
@@ -347,7 +347,7 @@ public class ChatService : IChatService
             NewChatter = new UserInMessage()
             {
                 Id = newChatter.Id,
-                Avatar = string.Empty,
+                Avatar = newChatter.Avatar,
                 FirstName = newChatter.FirstName,
                 LastName = newChatter.LastName,
                 Email = newChatter.Email,

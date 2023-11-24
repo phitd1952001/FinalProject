@@ -55,8 +55,8 @@ namespace Backend.Extensions
         
         public static IServiceCollection AddChatService(this IServiceCollection service)
         {
-            service.AddSingleton<IDictionary<string, UserConnection>>(opts => new Dictionary<string, UserConnection>());
-            service.AddSingleton<IDictionary<string, string>>(opts => new Dictionary<string, string>());
+            service.AddSingleton<IDictionary<int, UserConnection>>(opts => new Dictionary<int, UserConnection>());
+            service.AddSingleton<IDictionary<string, int>>(opts => new Dictionary<string, int>());
             return service;
         }
 

@@ -39,7 +39,7 @@
 #messenger #messenger-wrap #settings>div .fa-icon {
     position: relative;
     font-size: 20px;
-    color: #d1adcc;
+    color: #2999d4;
     margin-right: 5px;
     min-width: 20px;
 }
@@ -51,7 +51,7 @@
 
 #messenger #messenger-wrap>.fa-icon {
     font-size: 20px;
-    color: #d1adcc;
+    color: #2999d4;
     right: 0;
     position: absolute;
     top: 0;
