@@ -20,228 +20,70 @@ public class ChatService : IChatService
         _imageServices = imageServices;
     }
 
-    public async Task<List<GetChatByUserIdResponse>> GetChatByUserId(int id)
+   public async Task<List<GetChatByUserIdResponse>> GetChatByUserId(int id)
+{
+    var chatUsers = await _context.ChatUsers
+        .Where(cu => cu.UserId == id)
+        .ToListAsync();
+
+    var chatIds = chatUsers.Select(cu => cu.ChatId).Distinct().ToList();
+
+    var chatUsersContainChatWithUsers = await _context.ChatUsers
+        .Where(cu => chatIds.Contains(cu.ChatId))
+        .ToListAsync();
+
+    var chats = await _context.Chats
+        .Where(c => chatIds.Contains(c.Id))
+        .ToListAsync();
+
+    var userIds = chatUsersContainChatWithUsers.Select(cu => cu.UserId).Distinct().ToList();
+
+    var users = await _context.Accounts
+        .Where(a => userIds.Contains(a.Id))
+        .ToListAsync();
+
+    var messages = await _context.ChatMessages
+        .OrderByDescending(x => x.CreateAt)
+        .Where(cm => chatIds.Contains(cm.ChatId))
+        .Take(20)
+        .ToListAsync();
+
+    var res = new List<GetChatByUserIdResponse>();
+
+    foreach (var chat in chats)
     {
-        var chatUsers = _context.ChatUsers.Where(_ => _.UserId == id).ToList(); // 
-        var chatUsersContainChatWithUsersTakeChatId = chatUsers.Select(_ => _.ChatId).Distinct().ToList();
-        var chatUsersContainChatWithUsers =
-            _context.ChatUsers.Where(_ => chatUsersContainChatWithUsersTakeChatId.Contains(_.ChatId)).ToList();
-        var chatIds = chatUsers.Select(_ => _.ChatId).Distinct().ToList(); // 
-        var chats = _context.Chats.Where(_ => chatIds.Contains(_.Id)).ToList(); // 
-        var userIds = chatUsersContainChatWithUsers.Select(_ => _.UserId).Distinct().ToList(); // 
-        var users = _context.Accounts.Where(_ => userIds.Contains(_.Id)).ToList(); // 
-        var messages = _context.ChatMessages
-            .OrderByDescending(x=>x.CreateAt)
-            .Where(_ => chatIds.Contains(_.ChatId)).Take(20).Skip(0)
+        var chatUser = chatUsers.FirstOrDefault(cu => cu.UserId == id && cu.ChatId == chat.Id);
+
+        var userIdsChatWith = chatUsersContainChatWithUsers
+            .Where(cu => cu.ChatId == chat.Id && cu.UserId != id)
+            .Select(cu => cu.UserId)
             .ToList();
-        var res = new List<GetChatByUserIdResponse>();
 
-        foreach (var chat in chats)
-        {
-            var chatUser = chatUsers.FirstOrDefault(_ => _.UserId == id && _.ChatId == chat.Id); // 
-            var userIdsChatWith = chatUsersContainChatWithUsers.Where(_ => _.ChatId == chat.Id && _.UserId != id)
-                .Select(_ => _.UserId).ToList(); // 
-            var usersChatWith = users.Where(_ => userIdsChatWith.Contains(_.Id)).ToList(); //
-            var userResponseList = new List<UserResponse>();
-
-            foreach (var user in usersChatWith)
-            {
-                var chatUserInUser =
-                    chatUsersContainChatWithUsers.FirstOrDefault(_ => _.ChatId == chat.Id && _.UserId == user.Id);
-                if (chatUserInUser != null)
-                {
-                    var userResponse = new UserResponse()
-                    {
-                        Id = user.Id,
-                        Avatar = user.Avatar,
-                        FirstName = user.FirstName,
-                        LastName = user.LastName,
-                        Email = user.Email,
-                        ChatUser = new ChatUserResponse()
-                        {
-                            ChatId = chatUserInUser.ChatId,
-                            UserId = chatUserInUser.UserId,
-                        }
-                    };
-                    userResponseList.Add(userResponse);
-                }
-            }
-
-            var mess = messages.Where(_ => _.ChatId == chat.Id).ToList();
-            var messageResponseList = new List<MessageResponse>();
-            foreach (var m in mess)
-            {
-                var userWroteMessage = users.FirstOrDefault(_ => _.Id == m.FromUserId);
-                if (userWroteMessage != null)
-                {
-                    var messageResponse = new MessageResponse()
-                    {
-                        Id = m.Id,
-                        Type = m.Type,
-                        Message = m.Message,
-                        ChatId = m.ChatId,
-                        FromUserId = m.FromUserId,
-                        CreatedAt = m.CreateAt,
-                        UpdatedAt = m.CreateAt,
-                        User = new UserInMessage()
-                        {
-                            Id = userWroteMessage.Id,
-                            Avatar = userWroteMessage.Avatar,
-                            FirstName = userWroteMessage.FirstName,
-                            LastName = userWroteMessage.LastName,
-                            Email = userWroteMessage.Email,
-                        }
-                    };
-                    messageResponseList.Add(messageResponse);
-                }
-            }
-
-            if (chatUser != null)
-            {
-                var result = new GetChatByUserIdResponse()
-                {
-                    Id = chat.Id,
-                    Type = chat.Type,
-                    ChatUser = new ChatUserResponse()
-                    {
-                        UserId = chatUser.UserId,
-                        ChatId = chatUser.ChatId,
-                    },
-                    Users = userResponseList,
-                    Messages = messageResponseList,
-                };
-                res.Add(result);
-            }
-        }
-
-        return res;
-    }
-
-    public async Task<CreateChatResponse> Create(int partnerId, int userId)
-    {
-        if (partnerId == userId)
-        {
-            throw new AppException("Cannot Chat with this your self!");
-        }
-        
-        var chatUsers = _context.ChatUsers.Where(_ => _.UserId == partnerId || _.UserId == userId).ToList();
-        var chatIdInChatUserOfPartner = chatUsers.Where(_ => _.UserId == partnerId).Select(_ => _.ChatId);
-        var chatIdInChatUserOfUser = chatUsers.Where(_ => _.UserId == userId).Select(_ => _.ChatId);
-        var isChatIdOfUserAndPartnerIntersect = chatIdInChatUserOfPartner.Intersect(chatIdInChatUserOfUser).Any();
-        var isChatTypeDual = isChatIdOfUserAndPartnerIntersect
-            ? await _context.Chats.CountAsync(_ =>
-                chatIdInChatUserOfPartner.Intersect(chatIdInChatUserOfUser).Contains(_.Id) && _.Type == "dual") > 0
-            : false;
-        var isUserAndPartnerAlreadyChat = isChatIdOfUserAndPartnerIntersect && isChatTypeDual;
-
-        if (isUserAndPartnerAlreadyChat)
-            throw new Exception("Chat with this user already exists!");
-
-        var chat = new Chat()
-        {
-            Type = "dual"
-        };
-
-        _context.Chats.Add(chat);
-        _context.SaveChanges();
-
-        _context.ChatUsers.AddRange(new List<ChatUser>()
-        {
-            new ChatUser()
-            {
-                UserId = userId,
-                ChatId = chat.Id
-            },
-            new ChatUser()
-            {
-                UserId = partnerId,
-                ChatId = chat.Id
-            }
-        });
-
-        _context.SaveChanges();
-        
-        var userInfos = _context.Accounts.Where(_ => _.Id == userId || _.Id == partnerId).ToList();
-        var userInfo = userInfos.FirstOrDefault(_ => _.Id == userId);
-        var partnerInfo = userInfos.FirstOrDefault(_ => _.Id == partnerId);
-        
-        var forCreator = new CreateChatResponseModel()
-        {
-            Id = chat.Id,
-            Type = "dual",
-            ChatUser = new
-            {
-                chatId = chat.Id,
-                userId = userId,
-                createdAt = DateTime.UtcNow,
-                updatedAt = DateTime.UtcNow
-            },
-            Users = new List<UserInMessage>()
-            {
-                new UserInMessage()
-                {
-                    Id = partnerInfo.Id,
-                    Avatar = partnerInfo.Avatar,
-                    FirstName = partnerInfo.FirstName,
-                    LastName = partnerInfo.LastName,
-                    Email = partnerInfo.Email,
-                }
-            }
-        };
-        
-        var forReceiver = new CreateChatResponseModel()
-        {
-            Id = chat.Id,
-            Type = "dual",
-            ChatUser = new
-            {
-                chatId = chat.Id,
-                userId = partnerId,
-                createdAt = DateTime.UtcNow,
-                updatedAt = DateTime.UtcNow
-            },
-            Users = new List<UserInMessage>()
-            {
-                new UserInMessage()
-                {
-                    Id = userInfo.Id,
-                    Avatar = userInfo.Avatar,
-                    FirstName = userInfo.FirstName,
-                    LastName = userInfo.LastName,
-                    Email = userInfo.Email
-                }
-            },
-        };
-
-        return new CreateChatResponse()
-        {
-            CreateChatResponseModels = new List<CreateChatResponseModel>() { forCreator, forReceiver }
-        };
-    }
-
-    public async Task<object> Messages(int id, int page = 1)
-    {
-        var limit = 10;
-        var offset = page > 1 ? page * limit : 0;
-        var totalMessages = await _context.ChatMessages.CountAsync(_ => _.ChatId == id);
-        var totalPages = Math.Ceiling(Convert.ToDecimal(totalMessages / limit));
-        var messages = _context.ChatMessages
-            .Where(_ => _.ChatId == id)
+        var usersChatWith = users
+            .Where(u => userIdsChatWith.Contains(u.Id))
             .ToList();
-        messages = messages.OrderByDescending(_ => _.CreateAt).ToList();
-        messages = messages.Skip(offset).Take(limit).ToList();
-        
-        if (page > totalPages)
-            return new { data = new { messages = new List<MessageResponse>() } };
 
-        var messageResponses = new List<MessageResponse>();
+        var userResponseList = usersChatWith
+            .Select(user => new UserResponse
+            {
+                Id = user.Id,
+                Avatar = user.Avatar,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                ChatUser = new ChatUserResponse
+                {
+                    ChatId = chatUsersContainChatWithUsers
+                        .FirstOrDefault(cu => cu.ChatId == chat.Id && cu.UserId == user.Id)?
+                        .ChatId ?? 0,
+                    UserId = user.Id,
+                }
+            })
+            .ToList();
 
-        var fromUserIds = messages.Select(_ => _.FromUserId).ToList();
-        var userInfos = _context.Accounts.Where(_ => fromUserIds.Contains(_.Id)).ToList();
-        foreach (var m in messages)
-        {
-            var userInfo = userInfos.FirstOrDefault(_ => _.Id == m.FromUserId);
-            var messageResponse = new MessageResponse()
+        var messageResponseList = messages
+            .Where(m => m.ChatId == chat.Id)
+            .Select(m => new MessageResponse
             {
                 Id = m.Id,
                 Type = m.Type,
@@ -250,26 +92,213 @@ public class ChatService : IChatService
                 FromUserId = m.FromUserId,
                 CreatedAt = m.CreateAt,
                 UpdatedAt = m.CreateAt,
-                User = new UserInMessage()
+                User = new UserInMessage
                 {
-                    Id = userInfo.Id,
-                    Avatar = userInfo.Avatar,
-                    FirstName = userInfo.FirstName,
-                    LastName = userInfo.LastName,
-                    Email = userInfo.Email,
+                    Id = m.FromUserId,
+                    Avatar = users.FirstOrDefault(u => u.Id == m.FromUserId)?.Avatar,
+                    FirstName = users.FirstOrDefault(u => u.Id == m.FromUserId)?.FirstName,
+                    LastName = users.FirstOrDefault(u => u.Id == m.FromUserId)?.LastName,
+                    Email = users.FirstOrDefault(u => u.Id == m.FromUserId)?.Email,
                 }
-            };
-            messageResponses.Add(messageResponse);
-        }
+            })
+            .ToList();
 
-        return new { messages = messageResponses, pagination = new { page = page, totalPages = totalPages } };
+        if (chatUser != null)
+        {
+            var result = new GetChatByUserIdResponse
+            {
+                Id = chat.Id,
+                Type = chat.Type,
+                ChatUser = new ChatUserResponse
+                {
+                    UserId = chatUser.UserId,
+                    ChatId = chatUser.ChatId,
+                },
+                Users = userResponseList,
+                Messages = messageResponseList,
+            };
+            res.Add(result);
+        }
     }
+
+    return res;
+}
+
+
+   public async Task<CreateChatResponse> Create(int partnerId, int userId)
+{
+    if (partnerId == userId)
+    {
+        throw new AppException("Cannot Chat with yourself!");
+    }
+
+    var chatUsers = await _context.ChatUsers
+        .Where(cu => cu.UserId == partnerId || cu.UserId == userId)
+        .ToListAsync();
+
+    var chatIdInChatUserOfPartner = chatUsers
+        .Where(cu => cu.UserId == partnerId)
+        .Select(cu => cu.ChatId);
+
+    var chatIdInChatUserOfUser = chatUsers
+        .Where(cu => cu.UserId == userId)
+        .Select(cu => cu.ChatId);
+
+    var isChatIdOfUserAndPartnerIntersect = chatIdInChatUserOfPartner.Intersect(chatIdInChatUserOfUser).Any();
+
+    var isChatTypeDual = isChatIdOfUserAndPartnerIntersect
+        ? await _context.Chats
+            .Where(c => chatIdInChatUserOfPartner.Intersect(chatIdInChatUserOfUser).Contains(c.Id) && c.Type == "dual")
+            .AnyAsync()
+        : false;
+
+    var isUserAndPartnerAlreadyChat = isChatIdOfUserAndPartnerIntersect && isChatTypeDual;
+
+    if (isUserAndPartnerAlreadyChat)
+    {
+        throw new AppException("Chat with this user already exists!");
+    }
+
+    var chat = new Chat
+    {
+        Type = "dual"
+    };
+
+    _context.Chats.Add(chat);
+    await _context.SaveChangesAsync();
+
+    var chatUsersToAdd = new List<ChatUser>
+    {
+        new ChatUser { UserId = userId, ChatId = chat.Id },
+        new ChatUser { UserId = partnerId, ChatId = chat.Id }
+    };
+
+    _context.ChatUsers.AddRange(chatUsersToAdd);
+    await _context.SaveChangesAsync();
+
+    var userInfos = await _context.Accounts
+        .Where(a => a.Id == userId || a.Id == partnerId)
+        .ToListAsync();
+
+    var userInfo = userInfos.FirstOrDefault(a => a.Id == userId);
+    var partnerInfo = userInfos.FirstOrDefault(a => a.Id == partnerId);
+
+    var forCreator = new CreateChatResponseModel
+    {
+        Id = chat.Id,
+        Type = "dual",
+        ChatUser = new
+        {
+            chatId = chat.Id,
+            userId = userId,
+            createdAt = DateTime.UtcNow,
+            updatedAt = DateTime.UtcNow
+        },
+        Users = new List<UserInMessage>
+        {
+            new UserInMessage
+            {
+                Id = partnerInfo.Id,
+                Avatar = partnerInfo.Avatar,
+                FirstName = partnerInfo.FirstName,
+                LastName = partnerInfo.LastName,
+                Email = partnerInfo.Email,
+            }
+        }
+    };
+
+    var forReceiver = new CreateChatResponseModel
+    {
+        Id = chat.Id,
+        Type = "dual",
+        ChatUser = new
+        {
+            chatId = chat.Id,
+            userId = partnerId,
+            createdAt = DateTime.UtcNow,
+            updatedAt = DateTime.UtcNow
+        },
+        Users = new List<UserInMessage>
+        {
+            new UserInMessage
+            {
+                Id = userInfo.Id,
+                Avatar = userInfo.Avatar,
+                FirstName = userInfo.FirstName,
+                LastName = userInfo.LastName,
+                Email = userInfo.Email
+            }
+        },
+    };
+
+    return new CreateChatResponse
+    {
+        CreateChatResponseModels = new List<CreateChatResponseModel> { forCreator, forReceiver }
+    };
+}
+
+
+   public async Task<object> Messages(int id, int page = 1)
+   {
+       var limit = 10;
+       var offset = page > 1 ? page * limit : 0;
+
+       var totalMessages = await _context.ChatMessages
+           .CountAsync(cm => cm.ChatId == id);
+
+       var totalPages = Math.Ceiling(Convert.ToDecimal(totalMessages) / limit);
+
+       var messagesQuery = _context.ChatMessages
+           .Where(cm => cm.ChatId == id)
+           .OrderByDescending(cm => cm.CreateAt)
+           .Skip(offset)
+           .Take(limit);
+
+       var messages = await messagesQuery.ToListAsync();
+
+       if (page > totalPages)
+       {
+           return new { data = new { messages = new List<MessageResponse>() } };
+       }
+
+       var fromUserIds = messages.Select(cm => cm.FromUserId).ToList();
+
+       var userInfos = await _context.Accounts
+           .Where(a => fromUserIds.Contains(a.Id))
+           .ToDictionaryAsync(a => a.Id);
+
+       var messageResponses = messages
+           .Select(m => new MessageResponse
+           {
+               Id = m.Id,
+               Type = m.Type,
+               Message = m.Message,
+               ChatId = m.ChatId,
+               FromUserId = m.FromUserId,
+               CreatedAt = m.CreateAt,
+               UpdatedAt = m.CreateAt,
+               User = userInfos.TryGetValue(m.FromUserId, out var userInfo)
+                   ? new UserInMessage
+                   {
+                       Id = userInfo.Id,
+                       Avatar = userInfo.Avatar,
+                       FirstName = userInfo.FirstName,
+                       LastName = userInfo.LastName,
+                       Email = userInfo.Email,
+                   }
+                   : null
+           })
+           .ToList();
+
+       return new { messages = messageResponses, pagination = new { page = page, totalPages = totalPages } };
+   }
+
 
     public async Task<object> AddUserToGroup(int chatId, int userId, int currentUserId)
     {
         var chatUser = _context.ChatUsers.Where(_ => _.ChatId == chatId).ToList();
         if (chatUser.Any(_ => _.UserId == userId))
-            throw new Exception("User already in the group!");
+            throw new AppException("User already in the group!");
 
         _context.ChatUsers.Add(new ChatUser()
         {
@@ -362,26 +391,36 @@ public class ChatService : IChatService
 
     public async Task<object> Delete(int chatId)
     {
-        var chatUser = _context.ChatUsers.Where(_ => _.ChatId == chatId).ToList();
-        var chatUsersToDelete = _context.ChatUsers.Where(_ => _.ChatId == chatId).ToList();
+        var chatUsersToDelete = await _context.ChatUsers
+            .Where(cu => cu.ChatId == chatId)
+            .ToListAsync();
+
         _context.ChatUsers.RemoveRange(chatUsersToDelete);
-        
-        var messagesToDelete = _context.ChatMessages.Where(_ => _.ChatId == chatId).ToList();
+
+        var messagesToDelete = await _context.ChatMessages
+            .Where(cm => cm.ChatId == chatId)
+            .ToListAsync();
+
         _context.ChatMessages.RemoveRange(messagesToDelete);
-        
-        var chatsToDelete = _context.Chats.Where(_ => _.Id == chatId).ToList();
+
+        var chatsToDelete = await _context.Chats
+            .Where(c => c.Id == chatId)
+            .ToListAsync();
+
         _context.Chats.RemoveRange(chatsToDelete);
 
-        _context.SaveChanges();
-        return new { ChatId = chatId, NotifyUsers = chatUser.Select(_ => _.UserId) };
+        await _context.SaveChangesAsync();
+
+        return new { ChatId = chatId, NotifyUsers = chatUsersToDelete.Select(cu => cu.UserId) };
     }
+
 
     public async Task<object> LeaveCurrentChat(int chatId, int currentUserId)
     {
         var chatUsers = _context.ChatUsers.Where(_ => _.ChatId == chatId).ToList();
 
         if (chatUsers.Count == 2)
-            throw new Exception("You cannot leave this chat");
+            throw new AppException("You cannot leave this chat");
 
         if (chatUsers.Count == 3)
         {
