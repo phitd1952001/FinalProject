@@ -35,12 +35,7 @@ const MessageBox = ({ chat }) => {
       ).then((res)=>{
         const { messages, pagination } = res;
         if (typeof messages !== "undefined" && messages.length > 0) {
-          let payload = {
-            id: chat.id,
-            messages,
-            pagination
-          }
-          dispatch(paginateMessages(payload));
+          dispatch(paginateMessages(chat.id,messages,pagination));
           setScrollUp(scrollUp + 1);
         }
 
