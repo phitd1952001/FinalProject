@@ -119,6 +119,11 @@ public class ChatService : IChatService
 
     public async Task<CreateChatResponse> Create(int partnerId, int userId)
     {
+        if (partnerId == userId)
+        {
+            throw new AppException("Cannot Chat with this your self!");
+        }
+        
         var chatUsers = _context.ChatUsers.Where(_ => _.UserId == partnerId || _.UserId == userId).ToList();
         var chatIdInChatUserOfPartner = chatUsers.Where(_ => _.UserId == partnerId).Select(_ => _.ChatId);
         var chatIdInChatUserOfUser = chatUsers.Where(_ => _.UserId == userId).Select(_ => _.ChatId);
