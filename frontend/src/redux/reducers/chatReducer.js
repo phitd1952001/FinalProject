@@ -31,7 +31,6 @@ import { ChatStatus } from "../../_helpers";
   
     switch (type) {
       case FETCH_CHATS:
-        console.log(payload);
         return {
           ...state,
           chats: payload,

@@ -93,7 +93,6 @@ function AddEdit(props) {
             if (!isAddMode) {
               // get class and set form fields
               slotService.getById(id).then((obj) => {
-                console.log(obj);
                 const fields = ["name", "duration","startTime", "subjectId", "roomId"];
                 fields.forEach((field) => {
                   if (field === "startTime") {

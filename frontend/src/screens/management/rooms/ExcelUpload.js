@@ -16,7 +16,6 @@ function ExcelUpload({getRooms, setOpenImportModal}) {
     roomsService
       .getFields()
       .then((response) => {
-        console.log(response);
         setFields(response);
         alertService.success("Load Fields successfully", {
           keepAfterRouteChange: true,
@@ -46,7 +45,6 @@ function ExcelUpload({getRooms, setOpenImportModal}) {
       roomsService
         .uploadExcels(formData)
         .then((response) => {
-          console.log(response);
           setExcelData(response);
           setHeaders(Object.values(response[0] || {}));
           setColumnIndex(Object.keys(response[0] || {}));

@@ -39,23 +39,19 @@ const Chat = () => {
           connection.invoke("Join", user);
 
           connection.on("typing", (sender) => {
-            console.log("typing");
             dispatch(senderTyping(sender));
           });
 
           connection.on("friends", (friends) => {
-            console.log("Friends", friends);
             dispatch(onlineFriends(friends));
           });
 
           connection.on("online", (onlineUser) => {
             dispatch(onlineFriend(onlineUser));
-            console.log("Online", onlineUser);
           });
 
           connection.on("offline", (offlineUser) => {
             dispatch(offlineFriend(offlineUser));
-            console.log("Offline", offlineUser);
           });
 
           connection.on("received", (message) => {
@@ -67,7 +63,6 @@ const Chat = () => {
           });
 
           connection.on("new-chat", (chat) => {
-            console.log("new-chat", chat);
             dispatch(createChat(chat));
           });
 

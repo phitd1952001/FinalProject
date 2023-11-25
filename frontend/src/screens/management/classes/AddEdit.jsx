@@ -69,7 +69,6 @@ function AddEdit(props) {
             if (!isAddMode) {
               // get class and set form fields
               classService.getById(id).then((obj) => {
-                console.log(obj)
                 const fields = ["subjectCode", "email"];
                 fields.forEach((field) => {
                   setFieldValue(field, obj[field], false);
