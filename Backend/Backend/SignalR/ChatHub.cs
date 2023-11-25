@@ -2,6 +2,7 @@ using Backend.DbContext;
 using Backend.Dtos.ChatDtos;
 using Backend.Models;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.SignalR;
 
@@ -24,40 +25,39 @@ public class ChatHub : Hub
     {
         var sockets = new HashSet<string>();
 
-        if (users.ContainsKey(user.Id))
+        if (users.TryGetValue(user.Id, out var existingUser))
         {
-            var existingUser = users[user.Id];
-            if(!existingUser.Sockets.Contains(Context.ConnectionId))
-                existingUser.Sockets.Add(Context.ConnectionId);
-                
-            users[user.Id] = existingUser;
-            sockets = existingUser.Sockets;
-            userSockets[Context.ConnectionId] = user.Id;
+            if (existingUser.Sockets?.Add(Context.ConnectionId) == true)
+            {
+                userSockets[Context.ConnectionId] = user.Id;
+                sockets = existingUser.Sockets;
+            }
         }
         else
         {
-            users[user.Id] = new UserConnection {Id = user.Id, Sockets = new HashSet<string> {Context.ConnectionId}};
+            var newUser = new UserConnection { Id = user.Id, Sockets = new HashSet<string> { Context.ConnectionId } };
+            users[user.Id] = newUser;
             sockets.Add(Context.ConnectionId);
             userSockets[Context.ConnectionId] = user.Id;
         }
 
         var onlineFriends = new HashSet<int>();
-
+    
         var chatters = await GetChattersAsync(user.Id);
 
         foreach (var chatterId in chatters)
         {
-            if (users.ContainsKey(chatterId))
+            if (users.TryGetValue(chatterId, out var chatter))
             {
-                var chatter = users[chatterId];
                 foreach (var socket in chatter.Sockets)
                 {
                     try
                     {
                         await Clients.Client(socket).SendAsync("online", user);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        // Log or handle the exception appropriately
                     }
                 }
 
@@ -65,38 +65,31 @@ public class ChatHub : Hub
             }
         }
 
-        foreach (var socket in sockets)
+        try
         {
-            try
-            {
-                await Clients.Client(socket).SendAsync("friends", onlineFriends);
-            }
-            catch (Exception)
-            {
-            }
+            await Task.WhenAll(sockets.Select(socket => Clients.Client(socket).SendAsync("friends", onlineFriends)));
+        }
+        catch (Exception ex)
+        {
+            // Log or handle the exception appropriately
         }
     }
+
 
     public async Task Message(MessageSocket message)
     {
         var sockets = new HashSet<string>();
 
-        if (users.ContainsKey(message.FromUser.Id))
+        if (users.TryGetValue(message.FromUser.Id, out var fromUser))
         {
-            foreach (var socket in users[message.FromUser.Id].Sockets)
-            {
-                sockets.Add(socket);
-            }
+            sockets.UnionWith(fromUser.Sockets);
         }
 
         foreach (var id in message.ToUserId)
         {
-            if (users.ContainsKey(id))
+            if (users.TryGetValue(id, out var toUser))
             {
-                foreach (var socket in users[id].Sockets)
-                {
-                    sockets.Add(socket);
-                }
+                sockets.UnionWith(toUser.Sockets);
             }
         }
 
@@ -111,7 +104,7 @@ public class ChatHub : Hub
             };
 
             _context.ChatMessages.Add(msg);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var messageResponse = new MessageResponse()
             {
@@ -125,81 +118,103 @@ public class ChatHub : Hub
                 Message = msg.Message
             };
 
-            foreach (var socket in sockets)
+            var sendTasks = sockets.Select(async socket =>
             {
                 try
                 {
                     await Clients.Client(socket).SendAsync("received", messageResponse);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    // Log or handle the exception appropriately
                 }
-            }
+            });
+
+            await Task.WhenAll(sendTasks);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            // Log or handle the exception appropriately
         }
     }
+
 
     public async Task Typing(TypingModel model)
     {
         foreach (var id in model.ToUserId)
         {
-            if (users.ContainsKey(id))
+            if (users.TryGetValue(id, out var user))
             {
-                var userSockets = users[id].Sockets;
-                foreach (var socket in userSockets)
+                var userSockets = user.Sockets;
+
+                var sendTasks = userSockets.Select(async socket =>
                 {
                     try
                     {
                         await Clients.Client(socket).SendAsync("typing", model);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        // Log or handle the exception appropriately
                     }
-                }
+                });
+
+                await Task.WhenAll(sendTasks);
             }
         }
     }
+
 
     public async Task AddFriend(AddFriendModel model)
     {
         try
         {
+            const string onlineStatus = "online";
+
+            async Task NotifyUserAboutNewChat(ChatModel chat, int userId)
+            {
+                if (users.TryGetValue(userId, out var user))
+                {
+                    chat.Users[0].Status = onlineStatus;
+                    var userSockets = user.Sockets;
+
+                    var sendTasks = userSockets.Select(async socket =>
+                    {
+                        try
+                        {
+                            await Clients.Client(socket).SendAsync("new-chat", chat);
+                        }
+                        catch (Exception ex)
+                        {
+                            // Log or handle the exception appropriately
+                        }
+                    });
+
+                    await Task.WhenAll(sendTasks);
+                }
+            }
+
             foreach (var chat in model.Chats)
             {
                 chat.Messages = new List<object>();
             }
-            string online = "offline";
 
             if (users.ContainsKey(model.Chats[1].Users[0].Id))
             {
-                online = "online";
-                model.Chats[0].Users[0].Status = "online";
-                var userSockets = users[model.Chats[1].Users[0].Id].Sockets;
-
-                foreach (var socket in userSockets)
-                {
-                    await Clients.Client(socket).SendAsync("new-chat", model.Chats[0]);
-                }
+                await NotifyUserAboutNewChat(model.Chats[0], model.Chats[1].Users[0].Id);
             }
 
             if (users.ContainsKey(model.Chats[0].Users[0].Id))
             {
-                model.Chats[1].Users[0].Status = online;
-                var userSockets = users[model.Chats[0].Users[0].Id].Sockets;
-
-                foreach (var socket in userSockets)
-                {
-                    await Clients.Client(socket).SendAsync("new-chat", model.Chats[1]);
-                }
+                await NotifyUserAboutNewChat(model.Chats[1], model.Chats[0].Users[0].Id);
             }
         }
         catch (Exception e)
         {
-
+            // Log or handle the exception appropriately
         }
     }
+
 
     public async Task AddUserToGroup(AddUserToGroupModel model)
     {
@@ -266,43 +281,54 @@ public class ChatHub : Hub
 
     public async Task DeleteChat(DeleteChatModel model)
     {
-        foreach (var id in model.NotifyUsers)
+        try
         {
-            if (users.ContainsKey(id))
+            async Task NotifyUserAboutDeletedChat(int userId)
             {
-                var userSockets = users[id].Sockets;
-
-                foreach (var socket in userSockets)
+                if (users.TryGetValue(userId, out var user))
                 {
-                    await Clients.Client(socket).SendAsync("delete-chat", model.ChatId);
+                    var userSockets = user.Sockets;
+
+                    var sendTasks = userSockets.Select(async socket =>
+                    {
+                        try
+                        {
+                            await Clients.Client(socket).SendAsync("delete-chat", model.ChatId);
+                        }
+                        catch (Exception ex)
+                        {
+                            // Log or handle the exception appropriately
+                        }
+                    });
+
+                    await Task.WhenAll(sendTasks);
+                }
+            }
+
+            foreach (var userId in model.NotifyUsers)
+            {
+                if (users.ContainsKey(userId))
+                {
+                    await NotifyUserAboutDeletedChat(userId);
                 }
             }
         }
+        catch (Exception e)
+        {
+            // Log or handle the exception appropriately
+        }
     }
-
+    
     public async override Task OnDisconnectedAsync(Exception exception)
     {
-        if (userSockets.ContainsKey(Context.ConnectionId))
+        if (userSockets.TryGetValue(Context.ConnectionId, out var userId))
         {
-            var userId = userSockets[Context.ConnectionId];
-
-            if (users.ContainsKey(userId))
+            if (users.TryGetValue(userId, out var user))
             {
-                var user = users[userId];
-
                 if (user.Sockets.Count > 1)
                 {
                     // Remove the disconnected socket from the user's list of sockets
-                    foreach (var socket in user.Sockets)
-                    {
-                        if (socket == Context.ConnectionId)
-                        {
-                            user.Sockets.Remove(Context.ConnectionId);
-                        }
-                    }
-
-                    // Update the user's information
-                    users[userId] = user;
+                    user.Sockets.Remove(Context.ConnectionId);
                 }
                 else
                 {
@@ -310,10 +336,8 @@ public class ChatHub : Hub
 
                     foreach (var chatterId in chatters)
                     {
-                        if (users.ContainsKey(chatterId))
+                        if (users.TryGetValue(chatterId, out var chatter))
                         {
-                            var chatter = users[chatterId];
-
                             foreach (var socket in chatter.Sockets)
                             {
                                 try
@@ -322,27 +346,15 @@ public class ChatHub : Hub
                                 }
                                 catch (Exception)
                                 {
+                                    // Log or handle the exception appropriately
                                 }
                             }
                         }
                     }
 
                     // Remove the disconnected user from the dictionaries
-                    foreach (var userSocket in userSockets)
-                    {
-                        if (userSocket.Value == userId)
-                        {
-                            userSockets.Remove(userSocket);
-                        }
-                    }
-
-                    foreach (var userToRemove in users)
-                    {
-                        if (userToRemove.Key == userId)
-                        {
-                            users.Remove(userId);
-                        }
-                    }
+                    userSockets.Remove(Context.ConnectionId);
+                    users.Remove(userId);
                 }
             }
         }
@@ -352,10 +364,18 @@ public class ChatHub : Hub
 
     private async Task<IEnumerable<int>> GetChattersAsync(int userId)
     {
-        var chatUsers = _context.ChatUsers.Where(_ => _.UserId == userId);
-        var chatIds = chatUsers.Select(_ => _.ChatId);
-        var userIdsChatWith = (_context.ChatUsers.Where(_ => chatIds.Contains(_.ChatId)))
-            .Where(_ => _.UserId != userId).Select(_ => _.UserId);
+        // Use asynchronous operations if supported by _context
+        var chatUsers = await _context.ChatUsers
+            .Where(cu => cu.UserId == userId)
+            .ToListAsync();
+
+        var chatIds = chatUsers.Select(cu => cu.ChatId);
+
+        var userIdsChatWith = await _context.ChatUsers
+            .Where(cu => chatIds.Contains(cu.ChatId) && cu.UserId != userId)
+            .Select(cu => cu.UserId)
+            .ToListAsync();
+
         return userIdsChatWith;
     }
 }
