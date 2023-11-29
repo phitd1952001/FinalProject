@@ -140,13 +140,13 @@ const List = ({ match }) => {
                 <Grouping autoExpandAll={false} />
                 <FilterRow visible={true} />
                 
-                <Column dataField="name" caption="Name" width="10%" />
-                <Column dataField="startTime" caption="Start Time" width="20%" dataType="datetime" />
-                <Column dataField="duration" caption="Duration" width="10%" />
-                <Column dataField="subjectName" caption="Subject Name" width="10%" />
+                <Column dataField="name" caption="Name" width="8%" />
+                <Column dataField="startTime" caption="Start Time" width="15%" dataType="datetime" />
+                <Column dataField="duration" caption="Duration" width="8%" />
+                <Column dataField="subjectName" caption="Subject Name" width="22%" />
                 <Column dataField="roomName" caption="Room Name" width="10%" />
                 <Column
-                    width="40%"
+                    width="20%"
                     caption="Actions"
                     cellRender={({ data }) => (
                         <>

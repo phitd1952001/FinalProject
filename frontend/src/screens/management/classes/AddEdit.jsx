@@ -115,7 +115,7 @@ function AddEdit(props) {
                 />
               </div>
 
-              <div className="form-group d-flex justify-content-center">
+              <div className="form-group d-flex justify-content-center mt-3">
                 <button
                   type="submit"
                   disabled={isSubmitting}

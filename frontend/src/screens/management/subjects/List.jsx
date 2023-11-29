@@ -105,13 +105,13 @@ const List = ({ match }) => {
                 <Grouping autoExpandAll={false} />
                 <FilterRow visible={true} />
 
-                <Column dataField="subjectCode" caption="Subject Code" width="25%" />
-                <Column dataField="name" caption="Name" width="25%" />
-                <Column dataField="duration" caption="Duration" width="25%" />
-                <Column dataField="credit" caption="Credit" width="25%" />
-                <Column dataField="description" caption="Description" width="25%" />
+                <Column dataField="subjectCode" caption="Subject Code" width="15%" />
+                <Column dataField="name" caption="Name" width="30%" />
+                <Column dataField="duration" caption="Duration" width="12%" />
+                <Column dataField="credit" caption="Credit" width="10%" />
+                <Column dataField="description" caption="Description" width="55%" />
                 <Column
-                    width="30%"
+                    width="23%"
                     caption="Actions"
                     cellRender={({ data }) => (
                         <>

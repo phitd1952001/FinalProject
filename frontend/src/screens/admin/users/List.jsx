@@ -151,13 +151,13 @@ function List({ match }) {
                 />
                 <Column
                     caption="Role"
-                    width="25%"
+                    width="15%"
                     cellRender={({ data }) =>
                         Object.keys(Role).find(roleName => Role[roleName] === data.role)
                     }
                 />
                 <Column
-                    width="30%"
+                    width="40%"
                     caption="Actions"
                     cellRender={({ data }) => (
                         <>

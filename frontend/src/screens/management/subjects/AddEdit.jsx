@@ -108,7 +108,7 @@ function AddEdit(props) {
                 <ErrorMessage name="description" component="div" className="invalid-feedback" />
               </div>
 
-              <div className="form-group d-flex justify-content-center">
+              <div className="form-group d-flex justify-content-center mt-3">
                 <button type="submit" disabled={isSubmitting} className="btn btn-primary" style={{ width: "25%" }}>
                   {isSubmitting && <span className="spinner-border spinner-border-sm mr-1"></span>}
                   Save
